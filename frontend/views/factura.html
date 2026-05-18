@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facturas - Elite 3210</title>
+
+    <!-- Fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Iconos (FontAwesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Estilos Odoo -->
+    <link rel="stylesheet" href="../assets/css/stylesOdoo.css">
+
+    <style>
+        /* Estilos adicionales para visor de facturas y carga */
+        #upload-status {
+            font-size: 0.8rem;
+            margin-left: 10px;
+            transition: opacity 0.3s ease;
+        }
+
+        .status-loading {
+            color: var(--o-info);
+        }
+
+        .status-success {
+            color: var(--o-success);
+        }
+
+        .status-error {
+            color: #dc3545;
+        }
+
+        .loader {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid var(--o-info);
+            border-radius: 50%;
+            width: 12px;
+            height: 12px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Estilos para el visor clásico dentro del form-sheet */
+        #factura-viewer-container {
+            font-family: Arial, sans-serif;
+            /* Para mantener la factura impresa clásica */
+        }
+
+        .factura-box {
+            background-color: white;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ── NAVBAR ─────────────────────────────────────────────── -->
+    <nav class="o-navbar">
+        <div class="o-navbar-inner">
+
+            <!-- Apps Grid Button -->
+            <div class="o-nav-apps-wrap">
+                <button class="o-nav-apps" id="apps-btn" onclick="uiOdoo.toggleAppsMenu()" aria-expanded="false"
+                    title="Aplicaciones">
+                    <i class="fa-solid fa-grip"></i>
+                </button>
+
+                <!-- Apps Menu Dropdown -->
+                <div class="o-apps-overlay" id="apps-overlay" onclick="uiOdoo.closeAppsMenu()"></div>
+                <div class="o-apps-menu" id="apps-menu">
+                    <a href="#" class="o-apps-item active" onclick="uiOdoo.selectApp('Facturación'); return false;">
+                        <div class="app-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div> Facturación
+                    </a>
+                    <a href="#" class="o-apps-item" onclick="uiOdoo.selectApp('Ventas'); return false;">
+                        <div class="app-icon"><i class="fa-solid fa-tag"></i></div> Ventas
+                    </a>
+                    <a href="guia.html" class="o-apps-item">
+                        <div class="app-icon"><i class="fa-solid fa-truck-fast"></i></div> Guías
+                    </a>
+                    <a href="#" class="o-apps-item" onclick="uiOdoo.selectApp('Inventario'); return false;">
+                        <div class="app-icon"><i class="fa-solid fa-boxes-stacked"></i></div> Inventario
+                    </a>
+                </div>
+            </div>
+
+            <!-- App Brand -->
+            <a href="#" class="o-nav-brand">Facturación</a>
+
+            <!-- Sections (Tabs) — ocultas en móvil, se muestran en el drawer -->
+            <div class="o-nav-sections" id="o-nav-sections">
+                <!-- Clientes -->
+                <div class="o-nav-section" style="position:relative;"
+                    onclick="uiOdoo.toggleDropMenu(this, 'menu-clientes')">
+                    Clientes
+                    <div class="o-dropdown-menu" id="menu-clientes">
+                        <a class="o-dropdown-item" href="#">Facturas</a>
+                        <a class="o-dropdown-item" href="#">Notas de crédito</a>
+                        <a class="o-dropdown-item" href="#">Pagos</a>
+                        <div class="o-dropdown-sep"></div>
+                        <a class="o-dropdown-item" href="#">Clientes</a>
+                    </div>
+                </div>
+                <!-- Proveedores -->
+                <div class="o-nav-section" style="position:relative;"
+                    onclick="uiOdoo.toggleDropMenu(this, 'menu-proveedores')">
+                    Proveedores
+                </div>
+                <!-- Informes -->
+                <div class="o-nav-section" style="position:relative;"
+                    onclick="uiOdoo.toggleDropMenu(this, 'menu-informes')">
+                    Informes
+                </div>
+            </div>
+
+            <!-- Systray -->
+            <div class="o-systray">
+                <button class="o-systray-btn o-hide-mobile" title="Actividades">
+                    <i class="fa-regular fa-clock"></i> <span class="o-badge">4</span>
+                </button>
+                <button class="o-systray-btn o-hide-mobile" title="Conversaciones">
+                    <i class="fa-regular fa-comments"></i>
+                </button>
+                <!-- Company -->
+                <button class="o-systray-btn o-hide-mobile" title="Heinz Sport SAC">
+                    <i class="fa-solid fa-building" style="font-size:0.85rem;"></i>
+                    <span class="o-company-name">Heinz Sport SAC</span>
+                </button>
+                <!-- User -->
+                <button class="o-systray-btn" style="gap:7px;">
+                    <div class="o-user-avatar">EM</div>
+                    <div style="text-align:left;line-height:1.2;display:none;" class="hide-sm">
+                        <div style="font-size:0.75rem;font-weight:600;color:rgba(255,255,255,.9);">Elí Mandujano</div>
+                        <div style="font-size:0.65rem;color:rgba(255,255,255,.55);font-family:monospace;">
+                            <i class="fa-solid fa-database" style="font-size:0.55rem;"></i> elite
+                        </div>
+                    </div>
+                </button>
+
+                <!-- Botón hamburger — solo visible en móvil -->
+                <button class="o-hamburger" id="o-hamburger" title="Menú"
+                    onclick="document.getElementById('o-mobile-drawer').classList.toggle('open')">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ── DRAWER MÓVIL ──────────────────────────────────────── -->
+    <div class="o-mobile-overlay" id="o-mobile-overlay"
+        onclick="document.getElementById('o-mobile-drawer').classList.remove('open');this.classList.remove('open');">
+    </div>
+    <div class="o-mobile-drawer" id="o-mobile-drawer">
+        <div class="o-mobile-drawer-header">
+            <span>Facturación</span>
+            <button
+                onclick="document.getElementById('o-mobile-drawer').classList.remove('open');document.getElementById('o-mobile-overlay').classList.remove('open');">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <a class="o-mobile-drawer-item" href="#">📄 Facturas</a>
+        <a class="o-mobile-drawer-item" href="#">📝 Notas de crédito</a>
+        <a class="o-mobile-drawer-item" href="#">💰 Pagos</a>
+        <div class="o-mobile-drawer-sep"></div>
+        <a class="o-mobile-drawer-item" href="#">🛒 Proveedores</a>
+        <a class="o-mobile-drawer-item" href="#">📊 Informes</a>
+        <div class="o-mobile-drawer-sep"></div>
+        <a class="o-mobile-drawer-item" href="guia.html">🚚 Guías de Remisión</a>
+    </div>
+
+    <!-- ── LIST VIEW ─────────────────────────────────────────── -->
+    <div id="view-list" class="active">
+
+        <!-- Control Panel -->
+        <div class="o-control-panel">
+            <div class="o-cp-top">
+                <div class="o-cp-left">
+                    <button class="o-btn o-btn-primary"
+                        onclick="document.getElementById('xml-file').click()">Nuevo</button>
+                    <div class="o-breadcrumb-title">
+                        <!-- Secondary action -->
+                        <button class="o-btn o-btn-secondary">Subir</button>
+                        <!-- Breadcrumb title -->
+                        Facturas
+                        <div style="position:relative;">
+                            <button class="o-breadcrumb-gear" title="Acciones"
+                                onclick="uiOdoo.toggleDropMenu(this, 'gear-menu')">
+                                <i class="fa-solid fa-gear" style="font-size:0.85rem;"></i>
+                            </button>
+                            <div class="o-dropdown-menu" id="gear-menu">
+                                <a class="o-dropdown-item" href="#"
+                                    onclick="if(window.downloadSelectedPdf) window.downloadSelectedPdf()">Descargar
+                                    PDF</a>
+                                <div class="o-dropdown-sep"></div>
+                                <a class="o-dropdown-item" href="#">Exportar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 2: search bar -->
+                <div class="o-cp-search-row" style="position:relative;">
+                    <div class="o-searchview" id="o-searchview">
+                        <!-- Icono lupa -->
+                        <button class="o-search-icon-btn" id="search-icon-btn" title="Buscar">
+                            <i class="fa-solid fa-magnifying-glass" style="font-size:0.8rem;"></i>
+                        </button>
+                        <!-- Contenedor de facetas activas (se inyectan dinámicamente) -->
+                        <div id="facets-container"></div>
+                        <!-- Input de texto libre -->
+                        <input class="o-search-input" type="text"
+                            placeholder="Buscar…" id="search-input" autocomplete="off">
+                    </div>
+                    <!-- Botón ▼ para abrir el panel -->
+                    <button class="o-search-dropdown-btn" id="search-dropdown-btn"
+                        title="Mostrar u ocultar panel de búsqueda">
+                        <i class="fa-solid fa-angle-down" style="font-size:0.7rem;margin-right:2px;"></i>
+                    </button>
+
+                    <!-- ── PANEL DE BÚSQUEDA ─────────────────────────── -->
+                    <div class="o-search-panel" id="search-panel" style="display:none;">
+
+                        <!-- Columna 1: Filtros -->
+                        <div class="o-sp-col">
+                            <div class="o-sp-col-title">
+                                <i class="fa-solid fa-filter" style="font-size:0.75rem;"></i>
+                                Filtros
+                            </div>
+                            <!-- Filtros predefinidos -->
+                            <button class="o-sp-filter-item" data-facet-id="draft"
+                                data-facet-label="Borradores" data-facet-field="state"
+                                data-facet-value="draft" data-facet-icon="filter">
+                                Borradores
+                            </button>
+                            <button class="o-sp-filter-item" data-facet-id="posted"
+                                data-facet-label="Confirmadas" data-facet-field="state"
+                                data-facet-value="posted" data-facet-icon="filter">
+                                Confirmadas
+                            </button>
+                            <button class="o-sp-filter-item" data-facet-id="cancel"
+                                data-facet-label="Canceladas" data-facet-field="state"
+                                data-facet-value="cancel" data-facet-icon="filter">
+                                Canceladas
+                            </button>
+                            <div class="o-sp-separator"></div>
+                            <button class="o-sp-filter-item" data-facet-id="not_paid"
+                                data-facet-label="Pendientes de pago"
+                                data-facet-field="payment_status" data-facet-value="not_paid"
+                                data-facet-icon="clock">
+                                Pendientes de pago
+                            </button>
+                            <button class="o-sp-filter-item" data-facet-id="paid"
+                                data-facet-label="Pagadas" data-facet-field="payment_status"
+                                data-facet-value="paid" data-facet-icon="check">
+                                Pagadas
+                            </button>
+                            <div class="o-sp-separator"></div>
+                            <button class="o-sp-filter-item" data-facet-id="today"
+                                data-facet-label="Emitidas hoy" data-facet-field="fecha_hoy"
+                                data-facet-value="today" data-facet-icon="calendar">
+                                Emitidas hoy
+                            </button>
+                            <button class="o-sp-filter-item" data-facet-id="this_month"
+                                data-facet-label="Este mes" data-facet-field="fecha_mes"
+                                data-facet-value="this_month" data-facet-icon="calendar">
+                                Este mes
+                            </button>
+                            <button class="o-sp-filter-item" data-facet-id="last_month"
+                                data-facet-label="Mes pasado" data-facet-field="fecha_mes_pasado"
+                                data-facet-value="last_month" data-facet-icon="calendar">
+                                Mes pasado
+                            </button>
+                            <button class="o-sp-filter-item" data-facet-id="this_year"
+                                data-facet-label="Este año" data-facet-field="fecha_anio"
+                                data-facet-value="this_year" data-facet-icon="calendar">
+                                Este año
+                            </button>
+                        </div>
+
+                        <!-- Columna 2: Favoritos -->
+                        <div class="o-sp-col">
+                            <div class="o-sp-col-title">
+                                <i class="fa-solid fa-star" style="font-size:0.75rem;color:#f59e0b;"></i>
+                                Favoritos
+                            </div>
+                            <!-- Lista de favoritos guardados (se inyecta dinámicamente) -->
+                            <div id="favorites-list"></div>
+                            <!-- Form para guardar favorito -->
+                            <button class="o-sp-filter-item" id="btn-save-favorite">
+                                <i class="fa-solid fa-floppy-disk" style="font-size:0.75rem;color:var(--o-text-muted);"></i>
+                                Guardar búsqueda actual
+                            </button>
+                            <div id="save-favorite-form" style="display:none; padding:6px 10px;">
+                                <input type="text" id="favorite-name-input"
+                                    placeholder="Nombre de la búsqueda…"
+                                    style="width:100%;border:1px solid var(--o-border);border-radius:4px;padding:4px 8px;font-size:0.8rem;margin-bottom:6px;">
+                                <div style="display:flex;gap:6px;">
+                                    <button class="o-sp-save-btn" id="btn-confirm-save">Guardar</button>
+                                    <button class="o-sp-cancel-btn" id="btn-cancel-save">Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div><!-- /#search-panel -->
+                </div><!-- /.o-cp-search-row -->
+
+                <div class="o-cp-top">
+                    <div class="o-cp-left">
+
+                        <span id="upload-status"></span>
+                        <form id="upload-form" style="display:none;">
+                            <input type="file" id="xml-file" accept=".xml"
+                                onchange="document.getElementById('submit-upload').click()">
+                            <button type="submit" id="submit-upload"></button>
+                        </form>
+                    </div>
+                    <div class="o-pager">
+                        <span class="o-pager-counter" id="pager-val">1-80 / 82</span>
+                        <div class="o-pager-btns">
+                            <button class="o-pager-btn" id="btn-pager-prev" title="Anterior"><i
+                                    class="fa-solid fa-chevron-left"></i></button>
+                            <button class="o-pager-btn" id="btn-pager-next" title="Siguiente"><i
+                                    class="fa-solid fa-chevron-right"></i></button>
+                        </div>
+                        <div class="o-view-switcher" style="margin-left:8px;">
+                            <button class="o-view-btn active" title="Lista" onclick="uiOdoo.switchView(this)"><i
+                                    class="fa-solid fa-list"></i></button>
+                            <button class="o-view-btn" title="Kanban" onclick="uiOdoo.switchView(this)"><i
+                                    class="fa-solid fa-table-cells-large"></i></button>
+                            <button class="o-view-btn" title="Calendario" onclick="uiOdoo.switchView(this)"><i
+                                    class="fa-regular fa-calendar"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- List Table -->
+        <div class="o-list-container" style="position:relative;">
+
+            <!-- Panel de columnas opcionales (estilo Odoo) -->
+            <div class="o-opt-col-panel" id="opt-col-panel" style="display:none;">
+                <div class="o-opt-col-header">Columnas opcionales</div>
+                <label class="o-opt-col-item">
+                    <input type="checkbox" data-col="col-date" checked> Fecha de Emisión
+                </label>
+                <label class="o-opt-col-item">
+                    <input type="checkbox" data-col="col-ruc" checked> RUC
+                </label>
+                <label class="o-opt-col-item">
+                    <input type="checkbox" data-col="col-subtotal" checked> Subtotal
+                </label>
+                <label class="o-opt-col-item">
+                    <input type="checkbox" data-col="col-igv" checked> IGV
+                </label>
+                <label class="o-opt-col-item">
+                    <input type="checkbox" data-col="col-total-pen" checked> Total PEN
+                </label>
+                <label class="o-opt-col-item">
+                    <input type="checkbox" data-col="col-state" checked> Estado
+                </label>
+                <label class="o-opt-col-item">
+                    <input type="checkbox" data-col="col-guia" checked> Guía Remisión
+                </label>
+            </div>
+
+            <table class="o-list-table" id="main-table">
+                <thead>
+                    <tr>
+                        <th class="col-chk">
+                            <div style="display:flex;justify-content:center;">
+                                <div class="o-checkbox" id="chk-all"></div>
+                            </div>
+                        </th>
+                        <th class="col-num sorted" data-sort="numero_factura">Número <i
+                                class="fa-solid fa-arrow-down sort-icon"></i>
+                            <div class="th-resize"></div>
+                        </th>
+                        <th class="col-date" data-col="col-date" data-sort="fecha_emision">Fecha de Emisión <i
+                                class="fa-solid fa-arrow-down sort-icon"></i>
+                            <div class="th-resize"></div>
+                        </th>
+                        <th class="col-client" data-sort="nombre_receptor">Cliente <i
+                                class="fa-solid fa-arrow-down sort-icon"></i>
+                            <div class="th-resize"></div>
+                        </th>
+                        <th class="col-ruc" data-col="col-ruc" data-sort="ruc_receptor">RUC <i
+                                class="fa-solid fa-arrow-down sort-icon"></i>
+                            <div class="th-resize"></div>
+                        </th>
+                        <th class="col-total text-right" data-col="col-subtotal" data-sort="amount_untaxed">Subtotal <i
+                                class="fa-solid fa-arrow-down sort-icon"></i>
+                            <div class="th-resize"></div>
+                        </th>
+                        <th class="col-total text-right" data-col="col-igv" data-sort="amount_tax">IGV <i
+                                class="fa-solid fa-arrow-down sort-icon"></i>
+                            <div class="th-resize"></div>
+                        </th>
+                        <th class="col-total text-right" data-col="col-total-pen" data-sort="monto_total">Total PEN <i
+                                class="fa-solid fa-arrow-down sort-icon"></i>
+                            <div class="th-resize"></div>
+                        </th>
+                        <th class="col-state" data-col="col-state" data-sort="estado">Estado <i
+                                class="fa-solid fa-arrow-down sort-icon"></i>
+                            <div class="th-resize"></div>
+                        </th>
+                        <th class="col-inv" data-col="col-guia" data-sort="serie_numero_guia">Guía Remisión <i
+                                class="fa-solid fa-arrow-down sort-icon"></i>
+                            <div class="th-resize"></div>
+                        </th>
+                        <th class="col-opt">
+                            <button class="opt-col-btn" id="opt-col-btn" title="Columnas opcionales"><i
+                                    class="fa-solid fa-sliders"></i></button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                    <!-- Renderizado dinámicamente por FacturaOdooList.js -->
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td data-col="col-date"></td>
+                        <td></td>
+                        <td data-col="col-ruc"
+                            style="font-weight:600; text-align:right; color:var(--o-text-muted); font-size:0.8em;">
+                            Totales:</td>
+                        <td class="monetary fw-bold" data-col="col-subtotal" id="subtotal-footer">S/ 0.00</td>
+                        <td class="monetary fw-bold" data-col="col-igv" id="igv-footer">S/ 0.00</td>
+                        <td class="monetary fw-bold" data-col="col-total-pen" id="total-footer">S/ 0.00</td>
+                        <td data-col="col-state"></td>
+                        <td data-col="col-guia"></td>
+                        <td class="col-opt"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div><!-- /#view-list -->
+
+    <div id="form-view-container"></div>
+
+    <!-- Dependencias externas -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <!-- UI Odoo y Lógica -->
+    <script src="../assets/js/uiOdoo.js"></script>
+
+    <!-- Scripts de la aplicación -->
+    <script type="module" src="../assets/js/appFactura.js"></script>
+
+</body>
+
+</html>

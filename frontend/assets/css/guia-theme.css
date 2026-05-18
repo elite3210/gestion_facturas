@@ -1,0 +1,75 @@
+/**
+ * guia-theme.css - Variables específicas para Guías de Remisión
+ */
+[data-document-type="guia"] {
+    /* Colores primarios del tema Guía */
+    --theme-primary: #198754;
+    --theme-primary-dark: #146c43;
+    --theme-primary-light: #75b798;
+    --theme-secondary: #6c757d;
+    --theme-success: #0d6efd;
+    --theme-warning: #ffc107;
+    --theme-danger: #dc3545;
+    --theme-info: #0dcaf0;
+
+    /* Información del documento */
+    --document-type: "Guía de Remisión Electrónica";
+    --document-type-single: "Guía de Remisión";
+    --document-type-lower: "guía de remisión";
+    --document-type-plural: "Guías de Remisión";
+
+    /* Iconografía específica */
+    --header-icon: "fas fa-truck";
+    --table-icon: "fas fa-clipboard-list";
+    --empty-icon: "fas fa-truck-loading";
+    --upload-icon: "fas fa-cloud-upload-alt";
+    --search-icon: "fas fa-search";
+
+    /* URLs y rutas */
+    --api-base-url: "https://www.heinzsport.com/facturacion/backend/api/apiGuia.php";
+    --download-url: "https://www.heinzsport.com/facturacion/backend/api/guiaDownload.php";
+
+    /* Mensajes específicos */
+    --empty-message: "No se encontraron guías de remisión";
+    --loading-message: "Cargando guías de remisión...";
+    --error-message: "Error al cargar las guías de remisión";
+    --upload-message: "Seleccione un archivo XML de guía de remisión electrónica";
+
+    /* Aplicar colores del tema */
+    --bs-primary: var(--theme-primary);
+    --bs-primary-dark: var(--theme-primary-dark);
+    --bs-primary-light: var(--theme-primary-light);
+}
+
+[data-document-type="guia"] .main-header {
+    background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-primary-dark) 100%);
+}
+
+[data-document-type="guia"] .document-upload-section .card-header {
+    background: linear-gradient(90deg, var(--theme-primary-light) 0%, #ffffff 100%);
+}
+
+[data-document-type="guia"] .document-list-section .card-header {
+    border-left: 4px solid var(--theme-primary);
+}
+
+/* Estados específicos para guías */
+[data-document-type="guia"] .status-guia-emitida {
+    background-color: var(--theme-success);
+    color: white;
+}
+
+[data-document-type="guia"] .status-guia-en-transito {
+    background-color: var(--theme-warning);
+    color: black;
+}
+
+[data-document-type="guia"] .status-guia-entregada {
+    background-color: var(--theme-primary);
+    color: white;
+}
+
+[data-document-type="guia"] .status-guia-anulada {
+    background-color: var(--theme-danger);
+    color: white;
+}

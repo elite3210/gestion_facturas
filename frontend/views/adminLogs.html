@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visor de Logs - Sistema de Guías de Remisión</title>
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .log-line {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-bottom: 1px solid #eee;
+            margin: 2px 0;
+        }
+        .log-debug { background-color: #f8f9fa; color: #6c757d; }
+        .log-info { background-color: #d1ecf1; color: #0c5460; }
+        .log-warning { background-color: #fff3cd; color: #856404; }
+        .log-error { background-color: #f8d7da; color: #721c24; }
+        
+        .log-timestamp { font-weight: bold; color: #495057; }
+        .log-level { 
+            padding: 2px 6px; 
+            border-radius: 4px; 
+            font-size: 10px; 
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .log-message { margin-left: 8px; }
+        .log-context { 
+            font-size: 11px; 
+            color: #6c757d; 
+            margin-top: 4px;
+            padding-left: 20px;
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .refresh-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        #logContainer {
+            max-height: 600px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        
+        .filter-bar {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .connection-status {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .status-online { background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .status-offline { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .status-testing { background-color: #fff3cd; border: 1px solid #ffeaa7; color: #856404; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <h2><i class="fas fa-file-alt"></i> Visor de Logs del Sistema</h2>
+                
+                <!-- Estado de conexión -->
+                <div id="connectionStatus" class="connection-status status-testing">
+                    <i class="fas fa-wifi"></i> <span id="statusText">Conectando a la API...</span>
+                    <small id="statusDetails" class="ms-2"></small>
+                </div>
+                
+                <!-- Estadísticas -->
+                <div class="row" id="statsContainer">
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <h5><i class="fas fa-info-circle"></i> Estado</h5>
+                            <p id="logStatus">Cargando...</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <h5><i class="fas fa-database"></i> Tamaño</h5>
+                            <p id="logSize">Cargando...</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <h5><i class="fas fa-clock"></i> Último</h5>
+                            <p id="lastModified">Cargando...</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <h5><i class="fas fa-list"></i> Líneas</h5>
+                            <p id="totalLines">Cargando...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Filtros -->
+                <div class="filter-bar">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label for="levelFilter">Nivel:</label>
+                            <select id="levelFilter" class="form-select form-select-sm">
+                                <option value="">Todos</option>
+                                <option value="DEBUG">DEBUG</option>
+                                <option value="INFO" selected>INFO</option>
+                                <option value="WARNING">WARNING</option>
+                                <option value="ERROR">ERROR</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="linesFilter">Líneas:</label>
+                            <select id="linesFilter" class="form-select form-select-sm">
+                                <option value="50">50</option>
+                                <option value="100" selected>100</option>
+                                <option value="200">200</option>
+                                <option value="500">500</option>
+                                <option value="1000">1000</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="searchFilter">Buscar:</label>
+                            <input type="text" id="searchFilter" class="form-control form-control-sm" 
+                                   placeholder="Buscar en logs...">
+                        </div>
+                        <div class="col-md-4">
+                            <label>&nbsp;</label>
+                            <div class="d-grid gap-2 d-md-flex">
+                                <button class="btn btn-primary btn-sm" onclick="loadLogs()">
+                                    <i class="fas fa-sync"></i> Actualizar
+                                </button>
+                                <button class="btn btn-success btn-sm" onclick="downloadLogs()">
+                                    <i class="fas fa-download"></i> Descargar
+                                </button>
+                                <button class="btn btn-warning btn-sm" onclick="showFiles()">
+                                    <i class="fas fa-folder"></i> Archivos
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="clearLogs()">
+                                    <i class="fas fa-trash"></i> Limpiar
+                                </button>
+                                <button class="btn btn-info btn-sm" onclick="testConnection()">
+                                    <i class="fas fa-wifi"></i> Test
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contenedor de logs -->
+                <div id="logContainer">
+                    <div class="text-center py-5">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                        <p class="mt-3">Cargando logs del sistema...</p>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <!-- Botón flotante de actualización automática -->
+    <button class="btn btn-primary refresh-btn" onclick="toggleAutoRefresh()" id="autoRefreshBtn">
+        <i class="fas fa-play"></i> Auto
+    </button>
+    
+    <!-- Modal para archivos -->
+    <div class="modal fade" id="filesModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Archivos de Log</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" title="Activar o desactivar la actualización automática" aria-label="Activar o desactivar la actualización automática"></button>
+                </div>
+                <div class="modal-body" id="filesModalBody">
+                    Cargando...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/js/lib/bootstrap.min.js"></script>
+    <script>
+        // ✅ CONFIGURACIÓN CORREGIDA - URL completa y funcional
+        const API_BASE_URL = 'https://facturacion.heinzsport.com/backend/api/adminLogs.php';
+        
+        let autoRefreshInterval = null;
+        let isAutoRefresh = false;
+        let isOnline = false;
+        
+        // Actualizar estado de conexión
+        function updateConnectionStatus(online, message = '', details = '') {
+            const statusDiv = document.getElementById('connectionStatus');
+            const statusText = document.getElementById('statusText');
+            const statusDetails = document.getElementById('statusDetails');
+            
+            isOnline = online;
+            
+            if (online) {
+                statusDiv.className = 'connection-status status-online';
+                statusText.innerHTML = '<i class="fas fa-check-circle"></i> Conectado a la API';
+            } else {
+                statusDiv.className = 'connection-status status-offline';
+                statusText.innerHTML = '<i class="fas fa-exclamation-triangle"></i> ' + (message || 'Error de conexión');
+            }
+            
+            statusDetails.textContent = details;
+        }
+        
+        // Test de conexión
+        async function testConnection() {
+            console.log('🔍 Testing connection to:', API_BASE_URL);
+            
+            try {
+                updateConnectionStatus(false, 'Probando conexión...', 'Enviando petición de prueba...');
+                
+                const response = await fetch(API_BASE_URL + '?action=test');
+                console.log('📡 Response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('✅ Connection successful:', data);
+                
+                updateConnectionStatus(true, 'API funcionando correctamente', 
+                    `PHP ${data.php_version} | Logs: ${data.log_file_exists ? 'OK' : 'No encontrados'}`);
+                
+                return true;
+            } catch (error) {
+                console.error('❌ Connection failed:', error);
+                updateConnectionStatus(false, 'Error de conexión', error.message);
+                return false;
+            }
+        }
+        
+        // Cargar logs al iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 AdminLogs initialized');
+            console.log('🔗 API URL:', API_BASE_URL);
+            
+            // Test inicial de conexión
+            testConnection().then(success => {
+                if (success) {
+                    loadStats();
+                    loadLogs();
+                }
+            });
+            
+            // Eventos de filtros
+            document.getElementById('levelFilter').addEventListener('change', loadLogs);
+            document.getElementById('linesFilter').addEventListener('change', loadLogs);
+            document.getElementById('searchFilter').addEventListener('input', debounce(loadLogs, 500));
+        });
+        
+        async function loadStats() {
+            if (!isOnline) return;
+            
+            try {
+                console.log('📊 Loading stats...');
+                const response = await fetch(API_BASE_URL + '?action=stats');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('📊 Stats loaded:', data);
+                
+                if (data.success) {
+                    const stats = data.data;
+                    document.getElementById('logStatus').textContent = stats.enabled ? 'Activo' : 'Inactivo';
+                    document.getElementById('logSize').textContent = stats.file_size_formatted;
+                    document.getElementById('lastModified').textContent = stats.last_modified || 'N/A';
+                } else {
+                    console.error('❌ Stats error:', data.error);
+                    document.getElementById('logStatus').textContent = 'Error: ' + (data.error || 'Unknown error');
+                }
+            } catch (error) {
+                console.error('❌ Error loading stats:', error);
+                document.getElementById('logStatus').textContent = 'Error de conexión';
+                document.getElementById('logSize').textContent = 'N/A';
+                updateConnectionStatus(false, 'Error al cargar estadísticas', error.message);
+            }
+        }
+        
+        async function loadLogs() {
+            if (!isOnline) {
+                document.getElementById('logContainer').innerHTML = 
+                    '<div class="alert alert-warning">⚠️ No hay conexión con la API. Haz clic en "Test" para reconectar.</div>';
+                return;
+            }
+            
+            const level = document.getElementById('levelFilter').value;
+            const lines = document.getElementById('linesFilter').value;
+            const search = document.getElementById('searchFilter').value;
+            
+            const params = new URLSearchParams({
+                action: 'view',
+                lines: lines
+            });
+            
+            if (level) params.append('level', level);
+            if (search) params.append('search', search);
+            
+            try {
+                console.log('📝 Loading logs with params:', params.toString());
+                
+                const response = await fetch(API_BASE_URL + '?' + params);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('📝 Logs loaded:', data.data?.logs?.length, 'logs');
+                
+                if (data.success) {
+                    renderLogs(data.data.logs);
+                    document.getElementById('totalLines').textContent = data.data.total_lines;
+                    document.getElementById('lastModified').textContent = data.data.last_modified;
+                } else {
+                    document.getElementById('logContainer').innerHTML = 
+                        '<div class="alert alert-danger">❌ Error: ' + (data.error || 'Unknown error') + '</div>';
+                }
+            } catch (error) {
+                console.error('❌ Error loading logs:', error);
+                document.getElementById('logContainer').innerHTML = 
+                    `<div class="alert alert-danger">
+                        ❌ Error de conexión: ${error.message}<br>
+                        <small>URL: ${API_BASE_URL}</small>
+                    </div>`;
+                updateConnectionStatus(false, 'Error al cargar logs', error.message);
+            }
+        }
+        
+        function renderLogs(logs) {
+            const container = document.getElementById('logContainer');
+            
+            if (!logs || logs.length === 0) {
+                container.innerHTML = '<div class="alert alert-info">ℹ️ No hay logs para mostrar con los filtros actuales</div>';
+                return;
+            }
+            
+            const html = logs.map(log => {
+                const levelClass = `log-${log.level.toLowerCase()}`;
+                const contextHtml = log.context ? 
+                    `<div class="log-context">📋 Context: ${log.context}</div>` : '';
+                const uriHtml = log.uri ? 
+                    `<div class="log-context">🌐 URI: ${log.uri}</div>` : '';
+                
+                return `
+                    <div class="log-line ${levelClass}">
+                        <span class="log-timestamp">🕒 ${log.timestamp}</span>
+                        <span class="log-level badge bg-secondary">${log.level}</span>
+                        <span class="log-message">${log.message}</span>
+                        ${contextHtml}
+                        ${uriHtml}
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = html;
+            container.scrollTop = container.scrollHeight;
+        }
+        
+        function toggleAutoRefresh() {
+            const btn = document.getElementById('autoRefreshBtn');
+            
+            if (isAutoRefresh) {
+                clearInterval(autoRefreshInterval);
+                btn.innerHTML = '<i class="fas fa-play"></i> Auto';
+                btn.classList.remove('btn-success');
+                btn.classList.add('btn-primary');
+                isAutoRefresh = false;
+                console.log('⏸️ Auto-refresh stopped');
+            } else {
+                autoRefreshInterval = setInterval(() => {
+                    if (isOnline) loadLogs();
+                }, 5000);
+                btn.innerHTML = '<i class="fas fa-pause"></i> Auto';
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-success');
+                isAutoRefresh = true;
+                console.log('▶️ Auto-refresh started (every 5 seconds)');
+            }
+        }
+        
+        async function downloadLogs() {
+            if (!isOnline) {
+                alert('❌ No hay conexión con la API');
+                return;
+            }
+            
+            const url = API_BASE_URL + '?action=download';
+            console.log('📥 Downloading logs from:', url);
+            window.open(url, '_blank');
+        }
+        
+        async function showFiles() {
+            if (!isOnline) {
+                alert('❌ No hay conexión con la API');
+                return;
+            }
+            
+            try {
+                const response = await fetch(API_BASE_URL + '?action=files');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const files = data.data;
+                    const html = files.map(file => `
+                        <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                            <div>
+                                <strong>📄 ${file.name}</strong><br>
+                                <small>📏 Tamaño: ${formatBytes(file.size)} | 
+                                       🕒 Modificado: ${new Date(file.modified * 1000).toLocaleString()}</small>
+                            </div>
+                            <button class="btn btn-sm btn-primary" onclick="downloadFile(${file.number})">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    `).join('');
+                    
+                    document.getElementById('filesModalBody').innerHTML = html;
+                    new bootstrap.Modal(document.getElementById('filesModal')).show();
+                }
+            } catch (error) {
+                console.error('❌ Error loading files:', error);
+                alert('❌ Error al cargar archivos: ' + error.message);
+            }
+        }
+        
+        function downloadFile(fileNumber) {
+            const url = fileNumber > 0 ? 
+                `${API_BASE_URL}?action=download&file=${fileNumber}` :
+                `${API_BASE_URL}?action=download`;
+            console.log('📥 Downloading file:', url);
+            window.open(url, '_blank');
+        }
+        
+        async function clearLogs() {
+            if (!isOnline) {
+                alert('❌ No hay conexión con la API');
+                return;
+            }
+            
+            if (!confirm('❓ ¿Estás seguro de que quieres eliminar todos los logs? Esta acción no se puede deshacer.')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(API_BASE_URL + '?action=clear&confirm=true', {
+                    method: 'DELETE'
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('✅ Logs eliminados correctamente');
+                    loadLogs();
+                    loadStats();
+                } else {
+                    alert('❌ Error: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                alert('❌ Error de conexión: ' + error.message);
+            }
+        }
+        
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+    </script>
+</body>
+</html>

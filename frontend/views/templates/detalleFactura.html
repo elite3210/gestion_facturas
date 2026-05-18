@@ -1,0 +1,347 @@
+<!-- ── FORM VIEW ─────────────────────────────────────────── -->
+<div id="view-form" style="display:flex;">
+    <!-- Form Control Panel -->
+    <div class="o-form-cp">
+        <div class="o-form-cp-row1">
+            <div class="o-cp-left">
+                <!-- Secondary action -->
+                <button class="o-btn o-btn-secondary">Subir</button>
+                <a href="#" class="o-breadcrumb-back" onclick="uiOdoo.closeFormView(); return false;">Facturas</a>
+                <span class="o-breadcrumb-sep">/</span>
+                <span class="o-breadcrumb-current">
+                    <span id="form-title-crumb">Cargando...</span>
+                    <div style="display:inline-block; position:relative; margin-left:4px;">
+                        <button class="o-breadcrumb-gear" title="Acciones"
+                            onclick="uiOdoo.toggleDropMenu(this, 'form-gear-menu')"
+                            style="color:var(--o-text-muted); background:none; border:none; padding:2px;">
+                            <i class="fa-solid fa-gear" style="font-size:0.85rem;"></i>
+                        </button>
+                        <div class="o-dropdown-menu" id="form-gear-menu">
+                            <a class="o-dropdown-item" href="#"
+                                onclick="if(window.facturaViewer) window.facturaViewer.downloadPDF(); return false;">Descargar
+                                PDF</a>
+                            <div class="o-dropdown-sep"></div>
+                            <a class="o-dropdown-item" href="#"
+                                onclick="if(window.facturaViewer) window.facturaViewer.openPrintPreview(); return false;">Ver
+                                Factura Impresa</a>
+                        </div>
+                    </div>
+                </span>
+            </div>
+            <!-- Center: stat buttons -->
+            <div style="display:flex;align-items:center;gap:8px;" id="form-stat-btns">
+                <button class="o-stat-btn" id="btn-entrega">
+                    <i class="fa-solid fa-truck" style="color:var(--o-purple);font-size:1rem;"></i>
+                    <div>
+                        <div class="stat-val" id="stat-entregas">1</div>
+                        <div class="stat-lbl">Entrega</div>
+                    </div>
+                </button>
+            </div>
+            <div class="o-pager">
+                <span class="o-pager-counter"><span id="form-pager-val">1</span> / <span
+                        id="form-pager-total">1</span></span>
+                <div class="o-pager-btns">
+                    <button class="o-pager-btn" onclick="if(window.navigateForm) window.navigateForm(-1); return false;" title="Anterior"><i
+                            class="fa-solid fa-chevron-left"></i></button>
+                    <button class="o-pager-btn" onclick="if(window.navigateForm) window.navigateForm(1); return false;" title="Siguiente"><i
+                            class="fa-solid fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div
+        style="background:var(--o-bg-white);border-bottom:1px solid var(--o-border-light);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;flex-shrink:0;">
+        <!-- Action buttons -->
+        <div class="o-statusbar-actions" id="form-action-btns">
+            <button class="o-btn o-btn-primary" id="btn-action-confirmar"
+                onclick="if(window.facturaViewer) window.facturaViewer.changeState('posted');">Confirmar</button>
+            <button class="o-btn o-btn-secondary" id="btn-action-borrador"
+                onclick="if(window.facturaViewer) window.facturaViewer.changeState('draft');" style="display:none;">Cambiar a Borrador</button>
+            <button class="o-btn o-btn-secondary" id="btn-action-cancelar"
+                onclick="if(window.facturaViewer) window.facturaViewer.changeState('cancel');">Cancelar</button>
+            <button class="o-btn o-btn-secondary"
+                onclick="if(window.facturaViewer) window.facturaViewer.openPrintPreview(); return false;">Vista
+                previa</button>
+        </div>
+        <!-- Status steps -->
+        <div class="o-statusbar" id="form-statusbar">
+            <button class="o-status-step done" onclick="changeState('draft')">Cotización</button>
+            <button class="o-status-step done" onclick="changeState('sent')">Cotización enviada</button>
+            <button class="o-status-step current" onclick="changeState('draft')" disabled="">Emitido</button>
+        </div>
+    </div>
+
+    <div class="o-form-sheet-bg">
+        <div class="o-form-sheet">
+            <!-- Title -->
+            <h1 class="o-form-title" id="fld-serie-numero">...</h1>
+
+            <!-- Two-column fields -->
+            <div class="o-form-grid">
+                <!-- LEFT column -->
+                <div>
+                    <div class="o-field-row">
+                        <div class="o-field-label">Cliente</div>
+                        <div class="o-field-value">
+                            <a href="#" id="fld-cliente-nombre"
+                                style="font-weight:600; color:var(--o-purple); text-decoration:none;">...</a><br>
+                            <span style="color:var(--o-text-muted);font-size:0.77rem;"
+                                id="fld-cliente-direccion">...</span><br>
+                            <span style="color:var(--o-text-muted);font-size:0.77rem;" id="fld-cliente-ruc">...</span>
+                        </div>
+                    </div>
+                    <div class="o-field-row">
+                        <div class="o-field-label">Guía de remisión</div>
+                        <div class="o-field-value" id="fld-guia">...</div>
+                    </div>
+                </div>
+
+                <!-- RIGHT column -->
+                <div>
+                    <div class="o-field-row">
+                        <div class="o-field-label">Fecha de Emisión</div>
+                        <div class="o-field-value" id="fld-fecha-emision">...</div>
+                    </div>
+                    <div class="o-field-row">
+                        <div class="o-field-label">Moneda</div>
+                        <div class="o-field-value" id="fld-moneda">...</div>
+                    </div>
+                    <div class="o-field-row">
+                        <div class="o-field-label">Términos de pago</div>
+                        <div class="o-field-value" id="fld-forma-pago">...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notebook tabs -->
+            <div class="o-notebook-tabs">
+                <div class="o-nb-tab active" onclick="uiOdoo.nbTab('order-lines', this)">Líneas de la factura</div>
+            </div>
+
+            <!-- Tab: Líneas -->
+            <div class="o-nb-panel active" id="nb-order-lines">
+                <div style="overflow-x:auto;">
+                    <table class="o-lines-table">
+                        <thead>
+                            <tr>
+                                <th class="num">Cantidad</th>
+                                <th>UdM</th>
+                                <th>Descripción</th>
+                                <th class="num">Precio unitario</th>
+                                <th class="num">Importe</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fld-items-tbody"></tbody>
+                    </table>
+                </div>
+
+                <!-- Bottom row: totals -->
+                <div style="display:flex; justify-content:flex-end; margin-top:16px;">
+                    <div class="o-totals-box">
+                        <table class="o-totals-table">
+                            <tr>
+                                <td>Subtotal</td>
+                                <td id="fld-subtotal">S/ 0.00</td>
+                            </tr>
+                            <tr>
+                                <td>IGV</td>
+                                <td id="fld-igv">S/ 0.00</td>
+                            </tr>
+                            <tr class="total-row">
+                                <td>Total</td>
+                                <td id="fld-total">S/ 0.00</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- /#view-form -->
+
+<!-- Modal for Print View (Custom without Bootstrap CSS) -->
+<div id="modal-print-view"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center; overflow-y:auto; padding:20px;">
+    <div
+        style="background:#f0f0f0; border-radius:8px; width:100%; max-width:1140px; box-shadow:0 10px 30px rgba(0,0,0,0.2); margin:auto; position:relative; display:flex; flex-direction:column;">
+        <div
+            style="background:white; border-bottom:1px solid #ddd; padding:15px 20px; display:flex; justify-content:space-between; align-items:center; border-radius:8px 8px 0 0;">
+            <h5 style="margin:0; font-size:1.25rem; font-weight:600; color:var(--o-text);">Visor de Facturas Impresas
+            </h5>
+            <button type="button" onclick="document.getElementById('modal-print-view').style.display='none'"
+                style="background:transparent; border:none; font-size:1.5rem; line-height:1; cursor:pointer; color:#888;">&times;</button>
+        </div>
+        <div
+            style="padding:20px; display:flex; justify-content:center; background:#f0f0f0; border-radius:0 0 8px 8px; overflow-y:auto; max-height:80vh;">
+            <div id="factura-viewer-container"
+                style="width:100%; max-width:900px; box-shadow:0 0 15px rgba(0,0,0,0.1); background:white;">
+                <!-- Aquí se inyecta la plantilla A4 -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Templates: Visor de Factura (El mismo que tenías) -->
+<template id="factura-template">
+    <div class="factura-box p-4" style="background-color: white;">
+        <!-- Cabecera -->
+        <div class="row mb-4 border-bottom pb-3">
+            <div class="col-sm-8">
+                <!-- Logo -->
+                <div class="mb-3" style="max-height: 80px; overflow: hidden;">
+                    <img id="empresa-logo" src="" alt="Logo Empresa"
+                        style="max-height: 80px; width: auto; display: none;">
+                    <h4 id="empresa-nombre" class="text-primary fw-bold m-0" style="display: none;">ELITE 3210 S.A.C
+                    </h4>
+                </div>
+                <div>
+                    <p class="mb-1 fw-bold fs-5" id="emisor-nombre">[[emisor_nombre]]</p>
+                    <p class="mb-0 text-muted" id="emisor-direccion">[[emisor_direccion]]</p>
+                </div>
+            </div>
+            <div class="col-sm-4 text-center">
+                <div class="border border-secondary border-2 rounded p-2 pt-3 pb-3">
+                    <h5 class="mb-1 text-secondary">RUC: <span id="emisor-ruc">[[emisor_ruc]]</span></h5>
+                    <h4 class="mb-1 fw-bold bg-light py-2" id="documento-tipo-nombre">[[tipo_documento_nombre]]</h4>
+                    <h5 class="mb-0 text-danger" id="documento-serie-numero">[[serie]] - [[correlativo]]</h5>
+                </div>
+            </div>
+        </div>
+
+        <!-- Datos del Cliente -->
+        <div class="row mb-4">
+            <div class="col-sm-8">
+                <h6 class="text-secondary fw-bold border-bottom pb-1 mb-2">Datos del Cliente</h6>
+                <table class="table table-sm table-borderless mb-0">
+                    <tbody>
+                        <tr>
+                            <td class="fw-bold" style="width: 130px;">Señor(es):</td>
+                            <td id="receptor-nombre">[[receptor_nombre]]</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">RUC/DNI:</td>
+                            <td id="receptor-ruc">[[receptor_ruc]]</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Dirección:</td>
+                            <td id="receptor-direccion">[[receptor_direccion]]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-4">
+                <h6 class="text-secondary fw-bold border-bottom pb-1 mb-2">Datos de Emisión</h6>
+                <table class="table table-sm table-borderless mb-0">
+                    <tbody>
+                        <tr>
+                            <td class="fw-bold" style="width: 140px;">Fecha Emisión:</td>
+                            <td id="fecha-emision">[[fecha_emision]]</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Fecha Vencimiento:</td>
+                            <td id="fecha-vencimiento">[[fecha_vencimiento]]</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Moneda:</td>
+                            <td id="moneda-nombre">[[moneda_nombre]]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Referencia a Guías de Remisión -->
+        <div class="row mb-4" id="guias-container" style="display: none;">
+            <div class="col-12">
+                <h6 class="text-secondary fw-bold border-bottom pb-1 mb-2">Documentos Relacionados</h6>
+                <table class="table table-sm table-borderless mb-0">
+                    <tbody>
+                        <tr>
+                            <td class="fw-bold" style="width: 180px;">Guía de Remisión Remitente:</td>
+                            <td id="guia-remision"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Detalle de Items -->
+        <div class="table-responsive mb-4">
+            <table class="table table-sm table-striped table-bordered border-secondary mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="text-center" style="width: 60px;">Cant.</th>
+                        <th class="text-center" style="width: 80px;">U.M.</th>
+                        <th class="text-center" style="width: 100px;">Código</th>
+                        <th>Descripción</th>
+                        <th class="text-end" style="width: 110px;">V.U.</th>
+                        <th class="text-end" style="width: 110px;">P.U.</th>
+                        <th class="text-end" style="width: 110px;">V. Venta</th>
+                    </tr>
+                </thead>
+                <tbody id="items-table-body">
+                    <!-- Los items se insertarán dinámicamente aquí -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Resumen -->
+        <div class="row">
+            <div class="col-sm-7">
+                <div class="mb-3">
+                    <p class="mb-1"><strong>Son: </strong><span id="monto-letras"
+                            class="text-uppercase">[[monto_letras]]</span></p>
+                </div>
+
+                <div class="mt-4 pt-3 border-top">
+                    <!-- Contenedor del QR modificado -->
+                    <div class="d-flex align-items-center">
+                        <div id="qr-code-container" class="me-3 p-1 bg-white border border-secondary"
+                            style="width: 120px; height: 120px;">
+                            <!-- El QR generado dinámicamente o por backend -->
+                        </div>
+                        <div style="font-size: 0.8rem;" class="text-muted">
+                            <p class="mb-1 fw-bold">Representación impresa de la Factura Electrónica</p>
+                            <p class="mb-1">Consulte su documento en: <span
+                                    id="url-consulta">https://ww1.sunat.gob.pe/ol-ti-itconsvalicpe/ConsValiCpe.htm</span>
+                            </p>
+                            <p class="mb-0">Autorizado mediante Resolución de Superintendencia N° 155-2017/SUNAT</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-5">
+                <table class="table table-sm table-borderless">
+                    <tbody>
+                        <tr>
+                            <td class="text-end fw-bold">Operaciones Gravadas</td>
+                            <td class="text-end" style="width: 120px;" id="total-gravado">[[total_gravado]]</td>
+                        </tr>
+                        <tr>
+                            <td class="text-end fw-bold">Operaciones Inafectas</td>
+                            <td class="text-end" id="total-inafecto">[[total_inafecto]]</td>
+                        </tr>
+                        <tr>
+                            <td class="text-end fw-bold">Operaciones Exoneradas</td>
+                            <td class="text-end" id="total-exonerado">[[total_exonerado]]</td>
+                        </tr>
+                        <tr>
+                            <td class="text-end fw-bold">IGV (18%)</td>
+                            <td class="text-end" id="total-igv">[[total_igv]]</td>
+                        </tr>
+                        <tr>
+                            <td class="text-end fw-bold fs-5 border-top">Importe Total</td>
+                            <td class="text-end fs-5 border-top fw-bold" id="monto-total">[[monto_total]]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</template>

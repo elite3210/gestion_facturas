@@ -1,0 +1,165 @@
+/**
+ * base.css - Estilos base del sistema que aplican a todos los temas
+ */
+
+/* Reset y estilos base */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f8f9fa;
+}
+
+/* Layout principal */
+.main-header {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+}
+
+.container {
+    max-width: 1200px;
+}
+
+/* Secciones principales */
+.document-upload-section,
+.document-search-section,
+.document-list-section,
+.document-viewer-section {
+    margin-bottom: 2rem;
+}
+
+/* Cards con sombra mejorada */
+.card {
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 0.75rem;
+    transition: box-shadow 0.15s ease-in-out;
+}
+
+.card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    background: var(--bs-light);
+}
+
+/* Alerts container */
+.alerts-container {
+    position: sticky;
+    top: calc(var(--header-height, 80px) + 1rem);
+    z-index: 1010;
+}
+
+/* Responsividad mejorada */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .main-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .card {
+        border-radius: 0.5rem;
+    }
+}
+
+/* Estados globales */
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Utilidades personalizadas */
+.shadow-sm-custom {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-md-custom {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-lg-custom {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Focus states mejorados */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+/* Botones con estados mejorados */
+.btn {
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.15s ease-in-out;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* Footer mejorado */
+footer {
+    margin-top: auto;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Loading states globales */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+/* Modo oscuro automático */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1a1a1a;
+        color: #ffffff;
+    }
+
+    .card {
+        background-color: #2d2d2d;
+        color: #ffffff;
+    }
+
+    .card-header {
+        background-color: #343434;
+        border-bottom-color: #444;
+    }
+}

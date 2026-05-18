@@ -1,0 +1,394 @@
+/* Estilos para el Sistema de Guías de Remisión Electrónicas */
+
+/* Variables CSS */
+:root {
+    --primary-color: #0d6efd;
+    --secondary-color: #6c757d;
+    --success-color: #198754;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #0dcaf0;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    --border-radius: 0.375rem;
+    --box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --transition: all 0.3s ease;
+}
+
+/* Estilos generales */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--dark-color);
+}
+
+/* Estilos de estado para carga */
+.status-message {
+    padding: 0.75rem 1rem;
+    border-radius: var(--border-radius);
+    font-size: 0.875rem;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    transition: var(--transition);
+}
+
+.status-success {
+    color: #0f5132;
+    background-color: #d1e7dd;
+    border: 1px solid #badbcc;
+}
+
+.status-error {
+    color: #842029;
+    background-color: #f8d7da;
+    border: 1px solid #f5c2c7;
+}
+
+.status-loading {
+    color: #055160;
+    background-color: #cff4fc;
+    border: 1px solid #b6effb;
+}
+
+/* Loader/Spinner */
+.loader {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    margin-right: 0.5rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Estilos para el visualizador de guías */
+.guia-container {
+    max-width: 210mm;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+/* Header de la guía */
+.guia-header {
+    display: grid;
+    grid-template-columns: 120px 1fr 200px;
+    gap: 20px;
+    margin-bottom: 30px;
+    align-items: start;
+}
+
+.logo-company {
+    max-width: 100%;
+    height: auto;
+}
+
+.empresa-nombre {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin: 0 0 10px 0;
+}
+
+.info-company {
+    font-size: 11px;
+    color: var(--secondary-color);
+}
+
+.info-company div {
+    margin-bottom: 4px;
+}
+
+.documento-box {
+    text-align: center;
+    padding: 15px;
+    border: 2px solid var(--primary-color) !important;
+    border-radius: var(--border-radius);
+    background-color: var(--light-color);
+}
+
+.documento-box h4 {
+    margin: 5px 0;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.documento-box p {
+    margin: 3px 0;
+    font-size: 12px;
+}
+
+/* Secciones de información */
+.guia-info-section {
+    margin-bottom: 25px;
+    border: 1px solid #dee2e6;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.section-title {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 15px;
+    margin: 0;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.info-grid {
+    padding: 15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.info-grid div {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-grid label {
+    font-weight: bold;
+    color: var(--dark-color);
+    margin-bottom: 2px;
+    font-size: 11px;
+}
+
+.info-grid span {
+    color: var(--secondary-color);
+    word-wrap: break-word;
+}
+
+/* Tabla de items */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 11px;
+}
+
+.table th,
+.table td {
+    padding: 8px 6px;
+    text-align: left;
+    border: 1px solid #dee2e6;
+    vertical-align: top;
+}
+
+.table th {
+    background-color: var(--light-color);
+    font-weight: bold;
+    text-align: center;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.table-bordered {
+    border: 1px solid #dee2e6;
+}
+
+.table-bordered th,
+.table-bordered td {
+    border: 1px solid #dee2e6;
+}
+
+/* Footer de la guía */
+.guia-footer {
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    gap: 20px;
+    align-items: end;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #dee2e6;
+}
+
+.qr-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.qr-container canvas {
+    max-width: 100px;
+    height: auto;
+}
+
+.representacion-impresa {
+    font-size: 10px;
+    color: var(--secondary-color);
+    font-style: italic;
+    line-height: 1.3;
+}
+
+.paginacion {
+    font-size: 10px;
+    color: var(--secondary-color);
+    text-align: right;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .guia-header {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 15px;
+    }
+    
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .guia-footer {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 15px;
+    }
+    
+    .representacion-impresa {
+        text-align: center;
+    }
+    
+    .paginacion {
+        text-align: center;
+    }
+}
+
+/* Estilos para impresión */
+@media print {
+    .guia-container {
+        box-shadow: none;
+        margin: 0;
+        padding: 10mm;
+        max-width: none;
+    }
+    
+    .btn {
+        display: none !important;
+    }
+    
+    .card-header {
+        display: none !important;
+    }
+    
+    body {
+        background: white !important;
+    }
+    
+    .section-title {
+        background-color: #000 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+/* Estilos adicionales para botones */
+.btn {
+    transition: var(--transition);
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    margin-right: 0.25rem;
+}
+
+/* Estilos para alertas */
+.alert {
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.alert-danger {
+    color: #842029;
+    background-color: #f8d7da;
+    border: 1px solid #f5c2c7;
+}
+
+/* Ocultar elementos cuando están marcados como ocultos */
+.d-none {
+    display: none !important;
+}
+
+/* Estilos para campos de formulario */
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* Estilos para la paginación */
+.pagination {
+    margin: 0;
+}
+
+.page-link {
+    color: var(--primary-color);
+    border-color: #dee2e6;
+    transition: var(--transition);
+}
+
+.page-link:hover {
+    color: white;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.page-item.active .page-link {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Mejoras en la tabla responsive */
+.table-responsive {
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+/* Estilos para iconos de FontAwesome */
+.fas, .far, .fab {
+    margin-right: 0.25rem;
+}
+
+/* Estilos adicionales para el contenedor */
+.container {
+    max-width: 1200px;
+}
+
+/* Card enhancements */
+.card {
+    border: none;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+}
+
+.card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    background-color: var(--light-color);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    font-weight: 600;
+}

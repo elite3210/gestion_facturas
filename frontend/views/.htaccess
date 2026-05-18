@@ -1,0 +1,8 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Si la petición es hacia /facturas/[numero], redirigir silenciosamente a factura.html
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^facturas/([0-9A-Za-z-]+)$ factura.html [L]
+</IfModule>

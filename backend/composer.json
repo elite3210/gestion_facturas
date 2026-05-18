@@ -1,0 +1,17 @@
+{
+    "name": "sistema/guias-remision",
+    "description": "Sistema de gestión de guías de remisión UBL 2.0 Perú",
+    "type": "project",
+    "require": {
+        "php": ">=7.4",
+        "tecnickcom/tcpdf": "^6.6"
+    },
+    "license": "MIT",
+    "autoload": {
+        "files": [
+            "database.php",
+            "xml_helper.php",
+            "pdf_generator.php"
+        ]
+    }
+}

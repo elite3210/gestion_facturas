@@ -1,0 +1,77 @@
+/**
+ * factura-theme.css - Variables específicas para Facturas
+ */
+:root {
+    /* Colores primarios del tema Factura */
+    --theme-primary: #0d6efd;
+    --theme-primary-dark: #0a58ca;
+    --theme-primary-light: #6ea8fe;
+    --theme-secondary: #6c757d;
+    --theme-success: #198754;
+    --theme-warning: #ffc107;
+    --theme-danger: #dc3545;
+    --theme-info: #0dcaf0;
+
+    /* Información del documento */
+    --document-type: "Factura Electrónica";
+    --document-type-single: "Factura";
+    --document-type-lower: "factura";
+    --document-type-plural: "Facturas";
+
+    /* Iconografía específica */
+    --header-icon: "fas fa-file-invoice-dollar";
+    --table-icon: "fas fa-table";
+    --empty-icon: "fas fa-file-invoice";
+    --upload-icon: "fas fa-cloud-upload-alt";
+    --search-icon: "fas fa-search";
+
+    /* URLs y rutas */
+    --api-base-url: "https://www.heinzsport.com/facturacion/backend/api/apiFactura.php";
+    --download-url: "https://www.heinzsport.com/facturacion/backend/api/facturaDownload.php";
+
+    /* Configuración de funcionalidades */
+    --feature-auto-refresh: true;
+    --feature-export-pdf: true;
+    --feature-advanced-filters: true;
+    --feature-notifications: true;
+
+    /* Mensajes específicos */
+    --empty-message: "No se encontraron facturas electrónicas";
+    --loading-message: "Cargando facturas...";
+    --error-message: "Error al cargar las facturas";
+    --upload-message: "Seleccione un archivo XML de factura electrónica";
+
+    /* Aplicar colores del tema */
+    --bs-primary: var(--theme-primary);
+    --bs-primary-dark: var(--theme-primary-dark);
+    --bs-primary-light: var(--theme-primary-light);
+}
+
+/* Estilos específicos para facturas */
+.main-header {
+    background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-primary-dark) 100%);
+}
+
+.document-upload-section .card-header {
+    background: linear-gradient(90deg, var(--theme-primary-light) 0%, #ffffff 100%);
+}
+
+.document-list-section .card-header {
+    border-left: 4px solid var(--theme-primary);
+}
+
+/* Estados específicos para facturas */
+.status-factura-emitida {
+    background-color: var(--theme-success);
+    color: white;
+}
+
+.status-factura-pendiente {
+    background-color: var(--theme-warning);
+    color: black;
+}
+
+.status-factura-anulada {
+    background-color: var(--theme-danger);
+    color: white;
+}

@@ -1,0 +1,2778 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cotizaciones — Heinz Sport SAC</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* ── ODOO 18 DESIGN TOKENS ─────────────────────────────── */
+    :root {
+      /* Brand purple */
+      --o-purple: #71639e;
+      --o-purple-dark: #5c4e8a;
+      --o-purple-light: #8a7cb5;
+
+      /* Backgrounds */
+      --o-bg: #f9fafb;
+      /* body background */
+      --o-bg-white: #ffffff;
+      --o-bg-row-even: #f9fafb;
+      /* table-striped */
+      --o-bg-view: #ffffff;
+
+      /* Borders */
+      --o-border: #dee2e6;
+      --o-border-light: #e9ecef;
+      --o-border-table: #dee2e6;
+
+      /* Text */
+      --o-text: #212529;
+      --o-text-muted: #6c757d;
+      --o-text-light: #adb5bd;
+
+      /* Primary button = purple */
+      --o-btn-primary-bg: #714b97;
+      --o-btn-primary-hover: #5c3e7e;
+
+      /* Secondary button */
+      --o-btn-secondary-bg: #ffffff;
+      --o-btn-secondary-border: #ced4da;
+
+      /* Badge colors (Bootstrap-like) */
+      --o-success: #198754;
+      --o-success-bg: #d1e7dd;
+      --o-info: #0dcaf0;
+      --o-info-bg: #cff4fc;
+      --o-info-text: #055160;
+
+      /* Navbar */
+      --o-navbar-bg: #71639e;
+      --o-navbar-text: rgba(255, 255, 255, 0.85);
+      --o-navbar-hover: rgba(255, 255, 255, 0.15);
+
+      /* Font */
+      --o-font: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+      /* Search pill */
+      --o-facet-bg: #e9ecef;
+      --o-facet-label-bg: #714b97;
+
+      /* Row hover */
+      --o-row-hover: rgba(113, 99, 158, 0.06);
+
+      /* Pager */
+      --o-pager-border: #dee2e6;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 14px;
+    }
+
+    body {
+      font-family: var(--o-font);
+      font-size: 0.875rem;
+      color: var(--o-text);
+      background: var(--o-bg);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    /* ── NAVBAR ─────────────────────────────────────────────── */
+    .o-navbar {
+      background: var(--o-navbar-bg);
+      height: 46px;
+      display: flex;
+      align-items: stretch;
+      padding: 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    }
+
+    .o-navbar-inner {
+      display: flex;
+      align-items: stretch;
+      width: 100%;
+      padding: 0 4px;
+    }
+
+    /* Apps grid button */
+    .o-nav-apps {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.85);
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: background 0.15s;
+      flex-shrink: 0;
+      border-radius: 4px;
+      margin: 4px 2px;
+    }
+
+    .o-nav-apps:hover {
+      background: var(--o-navbar-hover);
+    }
+
+    /* Module brand link */
+    .o-nav-brand {
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      color: rgba(255, 255, 255, 0.95);
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      border-radius: 4px;
+      margin: 4px 2px;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+
+    .o-nav-brand:hover {
+      background: var(--o-navbar-hover);
+      color: white;
+    }
+
+    /* Separator */
+    .o-nav-sep {
+      width: 1px;
+      background: rgba(255, 255, 255, 0.2);
+      margin: 8px 4px;
+      flex-shrink: 0;
+    }
+
+    /* Section menu items */
+    .o-nav-sections {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      flex: 1;
+    }
+
+    .o-nav-section {
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 4px;
+      margin: 4px 1px;
+      transition: background 0.15s;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .o-nav-section:hover {
+      background: var(--o-navbar-hover);
+      color: white;
+    }
+
+    /* Systray (right side) */
+    .o-systray {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      margin-left: auto;
+      padding-right: 4px;
+    }
+
+    .o-systray-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 8px;
+      height: 36px;
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.85);
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      position: relative;
+      transition: background 0.15s;
+      white-space: nowrap;
+      gap: 4px;
+    }
+
+    .o-systray-btn:hover {
+      background: var(--o-navbar-hover);
+      color: white;
+    }
+
+    .o-badge {
+      background: #dc3545;
+      color: white;
+      border-radius: 999px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 1px 5px;
+      min-width: 18px;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .o-badge.green {
+      background: #198754;
+    }
+
+    /* User avatar */
+    .o-user-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: var(--o-purple);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .o-company-name {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* ── CONTROL PANEL ──────────────────────────────────────── */
+    .o-control-panel {
+      background: var(--o-bg-white);
+      border-bottom: 1px solid var(--o-border-light);
+      padding: 8px 16px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .o-cp-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .o-cp-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Breadcrumb title */
+    .o-breadcrumb-title {
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: var(--o-text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .o-breadcrumb-gear {
+      color: var(--o-text-muted);
+      font-size: 0.85rem;
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 3px;
+      border: none;
+      background: transparent;
+    }
+
+    .o-breadcrumb-gear:hover {
+      background: var(--o-bg-row-even);
+    }
+
+    /* Action buttons */
+    .o-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 12px;
+      font-family: var(--o-font);
+      font-size: 0.8125rem;
+      font-weight: 400;
+      border-radius: 4px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s;
+      white-space: nowrap;
+      line-height: 1.4;
+    }
+
+    .o-btn-primary {
+      background: var(--o-btn-primary-bg);
+      border-color: var(--o-btn-primary-bg);
+      color: white;
+    }
+
+    .o-btn-primary:hover {
+      background: var(--o-btn-primary-hover);
+      border-color: var(--o-btn-primary-hover);
+    }
+
+    .o-btn-secondary {
+      background: var(--o-btn-secondary-bg);
+      border-color: var(--o-btn-secondary-border);
+      color: var(--o-text);
+    }
+
+    .o-btn-secondary:hover {
+      background: #f8f9fa;
+      border-color: #adb5bd;
+    }
+
+    /* Search bar */
+    .o-cp-search-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .o-searchview {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      max-width: 480px;
+      background: var(--o-bg-white);
+      border: 1px solid var(--o-btn-secondary-border);
+      border-radius: 4px 0 0 4px;
+      padding: 3px 6px 3px 3px;
+      gap: 4px;
+      min-height: 32px;
+    }
+
+    .o-search-icon {
+      color: var(--o-text-muted);
+      font-size: 0.8rem;
+      padding: 0 4px;
+      flex-shrink: 0;
+    }
+
+    .o-facet {
+      display: inline-flex;
+      align-items: stretch;
+      background: var(--o-facet-bg);
+      border-radius: 4px;
+      font-size: 0.75rem;
+      overflow: hidden;
+      flex-shrink: 0;
+      max-width: 200px;
+    }
+
+    .o-facet-label {
+      background: var(--o-facet-label-bg);
+      color: white;
+      padding: 1px 5px;
+      display: flex;
+      align-items: center;
+      font-size: 0.7rem;
+    }
+
+    .o-facet-value {
+      padding: 2px 5px;
+      color: var(--o-text);
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .o-facet-remove {
+      background: transparent;
+      border: none;
+      color: #dc3545;
+      cursor: pointer;
+      padding: 0 4px;
+      font-size: 0.65rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .o-facet-remove:hover {
+      color: #a71d2a;
+    }
+
+    .o-search-input {
+      border: none;
+      outline: none;
+      font-family: var(--o-font);
+      font-size: 0.8125rem;
+      color: var(--o-text);
+      background: transparent;
+      flex: 1;
+      min-width: 60px;
+    }
+
+    .o-search-input::placeholder {
+      color: var(--o-text-muted);
+    }
+
+    .o-search-dropdown-btn {
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      background: var(--o-btn-secondary-bg);
+      border: 1px solid var(--o-btn-secondary-border);
+      border-left: none;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+      color: var(--o-text-muted);
+      font-size: 0.75rem;
+      transition: background 0.15s;
+      min-height: 32px;
+    }
+
+    .o-search-dropdown-btn:hover {
+      background: #f8f9fa;
+    }
+
+    /* Pager */
+    .o-pager {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8125rem;
+      color: var(--o-text);
+    }
+
+    .o-pager-counter {
+      color: var(--o-text);
+    }
+
+    .o-pager-btns {
+      display: flex;
+    }
+
+    .o-pager-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: var(--o-btn-secondary-bg);
+      border: 1px solid var(--o-pager-border);
+      cursor: pointer;
+      color: var(--o-text);
+      font-size: 0.75rem;
+      transition: background 0.15s;
+    }
+
+    .o-pager-btn:first-child {
+      border-radius: 4px 0 0 4px;
+    }
+
+    .o-pager-btn:last-child {
+      border-radius: 0 4px 4px 0;
+      border-left: none;
+    }
+
+    .o-pager-btn:hover {
+      background: #f8f9fa;
+    }
+
+    /* View switcher */
+    .o-view-switcher {
+      display: flex;
+    }
+
+    .o-view-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 28px;
+      background: var(--o-btn-secondary-bg);
+      border: 1px solid var(--o-pager-border);
+      cursor: pointer;
+      color: var(--o-text-muted);
+      font-size: 0.78rem;
+      transition: all 0.15s;
+    }
+
+    .o-view-btn+.o-view-btn {
+      border-left: none;
+    }
+
+    .o-view-btn:first-child {
+      border-radius: 4px 0 0 4px;
+    }
+
+    .o-view-btn:last-child {
+      border-radius: 0 4px 4px 0;
+    }
+
+    .o-view-btn:hover {
+      background: #f8f9fa;
+      color: var(--o-text);
+    }
+
+    .o-view-btn.active {
+      background: #e8e4f0;
+      color: var(--o-purple);
+      border-color: var(--o-pager-border);
+    }
+
+    /* ── LIST TABLE ──────────────────────────────────────────── */
+    .o-list-container {
+      background: var(--o-bg-white);
+      overflow-x: auto;
+    }
+
+    table.o-list-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+      table-layout: fixed;
+    }
+
+    /* Header */
+    table.o-list-table thead tr {
+      background: var(--o-bg-white);
+      border-bottom: 1px solid var(--o-border-table);
+    }
+
+    table.o-list-table th {
+      padding: 7px 8px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: var(--o-text);
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      position: relative;
+      border-bottom: 2px solid var(--o-border-table);
+      background: var(--o-bg-white);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    table.o-list-table th:hover {
+      color: var(--o-purple);
+    }
+
+    table.o-list-table th .sort-icon {
+      opacity: 0;
+      font-size: 0.75rem;
+      margin-left: 3px;
+      color: var(--o-text-muted);
+      vertical-align: middle;
+    }
+
+    table.o-list-table th:hover .sort-icon {
+      opacity: 0.5;
+    }
+
+    table.o-list-table th.sorted .sort-icon {
+      opacity: 1;
+      color: var(--o-purple);
+    }
+
+    .th-resize {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      cursor: col-resize;
+      background: transparent;
+      transition: background 0.15s;
+    }
+
+    .th-resize:hover {
+      background: rgba(113, 99, 158, 0.3);
+    }
+
+    /* Checkbox column */
+    .col-chk {
+      width: 36px;
+      text-align: center !important;
+    }
+
+    .col-num {
+      width: 90px;
+    }
+
+    .col-date {
+      width: 145px;
+    }
+
+    .col-client {
+      /* flex */
+    }
+
+    .col-act {
+      width: 110px;
+    }
+
+    .col-total {
+      width: 110px;
+      text-align: right !important;
+    }
+
+    .col-state {
+      width: 148px;
+    }
+
+    .col-inv {
+      width: 178px;
+    }
+
+    .col-opt {
+      width: 32px;
+    }
+
+    /* Checkbox */
+    .o-checkbox {
+      width: 14px;
+      height: 14px;
+      border: 1.5px solid #adb5bd;
+      border-radius: 3px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.1s;
+      background: white;
+      flex-shrink: 0;
+    }
+
+    .o-checkbox:hover {
+      border-color: var(--o-purple);
+    }
+
+    .o-checkbox.checked {
+      background: var(--o-purple);
+      border-color: var(--o-purple);
+    }
+
+    .o-checkbox.checked::after {
+      content: '';
+      width: 8px;
+      height: 5px;
+      border-left: 1.5px solid white;
+      border-bottom: 1.5px solid white;
+      transform: rotate(-45deg) translateY(-1px);
+    }
+
+    th.col-chk {
+      cursor: default;
+    }
+
+    th.col-chk:hover {
+      color: var(--o-text);
+    }
+
+    /* Rows */
+    table.o-list-table tbody tr {
+      border-bottom: 1px solid var(--o-border-light);
+      cursor: pointer;
+      transition: background 0.08s;
+    }
+
+    table.o-list-table tbody tr:nth-child(odd) {
+      background: var(--o-bg-white);
+    }
+
+    table.o-list-table tbody tr:nth-child(even) {
+      background: var(--o-bg-row-even);
+    }
+
+    table.o-list-table tbody tr:hover {
+      background: var(--o-row-hover) !important;
+    }
+
+    table.o-list-table tbody tr.selected {
+      background: rgba(113, 99, 158, 0.08) !important;
+    }
+
+    table.o-list-table td {
+      padding: 6px 8px;
+      color: var(--o-text);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+
+    table.o-list-table td.col-chk {
+      text-align: center;
+    }
+
+    td.fw-bold {
+      font-weight: 700;
+      color: var(--o-text);
+    }
+
+    td.text-right {
+      text-align: right;
+    }
+
+    td.monetary {
+      text-align: right;
+      font-weight: 700;
+    }
+
+    td.monetary.text-info {
+      color: #0dcaf0;
+    }
+
+    td.monetary.text-normal {
+      color: var(--o-text);
+    }
+
+    td.activity-cell {
+      text-align: left;
+    }
+
+    /* Activity icon */
+    .activity-btn {
+      background: transparent;
+      border: none;
+      color: var(--o-text-muted);
+      cursor: pointer;
+      font-size: 0.95rem;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .activity-btn:hover {
+      color: var(--o-text);
+    }
+
+    /* Badges */
+    .o-badge-pill {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      white-space: nowrap;
+      line-height: 1.3;
+    }
+
+    .badge-success {
+      background: #d1e7dd;
+      color: #0a3622;
+    }
+
+    .badge-info {
+      background: #cff4fc;
+      color: #055160;
+    }
+
+    .badge-secondary {
+      background: #e2e3e5;
+      color: #41464b;
+    }
+
+    .badge-dark {
+      background: #d3d3d4;
+      color: #141619;
+    }
+
+    /* Optional columns button */
+    .opt-col-btn {
+      background: transparent;
+      border: none;
+      color: var(--o-text-muted);
+      cursor: pointer;
+      font-size: 0.85rem;
+      padding: 2px 6px;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .opt-col-btn:hover {
+      background: #f8f9fa;
+      color: var(--o-text);
+    }
+
+    /* Footer row */
+    table.o-list-table tfoot tr {
+      background: var(--o-bg-white) !important;
+    }
+
+    table.o-list-table tfoot td {
+      padding: 8px 8px;
+      border-top: 1px solid var(--o-border-table);
+      border-bottom: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    table.o-list-table tfoot td.monetary {
+      text-align: right;
+      color: var(--o-text);
+    }
+
+    /* ── SCROLLBAR ───────────────────────────────────────────── */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #c4c4c4;
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #aaa;
+    }
+
+    /* ── APPS MENU (home menu dropdown) ─────────────────────── */
+    .o-nav-apps-wrap {
+      position: relative;
+      display: flex;
+      align-items: stretch;
+      flex-shrink: 0;
+    }
+
+    .o-apps-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 2px);
+      left: 0;
+      background: white;
+      border: 1px solid var(--o-border);
+      border-radius: 4px;
+      width: 230px;
+      max-height: 75vh;
+      overflow-y: auto;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.14);
+      z-index: 3000;
+      padding: 4px 0;
+    }
+
+    .o-apps-menu.open {
+      display: block;
+    }
+
+    /* Active item = current module highlighted */
+    .o-apps-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 16px;
+      font-size: 0.8375rem;
+      color: var(--o-text);
+      cursor: pointer;
+      transition: background 0.08s;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    .o-apps-item:hover {
+      background: #f3f1f9;
+      color: var(--o-purple);
+    }
+
+    .o-apps-item.active {
+      background: #ede9f5;
+      color: var(--o-purple);
+      font-weight: 600;
+    }
+
+    .o-apps-item .app-icon {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--o-purple);
+      flex-shrink: 0;
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+
+    .o-apps-item:hover .app-icon,
+    .o-apps-item.active .app-icon {
+      opacity: 1;
+    }
+
+    /* Overlay backdrop */
+    .o-apps-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2999;
+    }
+
+    .o-apps-overlay.open {
+      display: block;
+    }
+
+    /* ── DROPDOWN MENU (for navbar section items) ────────────── */
+    .o-dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: white;
+      border: 1px solid var(--o-border);
+      border-radius: 4px;
+      min-width: 180px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+      z-index: 2000;
+      padding: 4px 0;
+    }
+
+    .o-dropdown-menu.open {
+      display: block;
+    }
+
+    .o-dropdown-item {
+      padding: 6px 14px;
+      font-size: 0.8125rem;
+      color: var(--o-text);
+      cursor: pointer;
+      display: block;
+      white-space: nowrap;
+    }
+
+    .o-dropdown-item:hover {
+      background: #f8f9fa;
+      color: var(--o-purple);
+    }
+
+    .o-dropdown-sep {
+      height: 1px;
+      background: var(--o-border-light);
+      margin: 4px 0;
+    }
+
+    /* ── AVATAR placeholder (since we can't load real Odoo assets) */
+    .o-avatar-box {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #a89dd4, #714b97);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    /* ── FORM VIEW ───────────────────────────────────────────────── */
+    /* View container — switches between list and form */
+    #view-list {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+    }
+
+    #view-form {
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+      background: var(--o-bg);
+    }
+
+    #view-form.active {
+      display: flex;
+    }
+
+    #view-list.active {
+      display: flex;
+    }
+
+    /* Form control panel */
+    .o-form-cp {
+      background: var(--o-bg-white);
+      border-bottom: 1px solid var(--o-border-light);
+      padding: 6px 16px 8px;
+      flex-shrink: 0;
+    }
+
+    .o-form-cp-row1 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+
+    .o-breadcrumb-back {
+      color: var(--o-purple);
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .o-breadcrumb-back:hover {
+      text-decoration: underline;
+    }
+
+    .o-breadcrumb-current {
+      font-size: 0.8rem;
+      color: var(--o-text);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .o-breadcrumb-sep {
+      color: var(--o-text-muted);
+      margin: 0 2px;
+      font-size: 0.75rem;
+    }
+
+    /* Stat buttons (Entrega 1) */
+    .o-stat-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 12px;
+      background: var(--o-bg-white);
+      border: 1px solid var(--o-btn-secondary-border);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      color: var(--o-text);
+      transition: all 0.15s;
+      text-decoration: none;
+    }
+
+    .o-stat-btn:hover {
+      background: #f8f9fa;
+      border-color: var(--o-purple);
+      color: var(--o-purple);
+    }
+
+    .o-stat-btn .stat-val {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--o-purple);
+      line-height: 1;
+    }
+
+    .o-stat-btn .stat-lbl {
+      font-size: 0.7rem;
+      color: var(--o-text-muted);
+    }
+
+    /* Status bar (Cotización → Cotización enviada → Orden de venta) */
+    .o-statusbar {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-wrap: wrap;
+    }
+
+    .o-statusbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .o-status-step {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 14px 5px 20px;
+      background: var(--o-btn-secondary-bg);
+      border: 1px solid var(--o-btn-secondary-border);
+      border-left: none;
+      font-size: 0.78rem;
+      color: var(--o-text-muted);
+      cursor: default;
+      position: relative;
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%, 10px 50%);
+      margin-right: -1px;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+
+    .o-status-step:first-child {
+      border-left: 1px solid var(--o-btn-secondary-border);
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%);
+      padding-left: 14px;
+    }
+
+    .o-status-step.current {
+      background: var(--o-purple);
+      border-color: var(--o-purple);
+      color: white;
+      font-weight: 600;
+    }
+
+    .o-status-step.done {
+      background: #f0edf7;
+      color: var(--o-purple);
+    }
+
+    /* Form sheet */
+    .o-form-sheet-bg {
+      background: var(--o-bg);
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 0 40px 0;
+    }
+
+    .o-form-sheet {
+      background: var(--o-bg-white);
+      border: 1px solid var(--o-border-light);
+      border-radius: 4px;
+      margin: 16px auto;
+      max-width: 1200px;
+      padding: 24px 32px 28px;
+    }
+
+    .o-form-title {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--o-text);
+      margin-bottom: 20px;
+    }
+
+    .o-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 32px;
+      margin-bottom: 4px;
+    }
+
+    .o-field-row {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 4px 8px;
+      align-items: start;
+      padding: 5px 0;
+      border-bottom: 1px solid transparent;
+    }
+
+    .o-field-row:hover {
+      border-bottom-color: var(--o-border-light);
+    }
+
+    .o-field-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--o-text);
+      padding-top: 2px;
+      white-space: nowrap;
+    }
+
+    .o-field-label sup {
+      color: var(--o-info, #0dcaf0);
+      font-size: 0.7rem;
+      cursor: help;
+      margin-left: 2px;
+    }
+
+    .o-field-value {
+      font-size: 0.8rem;
+      color: var(--o-text);
+      line-height: 1.5;
+    }
+
+    .o-field-value a {
+      color: var(--o-purple);
+      text-decoration: none;
+    }
+
+    .o-field-value a:hover {
+      text-decoration: underline;
+    }
+
+    .o-field-input {
+      border: none;
+      border-bottom: 1px solid var(--o-border);
+      background: transparent;
+      font-family: var(--o-font);
+      font-size: 0.8rem;
+      color: var(--o-text);
+      width: 100%;
+      outline: none;
+      padding: 1px 2px;
+      transition: border-color 0.15s;
+    }
+
+    .o-field-input:focus {
+      border-bottom-color: var(--o-purple);
+    }
+
+    .o-field-input::placeholder {
+      color: var(--o-text-light);
+    }
+
+    .o-field-empty {
+      color: var(--o-text-muted);
+      font-style: italic;
+      font-size: 0.78rem;
+    }
+
+    /* Notebook tabs */
+    .o-notebook-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--o-border);
+      margin: 20px -32px 0;
+      padding: 0 32px;
+    }
+
+    .o-nb-tab {
+      padding: 7px 16px;
+      font-size: 0.82rem;
+      color: var(--o-text-muted);
+      cursor: pointer;
+      border: 1px solid transparent;
+      border-bottom: none;
+      border-radius: 4px 4px 0 0;
+      margin-bottom: -1px;
+      transition: all 0.12s;
+      white-space: nowrap;
+    }
+
+    .o-nb-tab:hover {
+      color: var(--o-text);
+    }
+
+    .o-nb-tab.active {
+      color: var(--o-text);
+      background: var(--o-bg-white);
+      border-color: var(--o-border);
+      font-weight: 500;
+    }
+
+    .o-nb-panel {
+      display: none;
+      padding-top: 16px;
+    }
+
+    .o-nb-panel.active {
+      display: block;
+    }
+
+    /* Order lines table */
+    .o-lines-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      margin-bottom: 8px;
+    }
+
+    .o-lines-table thead th {
+      padding: 6px 8px;
+      font-weight: 600;
+      font-size: 0.77rem;
+      color: var(--o-text);
+      text-align: left;
+      border-bottom: 2px solid var(--o-border-table);
+      white-space: nowrap;
+      background: var(--o-bg-white);
+    }
+
+    .o-lines-table thead th.num {
+      text-align: right;
+    }
+
+    .o-lines-table tbody tr {
+      border-bottom: 1px solid var(--o-border-light);
+      transition: background 0.07s;
+      cursor: pointer;
+    }
+
+    .o-lines-table tbody tr:hover {
+      background: var(--o-row-hover);
+    }
+
+    .o-lines-table td {
+      padding: 6px 8px;
+      color: var(--o-text);
+      vertical-align: middle;
+    }
+
+    .o-lines-table td.num {
+      text-align: right;
+    }
+
+    .o-lines-table td.handle {
+      width: 20px;
+      color: var(--o-text-muted);
+      cursor: grab;
+    }
+
+    .o-lines-table td.del-btn {
+      text-align: center;
+      width: 32px;
+    }
+
+    .o-lines-table .del-row-btn {
+      background: transparent;
+      border: none;
+      color: var(--o-text-muted);
+      cursor: pointer;
+      font-size: 0.85rem;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+
+    .o-lines-table .del-row-btn:hover {
+      color: #dc3545;
+      background: #fff0f0;
+    }
+
+    .o-tag {
+      display: inline-flex;
+      align-items: center;
+      background: #e2e3e5;
+      color: #41464b;
+      border-radius: 999px;
+      padding: 1px 8px;
+      font-size: 0.72rem;
+      font-weight: 500;
+    }
+
+    .o-tag.igv {
+      background: #d1e7dd;
+      color: #0a3622;
+    }
+
+    /* Add product row */
+    .o-add-product {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 8px;
+      font-size: 0.8rem;
+    }
+
+    .o-add-product a {
+      color: var(--o-purple);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .o-add-product a:hover {
+      text-decoration: underline;
+    }
+
+    .o-add-product .catalog-btn {
+      background: transparent;
+      border: 1px solid var(--o-btn-secondary-border);
+      color: var(--o-text);
+      border-radius: 4px;
+      padding: 2px 10px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+
+    .o-add-product .catalog-btn:hover {
+      background: #f8f9fa;
+    }
+
+    /* Totals box */
+    .o-totals-box {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 12px;
+    }
+
+    .o-totals-table {
+      font-size: 0.82rem;
+    }
+
+    .o-totals-table td {
+      padding: 3px 6px;
+    }
+
+    .o-totals-table td:first-child {
+      color: var(--o-text);
+      font-weight: 500;
+      text-align: right;
+      min-width: 100px;
+    }
+
+    .o-totals-table td:last-child {
+      text-align: right;
+      font-weight: 700;
+      min-width: 110px;
+    }
+
+    .o-totals-table tr.total-row td {
+      font-size: 1rem;
+      border-top: 1px solid var(--o-border);
+      padding-top: 6px;
+    }
+
+    .o-totals-table tr.total-row td:first-child {
+      font-weight: 700;
+    }
+
+    /* Terms field */
+    .o-terms {
+      font-size: 0.78rem;
+      color: var(--o-text-muted);
+      border: 1px solid var(--o-border-light);
+      border-radius: 4px;
+      padding: 8px 10px;
+      margin-top: 10px;
+      min-height: 40px;
+    }
+
+    /* Chatter */
+    .o-chatter {
+      background: var(--o-bg-white);
+      border-top: 1px solid var(--o-border-light);
+      margin: 0 auto;
+      max-width: 1200px;
+      padding: 16px 32px 24px;
+    }
+
+    .o-chatter-topbar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--o-border-light);
+      flex-wrap: wrap;
+    }
+
+    .o-chatter-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: auto;
+    }
+
+    .o-chatter-icon-btn {
+      background: transparent;
+      border: none;
+      color: var(--o-text-muted);
+      cursor: pointer;
+      font-size: 0.85rem;
+      padding: 3px 6px;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .o-chatter-icon-btn:hover {
+      background: #f8f9fa;
+      color: var(--o-text);
+    }
+
+    .o-followers-btn {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      background: transparent;
+      border: none;
+      color: var(--o-text-muted);
+      cursor: pointer;
+      font-size: 0.78rem;
+      padding: 3px 6px;
+      border-radius: 3px;
+    }
+
+    .o-followers-btn:hover {
+      background: #f8f9fa;
+    }
+
+    .o-following-btn {
+      background: transparent;
+      border: none;
+      color: #198754;
+      font-size: 0.78rem;
+      cursor: pointer;
+      padding: 3px 6px;
+    }
+
+    .o-message {
+      display: flex;
+      gap: 10px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--o-border-light);
+    }
+
+    .o-message:last-child {
+      border-bottom: none;
+    }
+
+    .o-msg-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #a89dd4, #714b97);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .o-msg-header {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 3px;
+    }
+
+    .o-msg-author {
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--o-text);
+    }
+
+    .o-msg-date {
+      font-size: 0.7rem;
+      color: var(--o-text-muted);
+    }
+
+    .o-msg-body {
+      font-size: 0.8rem;
+      color: var(--o-text);
+    }
+
+    .o-msg-tracking {
+      font-size: 0.78rem;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .o-msg-track-old {
+      color: var(--o-text-muted);
+      font-weight: 600;
+      background: #f8f9fa;
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    .o-msg-track-new {
+      color: #0dcaf0;
+      font-weight: 600;
+    }
+
+    .o-msg-track-field {
+      color: var(--o-text-muted);
+      font-style: italic;
+      font-size: 0.72rem;
+    }
+
+    .o-msg-date-sep {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      color: var(--o-text-muted);
+      font-weight: 700;
+      padding: 8px 0;
+    }
+
+    .o-msg-date-sep hr {
+      flex: 1;
+      border: none;
+      border-top: 1px solid var(--o-border-light);
+    }
+
+    /* Form new record mode */
+    .o-field-new input,
+    .o-field-new .o-field-input-box {
+      border: 1px solid var(--o-border);
+      border-radius: 4px;
+      padding: 4px 8px;
+      background: var(--o-bg-white);
+      font-family: var(--o-font);
+      font-size: 0.8rem;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .o-field-new input:focus,
+    .o-field-new .o-field-input-box:focus {
+      border-color: var(--o-purple);
+    }
+
+    /* Agregar envío button bottom */
+    .o-form-bottom-bar {
+      position: sticky;
+      bottom: 0;
+      background: var(--o-bg-white);
+      border-top: 1px solid var(--o-border-light);
+      padding: 8px 32px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .col-date {
+        width: 100px;
+      }
+
+      .col-state {
+        width: 120px;
+      }
+
+      .col-inv {
+        display: none;
+      }
+
+      .hide-sm {
+        display: none;
+      }
+
+      .o-form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!--╔══════════════════════════════════════════════╗
+      ║            NAVBAR                            ║
+      ╚══════════════════════════════════════════════╝ -->
+  <header class="o-navbar">
+    <div class="o-navbar-inner">
+
+      <!-- Apps grid menu -->
+      <div class="o-nav-apps-wrap">
+        <!-- Backdrop overlay to close on outside click -->
+        <div class="o-apps-overlay" id="apps-overlay" onclick="closeAppsMenu()"></div>
+
+        <button class="o-nav-apps" id="apps-btn" title="Menú de inicio" onclick="toggleAppsMenu()"
+          aria-expanded="false">
+          <i class="fa-solid fa-th" style="font-size:1rem;"></i>
+        </button>
+
+        <!-- Apps dropdown panel -->
+        <div class="o-apps-menu" id="apps-menu" role="menu">
+
+          <a class="o-apps-item" onclick="selectApp('Conversaciones')">
+            <span class="app-icon"><i class="fa-solid fa-comments"></i></span>
+            Conversaciones
+          </a>
+          <a class="o-apps-item" onclick="selectApp('Actividades pendientes')">
+            <span class="app-icon"><i class="fa-regular fa-clock"></i></span>
+            Actividades pendientes
+          </a>
+          <a class="o-apps-item" onclick="selectApp('Calendario')">
+            <span class="app-icon"><i class="fa-regular fa-calendar"></i></span>
+            Calendario
+          </a>
+          <a class="o-apps-item" onclick="selectApp('Nómina')">
+            <span class="app-icon"><i class="fa-solid fa-file-invoice-dollar"></i></span>
+            Nómina
+          </a>
+          <a class="o-apps-item" onclick="selectApp('Contactos')">
+            <span class="app-icon"><i class="fa-solid fa-address-book"></i></span>
+            Contactos
+          </a>
+          <a class="o-apps-item active" onclick="selectApp('Ventas')">
+            <span class="app-icon"><i class="fa-solid fa-chart-line"></i></span>
+            Ventas
+          </a>
+          <a class="o-apps-item" onclick="selectApp('Tableros')">
+            <span class="app-icon"><i class="fa-solid fa-gauge"></i></span>
+            Tableros
+          </a>
+          <a class="o-apps-item" onclick="selectApp('Punto de venta')">
+            <span class="app-icon"><i class="fa-solid fa-cash-register"></i></span>
+            Punto de venta
+          </a>
+          <a class="o-apps-item" onclick="selectApp('Facturación')">
+            <span class="app-icon"><i class="fa-solid fa-file-invoice"></i></span>
+            Facturación
+          </a>
+          <a class="o-apps-item" onclick="selectApp('Proyecto')">
+            <span class="app-icon"><i class="fa-solid fa-diagram-project"></i></span>
+            Proyecto
+          </a>
+          <a class="o-apps-item" onclick="selectApp('Sitio web')">
+            <span class="app-icon"><i class="fa-solid fa-globe"></i></span>
+            Sitio web
+          </a>
+          <a class="o-apps-item" onclick="selectApp('Marketing por correo electrónico')">
+            <span class="app-icon"><i class="fa-solid fa-envelope-open-text"></i></span>
+            Marketing por correo electrónico
+          </a>
+          <a class="o-apps-item" onclick="selectApp('Encuestas')">
+            <span class="app-icon"><i class="fa-solid fa-poll"></i></span>
+            Encuestas
+          </a>
+          <a class="o-apps-item" onclick="selectApp('Compra')">
+            <span class="app-icon"><i class="fa-solid fa-cart-shopping"></i></span>
+            Compra
+          </a>
+          <a class="o-apps-item" onclick="selectApp('Inventario')">
+            <span class="app-icon"><i class="fa-solid fa-warehouse"></i></span>
+            Inventario
+          </a>
+          <a class="o-apps-item" onclick="selectApp('Manufactura')">
+            <span class="app-icon"><i class="fa-solid fa-industry"></i></span>
+            Manufactura
+          </a>
+          <a class="o-apps-item" onclick="selectApp('Empleados')">
+            <span class="app-icon"><i class="fa-solid fa-users"></i></span>
+            Empleados
+          </a>
+          <a class="o-apps-item" onclick="selectApp('Asistencias')">
+            <span class="app-icon"><i class="fa-solid fa-user-check"></i></span>
+            Asistencias
+          </a>
+          <a class="o-apps-item" onclick="selectApp('Flota')">
+            <span class="app-icon"><i class="fa-solid fa-car"></i></span>
+            Flota
+          </a>
+
+        </div>
+      </div>
+
+      <!-- Brand: current module -->
+      <a class="o-nav-brand" href="#">Ventas</a>
+
+      <div class="o-nav-sep"></div>
+
+      <!-- Section menu items -->
+      <nav class="o-nav-sections">
+        <div class="o-nav-section" onclick="toggleDropMenu(this,'dd-ordenes')">
+          Órdenes <i class="fa-solid fa-angle-down" style="font-size:0.65rem;margin-left:3px;opacity:.7;"></i>
+          <div class="o-dropdown-menu" id="dd-ordenes">
+            <div class="o-dropdown-item">Cotizaciones</div>
+            <div class="o-dropdown-item">Órdenes de venta</div>
+            <div class="o-dropdown-sep"></div>
+            <div class="o-dropdown-item">Clientes</div>
+          </div>
+        </div>
+        <div class="o-nav-section">Por facturar</div>
+        <div class="o-nav-section">Productos</div>
+        <div class="o-nav-section">Reportes</div>
+        <div class="o-nav-section">Configuración</div>
+      </nav>
+
+      <!-- Systray -->
+      <div class="o-systray">
+        <!-- Alert dot -->
+        <button class="o-systray-btn" title="Asistencia">
+          <i class="fa-solid fa-circle" style="color:#dc3545;font-size:0.55rem;"></i>
+        </button>
+
+        <!-- Messages -->
+        <button class="o-systray-btn" title="Mensajes">
+          <i class="fa-solid fa-comments" style="font-size:1.05rem;"></i>
+          <span class="o-badge">67</span>
+        </button>
+
+        <!-- Activities -->
+        <button class="o-systray-btn" title="Actividades">
+          <i class="fa-regular fa-clock" style="font-size:1.05rem;"></i>
+          <span class="o-badge green">10</span>
+        </button>
+
+        <!-- Company -->
+        <button class="o-systray-btn" title="Heinz Sport SAC">
+          <i class="fa-solid fa-building" style="font-size:0.85rem;"></i>
+          <span class="o-company-name">Heinz Sport SAC</span>
+        </button>
+
+        <!-- User -->
+        <button class="o-systray-btn" style="gap:7px;">
+          <div class="o-avatar-box">EM</div>
+          <div style="text-align:left;line-height:1.2;display:none;" class="hide-sm">
+            <div style="font-size:0.75rem;font-weight:600;color:rgba(255,255,255,.9);">Elí Mandujano</div>
+            <div style="font-size:0.65rem;color:rgba(255,255,255,.55);font-family:monospace;">
+              <i class="fa-solid fa-database" style="font-size:0.55rem;"></i> elite
+            </div>
+          </div>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!--╔══════════════════════════════════════════════╗
+      ║     VIEW ROUTER (list ↔ form)                ║
+      ╚══════════════════════════════════════════════╝ -->
+
+  <!-- ═══ LIST VIEW ═══ -->
+  <div id="view-list" class="active">
+
+    <!--╔══════════════════════════════════════════════╗
+        ║          CONTROL PANEL                       ║
+        ╚══════════════════════════════════════════════╝ -->
+    <div class="o-control-panel">
+
+      <!-- Row 1: actions + breadcrumb + pager + view switcher -->
+      <div class="o-cp-top">
+        <div class="o-cp-left">
+          <!-- Primary action -->
+          <button class="o-btn o-btn-primary" onclick="openForm(null)">
+            &nbsp;Nuevo
+          </button>
+          <!-- Secondary action -->
+          <button class="o-btn o-btn-secondary">Subir</button>
+          <!-- Breadcrumb title -->
+          <span class="o-breadcrumb-title" style="margin-left:6px;">
+            Cotizaciones
+            <button class="o-breadcrumb-gear" title="Acciones">
+              <i class="fa-solid fa-gear" style="font-size:0.85rem;"></i>
+            </button>
+          </span>
+        </div>
+
+        <!-- Row 2: search bar -->
+        <div class="o-cp-search-row">
+          <div class="o-searchview">
+            <button style="background:transparent;border:none;cursor:pointer;padding:0 2px;color:var(--o-text-muted);">
+              <i class="fa-solid fa-magnifying-glass" style="font-size:0.8rem;"></i>
+            </button>
+            <!-- Active facet -->
+            <div class="o-facet" id="facet-mis">
+              <span class="o-facet-label">
+                <i class="fa-solid fa-filter" style="font-size:0.6rem;"></i>
+              </span>
+              <span class="o-facet-value">Mis cotizaciones</span>
+              <button class="o-facet-remove" onclick="removeFacet()" title="Eliminar">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+            <input class="o-search-input" type="text" placeholder="Buscar…" id="search-input">
+          </div>
+          <button class="o-search-dropdown-btn" title="Mostrar u ocultar panel de búsqueda">
+            <i class="fa-solid fa-angle-down" style="font-size:0.7rem;margin-right:2px;"></i>
+          </button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <!-- Pager -->
+          <nav class="o-pager">
+            <span class="o-pager-counter">
+              <span id="pager-val">1-80</span>
+              <span> / </span>
+              <span id="pager-limit">82</span>
+            </span>
+            <div class="o-pager-btns">
+              <button class="o-pager-btn" onclick="pagePrev()" title="Anterior">
+                <i class="fa-solid fa-chevron-left" style="font-size:0.7rem;"></i>
+              </button>
+              <button class="o-pager-btn" onclick="pageNext()" title="Siguiente">
+                <i class="fa-solid fa-chevron-right" style="font-size:0.7rem;"></i>
+              </button>
+            </div>
+          </nav>
+
+          <!-- View switcher -->
+          <div class="o-view-switcher">
+            <button class="o-view-btn active" title="Lista">
+              <i class="fa-solid fa-list"></i>
+            </button>
+            <button class="o-view-btn" title="Kanban" onclick="switchView(this)">
+              <i class="fa-solid fa-table-cells-large"></i>
+            </button>
+            <button class="o-view-btn" title="Calendario" onclick="switchView(this)">
+              <i class="fa-regular fa-calendar"></i>
+            </button>
+            <button class="o-view-btn" title="Tabla dinámica" onclick="switchView(this)">
+              <i class="fa-solid fa-table"></i>
+            </button>
+            <button class="o-view-btn" title="Gráfico" onclick="switchView(this)">
+              <i class="fa-solid fa-chart-area"></i>
+            </button>
+            <button class="o-view-btn" title="Actividad" onclick="switchView(this)">
+              <i class="fa-regular fa-clock"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+
+    <!-- ╔══════════════════════════════════════════════╗
+     ║          LIST TABLE                           ║
+     ╚══════════════════════════════════════════════╝ -->
+    <div class="o-list-container">
+      <table class="o-list-table" id="main-table">
+        <thead>
+          <tr>
+            <th class="col-chk">
+              <div style="display:flex;justify-content:center;">
+                <div class="o-checkbox" id="chk-all" onclick="toggleAll(this)"></div>
+              </div>
+            </th>
+            <th class="col-num sorted" onclick="sortBy('num')">
+              Número
+              <i class="fa-solid fa-angle-down sort-icon"></i>
+              <span class="th-resize"></span>
+            </th>
+            <th class="col-date" onclick="sortBy('create')">
+              Fecha de creación
+              <i class="fa-solid fa-angle-down sort-icon"></i>
+              <span class="th-resize"></span>
+            </th>
+            <th class="col-date" onclick="sortBy('expected')">
+              Fecha esperada
+              <i class="fa-solid fa-angle-down sort-icon"></i>
+              <span class="th-resize"></span>
+            </th>
+            <th onclick="sortBy('client')">
+              Cliente
+              <i class="fa-solid fa-angle-down sort-icon"></i>
+              <span class="th-resize"></span>
+            </th>
+            <th class="col-act">Actividades<span class="th-resize"></span></th>
+            <th class="col-total" style="text-align:right;" onclick="sortBy('total')">
+              Total
+              <i class="fa-solid fa-angle-down sort-icon"></i>
+              <span class="th-resize"></span>
+            </th>
+            <th class="col-state" onclick="sortBy('state')">
+              Estado
+              <i class="fa-solid fa-angle-down sort-icon"></i>
+              <span class="th-resize"></span>
+            </th>
+            <th class="col-inv" onclick="sortBy('inv')">
+              Estado de la factura
+              <i class="fa-solid fa-angle-down sort-icon"></i>
+              <span class="th-resize"></span>
+            </th>
+            <th class="col-opt" style="text-align:center;cursor:default;" onclick="event.stopPropagation()">
+              <button class="opt-col-btn" title="Columnas opcionales">
+                <i class="fa-solid fa-sliders" style="font-size:0.75rem;"></i>
+              </button>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="monetary" id="total-footer">S/ 186,997.41</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+  </div><!-- /#view-list -->
+
+  <!-- ═══ FORM VIEW ═══ -->
+  <div id="view-form">
+
+    <!-- Form Control Panel -->
+    <div class="o-form-cp">
+      <div class="o-form-cp-row1">
+        <!-- Left: breadcrumb + new button -->
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <button class="o-btn o-btn-secondary" style="font-size:0.78rem;padding:4px 10px;" onclick="openForm(null)">
+            Nuevo
+          </button>
+          <nav style="display:flex;align-items:center;gap:2px;font-size:0.8rem;">
+            <a class="o-breadcrumb-back" onclick="closeForm()">
+              Cotizaciones
+            </a>
+            <span class="o-breadcrumb-sep"><i class="fa-solid fa-chevron-right" style="font-size:0.65rem;"></i></span>
+            <span class="o-breadcrumb-current">
+              <span id="form-title-crumb">S00145</span>
+              <button class="o-breadcrumb-gear" title="Acciones" style="color:var(--o-text-muted);">
+                <i class="fa-solid fa-gear" style="font-size:0.82rem;"></i>
+              </button>
+            </span>
+          </nav>
+        </div>
+
+        <!-- Center: stat buttons -->
+        <div style="display:flex;align-items:center;gap:8px;" id="form-stat-btns">
+          <button class="o-stat-btn" id="btn-entrega">
+            <i class="fa-solid fa-truck" style="color:var(--o-purple);font-size:1rem;"></i>
+            <div>
+              <div class="stat-val" id="stat-entregas">1</div>
+              <div class="stat-lbl">Entrega</div>
+            </div>
+          </button>
+        </div>
+
+        <!-- Right: pager -->
+        <nav class="o-pager">
+          <span class="o-pager-counter">
+            <span id="form-pager-val">1</span>
+            <span> / </span>
+            <span id="form-pager-total">80</span>
+          </span>
+          <div class="o-pager-btns">
+            <button class="o-pager-btn" onclick="formPagerPrev()" title="Anterior">
+              <i class="fa-solid fa-chevron-left" style="font-size:0.7rem;"></i>
+            </button>
+            <button class="o-pager-btn" onclick="formPagerNext()" title="Siguiente">
+              <i class="fa-solid fa-chevron-right" style="font-size:0.7rem;"></i>
+            </button>
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Status bar -->
+    <div
+      style="background:var(--o-bg-white);border-bottom:1px solid var(--o-border-light);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;flex-shrink:0;">
+      <!-- Action buttons -->
+      <div class="o-statusbar-actions" id="form-action-btns">
+        <button class="o-btn o-btn-secondary" id="btn-crear-factura"
+          onclick="alert('Crear factura: funcionalidad próximamente.')">Crear factura</button>
+        <button class="o-btn o-btn-secondary" onclick="alert('Enviar por correo: funcionalidad próximamente.')">Enviar
+          por correo electrónico</button>
+        <button class="o-btn o-btn-secondary" onclick="alert('Vista previa: funcionalidad próximamente.')">Vista
+          previa</button>
+        <button class="o-btn o-btn-secondary" id="btn-cancelar-order" onclick="cancelOrder()">Cancelar</button>
+      </div>
+      <!-- Status steps -->
+      <div class="o-statusbar" id="form-statusbar">
+        <!-- rendered by JS -->
+      </div>
+    </div>
+
+    <!-- Form Sheet -->
+    <div class="o-form-sheet-bg">
+      <div class="o-form-sheet" id="form-sheet">
+
+        <!-- Title -->
+        <h1 class="o-form-title" id="form-id-title">S00145</h1>
+
+        <!-- Two-column fields -->
+        <div class="o-form-grid">
+
+          <!-- LEFT column -->
+          <div>
+            <div class="o-field-row">
+              <div class="o-field-label">Cliente</div>
+              <div class="o-field-value" id="fld-client-val">
+                <a href="#">COMPAÑIA DE EMPAQUES ARRUE S.A.C.</a><br>
+                <span style="color:var(--o-text-muted);font-size:0.77rem;">Chiclayo<br>Chiclayo<br>Lambayeque<br>Perú –
+                  20608005235</span>
+              </div>
+            </div>
+            <div class="o-field-row">
+              <div class="o-field-label">Dirección de factura</div>
+              <div class="o-field-value o-field-new">
+                <input class="o-field-input" id="fld-dir-factura" value="COMPAÑIA DE EMPAQUES ARRUE S.A.C."
+                  placeholder="Dirección de factura">
+              </div>
+            </div>
+            <div class="o-field-row">
+              <div class="o-field-label">Dirección de entrega</div>
+              <div class="o-field-value o-field-new">
+                <input class="o-field-input" id="fld-dir-entrega" value="COMPAÑIA DE EMPAQUES ARRUE S.A.C."
+                  placeholder="Dirección de entrega">
+              </div>
+            </div>
+            <div class="o-field-row">
+              <div class="o-field-label">Plantilla de cotización</div>
+              <div class="o-field-value o-field-new">
+                <input class="o-field-input" id="fld-plantilla" value="" placeholder="">
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT column -->
+          <div>
+            <div class="o-field-row">
+              <div class="o-field-label">Fecha de la orden <sup title="Fecha de confirmación de la orden">?</sup></div>
+              <div class="o-field-value" id="fld-fecha">09/05/2026 16:17:13</div>
+            </div>
+            <div class="o-field-row">
+              <div class="o-field-label">Lista de precios <sup
+                  title="Si modifica la lista de precios, solo afectará a las nuevas líneas">?</sup></div>
+              <div class="o-field-value" id="fld-pricelist">Benelux (PEN)</div>
+            </div>
+            <div class="o-field-row">
+              <div class="o-field-label">Términos de pago</div>
+              <div class="o-field-value o-field-new">
+                <input class="o-field-input" id="fld-payment-term" value="" placeholder="Inmediato">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notebook tabs -->
+        <div class="o-notebook-tabs">
+          <div class="o-nb-tab active" onclick="nbTab('order-lines', this)">Líneas de la orden</div>
+          <div class="o-nb-tab" onclick="nbTab('cotiz-builder', this)">Creador de cotizaciones</div>
+          <div class="o-nb-tab" onclick="nbTab('other-info', this)">Otra información</div>
+          <div class="o-nb-tab" onclick="nbTab('firma', this)">Firma del cliente</div>
+        </div>
+
+        <!-- Tab: Líneas de la orden -->
+        <div class="o-nb-panel active" id="nb-order-lines">
+          <div style="overflow-x:auto;">
+            <table class="o-lines-table" id="order-lines-table">
+              <thead>
+                <tr>
+                  <th style="width:20px;"></th>
+                  <th>Producto</th>
+                  <th class="num">Cantidad</th>
+                  <th class="num">Entregado</th>
+                  <th style="width:28px;"></th>
+                  <th class="num">Facturado</th>
+                  <th>UdM</th>
+                  <th class="num">Precio unitario</th>
+                  <th>Impuestos</th>
+                  <th class="num">Importe</th>
+                  <th style="width:32px;"></th>
+                </tr>
+              </thead>
+              <tbody id="lines-tbody"></tbody>
+            </table>
+          </div>
+
+          <!-- Add actions -->
+          <div class="o-add-product">
+            <a onclick="addOrderLine()">Agregar un producto</a>
+            <a onclick="addSection()">Agregar una sección</a>
+            <a onclick="addNote()">Agregar una nota</a>
+            <button class="catalog-btn" onclick="alert('Catálogo: próximamente.')">Catálogo</button>
+          </div>
+
+          <!-- Bottom row: totals + terms -->
+          <div style="display:grid;grid-template-columns:1fr auto;gap:24px;margin-top:8px;align-items:start;">
+            <!-- Terms & conditions -->
+            <div>
+              <div class="o-terms" contenteditable="true" id="fld-terms">
+                Términos y condiciones: <a href="https://www.heinzsport.com/terms"
+                  target="_blank">https://www.heinzsport.com/terms</a>
+              </div>
+            </div>
+            <!-- Totals -->
+            <div class="o-totals-box">
+              <table class="o-totals-table" id="totals-table">
+                <tr>
+                  <td>Subtotal</td>
+                  <td id="tot-subtotal">S/ 0.00</td>
+                </tr>
+                <tr>
+                  <td>IGV</td>
+                  <td id="tot-igv">S/ 0.00</td>
+                </tr>
+                <tr class="total-row">
+                  <td>Total</td>
+                  <td id="tot-total">S/ 0.00</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Creador de cotizaciones (placeholder) -->
+        <div class="o-nb-panel" id="nb-cotiz-builder">
+          <p style="color:var(--o-text-muted);font-size:0.82rem;padding:16px 0;">Creador de cotizaciones — funcionalidad
+            próximamente.</p>
+        </div>
+
+        <!-- Tab: Otra información (placeholder) -->
+        <div class="o-nb-panel" id="nb-other-info">
+          <p style="color:var(--o-text-muted);font-size:0.82rem;padding:16px 0;">Otra información — funcionalidad
+            próximamente.</p>
+        </div>
+
+        <!-- Tab: Firma del cliente (placeholder) -->
+        <div class="o-nb-panel" id="nb-firma">
+          <p style="color:var(--o-text-muted);font-size:0.82rem;padding:16px 0;">Firma del cliente — funcionalidad
+            próximamente.</p>
+        </div>
+
+      </div><!-- /.o-form-sheet -->
+
+      <!-- Chatter -->
+      <div class="o-chatter" id="form-chatter">
+        <div class="o-chatter-topbar">
+          <button class="o-btn o-btn-primary" style="font-size:0.78rem;padding:4px 12px;"
+            onclick="alert('Enviar mensaje: próximamente.')">
+            Enviar mensaje
+          </button>
+          <button class="o-btn o-btn-secondary" style="font-size:0.78rem;padding:4px 12px;"
+            onclick="alert('Registrar nota: próximamente.')">
+            Registrar una nota
+          </button>
+          <button class="o-btn o-btn-secondary" style="font-size:0.78rem;padding:4px 12px;"
+            onclick="alert('Actividades: próximamente.')">
+            Actividades
+          </button>
+          <div class="o-chatter-actions">
+            <button class="o-chatter-icon-btn" title="Buscar mensajes">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+            <button class="o-chatter-icon-btn" title="Adjuntar archivos">
+              <i class="fa-solid fa-paperclip"></i>
+            </button>
+            <button class="o-followers-btn" title="Seguidores">
+              <i class="fa-regular fa-user"></i>
+              <sup style="font-size:0.65rem;font-weight:700;">2</sup>
+            </button>
+            <button class="o-following-btn">
+              <i class="fa-solid fa-circle-check" style="font-size:0.85rem;"></i> Siguiendo
+            </button>
+          </div>
+        </div>
+
+        <!-- Messages -->
+        <div id="chatter-messages"></div>
+      </div>
+
+    </div><!-- /.o-form-sheet-bg -->
+
+    <!-- Bottom bar -->
+    <div class="o-form-bottom-bar" id="form-bottom-bar" style="display:none;">
+      <button class="o-btn o-btn-secondary" onclick="alert('Agregar envío: próximamente.')">Agregar envío</button>
+    </div>
+
+  </div><!-- /#view-form -->
+
+  <script>
+    // ══════════════════════════════════════════════════════════
+    //  DATA
+    // ══════════════════════════════════════════════════════════
+    const ROWS = [
+      { id: 'S00086', 'create': '28/01/2026 12:17:20', 'expected': '02/02/2026 10:37:16', 'client': 'FAROBEN DEL PERU E.I.R.L.', 'total': 'S/ 2,550.00', 'totalInfo': false, 'state': 'sale', 'inv': 'invoiced', 'lines': [{ prod: '[FAR001] Sorbete Estándar', qty: 150, del: 0, inv: 150, uom: 'Unidad', price: 17.00, tax: 'IGV 18%', subtotal: 2550.00 }] },
+      { id: 'S00081', 'create': '19/01/2026 00:09:14', 'expected': '01/02/2026 23:15:07', 'client': 'OSORIO SIGUAS SILVIO VITALIANO', 'total': 'S/ 330.00', 'totalInfo': true, 'state': 'sale', 'inv': 'to invoice', 'lines': [{ prod: '[OS001] Pajita Flexible', qty: 60, del: 0, inv: 0, uom: 'Unidad', price: 5.50, tax: 'IGV 18%', subtotal: 330.00 }] },
+      { id: 'S00079', 'create': '17/01/2026 22:53:07', 'expected': '23/01/2026 08:53:20', 'client': 'TORIBIO NEYRA ROBERTO HENRY', 'total': 'S/ 630.00', 'totalInfo': true, 'state': 'sale', 'inv': 'to invoice', 'lines': [{ prod: '[TN001] Sorbete Rígido 6mm', qty: 90, del: 0, inv: 0, uom: 'Unidad', price: 7.00, tax: 'IGV 18%', subtotal: 630.00 }] },
+      { id: 'S00077', 'create': '17/01/2026 00:10:33', 'expected': '17/01/2026 00:10:39', 'client': 'OSORIO SIGUAS SILVIO VITALIANO', 'total': 'S/ 630.00', 'totalInfo': true, 'state': 'sale', 'inv': 'to invoice', 'lines': [{ prod: '[OS002] Sorbete Jumbo', qty: 45, del: 0, inv: 0, uom: 'Unidad', price: 14.00, tax: 'IGV 18%', subtotal: 630.00 }] },
+      { id: 'S00076', 'create': '16/01/2026 19:26:10', 'expected': '16/01/2026 19:26:13', 'client': 'LEGUIA DACOSTA CLAUDIA HILARY', 'total': 'S/ 1,080.00', 'totalInfo': true, 'state': 'sale', 'inv': 'to invoice', 'lines': [{ prod: '[LG001] Pajita Bendy', qty: 120, del: 0, inv: 0, uom: 'Unidad', price: 9.00, tax: 'IGV 18%', subtotal: 1080.00 }] },
+      { id: 'S00072', 'create': '12/01/2026 23:38:29', 'expected': '12/01/2026 23:38:38', 'client': 'CLIENTES VARIOS', 'total': 'S/ 19.00', 'totalInfo': true, 'state': 'sale', 'inv': 'to invoice', 'lines': [{ prod: '[CV001] Sorbete Mini', qty: 10, del: 0, inv: 0, uom: 'Unidad', price: 1.90, tax: 'IGV 18%', subtotal: 19.00 }] },
+      { id: 'S00071', 'create': '12/01/2026 23:32:52', 'expected': '12/01/2026 23:33:33', 'client': 'OSORIO SIGUAS SILVIO VITALIANO', 'total': 'S/ 660.00', 'totalInfo': true, 'state': 'sale', 'inv': 'to invoice', 'lines': [{ prod: '[OS003] Sorbete Jumbo 10mm', qty: 60, del: 0, inv: 0, uom: 'Unidad', price: 11.00, tax: 'IGV 18%', subtotal: 660.00 }] },
+      { id: 'S00070', 'create': '10/01/2026 10:54:42', 'expected': '10/01/2026 10:54:42', 'client': 'OSORIO SIGUAS SILVIO VITALIANO', 'total': 'S/ 1,350.00', 'totalInfo': true, 'state': 'sale', 'inv': 'to invoice', 'lines': [{ prod: '[OS004] Sorbete Flexible 8mm', qty: 150, del: 0, inv: 0, uom: 'Unidad', price: 9.00, tax: 'IGV 18%', subtotal: 1350.00 }] },
+      { id: 'S00069', 'create': '10/01/2026 10:53:20', 'expected': '10/01/2026 10:53:20', 'client': 'LINGAN SEJURO OSCAR ANTONIO', 'total': 'S/ 1,350.00', 'totalInfo': true, 'state': 'sale', 'inv': 'to invoice', 'lines': [{ prod: '[LS001] Pajita Recta 8mm', qty: 150, del: 0, inv: 0, uom: 'Unidad', price: 9.00, tax: 'IGV 18%', subtotal: 1350.00 }] },
+      { id: 'S00068', 'create': '10/01/2026 10:50:05', 'expected': '10/01/2026 10:50:06', 'client': 'OSORIO SIGUAS SILVIO VITALIANO', 'total': 'S/ 7,030.00', 'totalInfo': true, 'state': 'sale', 'inv': 'to invoice', 'lines': [{ prod: '[OS005] Sorbete Forrado Premium', qty: 200, del: 0, inv: 0, uom: 'Unidad', price: 35.15, tax: 'IGV 18%', subtotal: 7030.00 }] },
+      { id: 'S00067', 'create': '10/01/2026 00:23:35', 'expected': '10/01/2026 11:03:27', 'client': 'CAMPOS MAZA GENESIS', 'total': 'S/ 5,655.00', 'totalInfo': true, 'state': 'sale', 'inv': 'to invoice', 'lines': [{ prod: '[CM001] Sorbete Bendy XL', qty: 300, del: 0, inv: 0, uom: 'Unidad', price: 18.85, tax: 'IGV 18%', subtotal: 5655.00 }] },
+      { id: 'S00066', 'create': '09/01/2026 23:28:31', 'expected': '09/01/2026 23:28:54', 'client': 'VALCARCEL SUCASACA CARLOS RAUL', 'total': 'S/ 1,822.00', 'totalInfo': false, 'state': 'sale', 'inv': 'invoiced', 'lines': [{ prod: '[VC001] Pajita Articulada', qty: 140, del: 140, inv: 140, uom: 'Unidad', price: 13.01, tax: 'IGV 18%', subtotal: 1822.00 }] },
+      { id: 'S00065', 'create': '09/01/2026 23:19:15', 'expected': '09/01/2026 23:19:34', 'client': 'TORIBIO NEYRA ROBERTO HENRY', 'total': 'S/ 510.00', 'totalInfo': false, 'state': 'sale', 'inv': 'invoiced', 'lines': [{ prod: '[TN002] Sorbete Recto 6mm', qty: 60, del: 60, inv: 60, uom: 'Unidad', price: 8.50, tax: 'IGV 18%', subtotal: 510.00 }] },
+      { id: 'S00064', 'create': '09/01/2026 22:28:20', 'expected': '09/01/2026 22:39:03', 'client': 'UNIVERSAL PLASTICOS & DESCARTABLES SCRL', 'total': 'S/ 4,744.97', 'totalInfo': false, 'state': 'sale', 'inv': 'invoiced', 'lines': [{ prod: '[UP001] Sorbete Flexible Forrado XL', qty: 136, del: 136, inv: 136, uom: 'Unidad', price: 34.89, tax: 'IGV 18%', subtotal: 4744.97 }] },
+      { id: 'S00145', 'create': '09/05/2026 01:36:27', 'expected': '09/05/2026 16:17:13', 'client': 'COMPAÑIA DE EMPAQUES ARRUE S.A.C.', 'total': 'S/ 3,321.00', 'totalInfo': false, 'state': 'sale', 'inv': 'no', 'lines': [{ prod: '[FF6000] Sorbete Flexible Forrado', qty: 81, del: 0, inv: 0, uom: 'Unidad', price: 34.7458, tax: 'IGV 18%', subtotal: 2814.41 }] },
+      { id: 'S00146', 'create': '09/05/2026 09:04:20', 'expected': '09/05/2026 09:04:27', 'client': 'ALVARADO ROMAN ISOLINA SILVIA', 'total': 'S/ 1,155.00', 'totalInfo': false, 'state': 'sale', 'inv': 'no', 'lines': [{ prod: '[AR001] Sorbete Bendy 8mm', qty: 105, del: 0, inv: 0, uom: 'Unidad', price: 11.00, tax: 'IGV 18%', subtotal: 1155.00 }] },
+      { id: 'S00143', 'create': '07/05/2026 12:03:01', 'expected': '15/05/2026 21:41:08', 'client': 'COORPORACION YOLPLAST E.I.R.L.', 'total': 'S/ 540.00', 'totalInfo': false, 'state': 'draft', 'inv': 'no', 'lines': [{ prod: '[YP001] Sorbete Jumbo Flexible', qty: 60, del: 0, inv: 0, uom: 'Unidad', price: 9.00, tax: 'IGV 18%', subtotal: 540.00 }] },
+      { id: 'S00142', 'create': '06/05/2026 00:11:54', 'expected': '15/05/2026 21:41:08', 'client': 'OSORIO SIGUAS SILVIO VITALIANO', 'total': 'S/ 2,880.00', 'totalInfo': false, 'state': 'draft', 'inv': 'no', 'lines': [{ prod: '[OS006] Sorbete Forrado 6mm', qty: 160, del: 0, inv: 0, uom: 'Unidad', price: 18.00, tax: 'IGV 18%', subtotal: 2880.00 }] },
+      { id: 'S00139', 'create': '25/04/2026 15:00:43', 'expected': '30/04/2026 03:51:47', 'client': 'FREDY PONCE & MARANATHA S.A.C.', 'total': 'S/ 10,940.00', 'totalInfo': true, 'state': 'sale', 'inv': 'to invoice', 'lines': [{ prod: '[FP001] Sorbete Industrial 12mm', qty: 400, del: 0, inv: 0, uom: 'Unidad', price: 27.35, tax: 'IGV 18%', subtotal: 10940.00 }] },
+      { id: 'S00140', 'create': '30/04/2026 01:51:09', 'expected': '30/04/2026 00:52:16', 'client': 'GARAY RUDY HENRY MESA', 'total': 'S/ 1,050.00', 'totalInfo': true, 'state': 'sale', 'inv': 'to invoice', 'lines': [{ prod: '[GR001] Pajita Bendy 6mm', qty: 120, del: 0, inv: 0, uom: 'Unidad', price: 8.75, tax: 'IGV 18%', subtotal: 1050.00 }] },
+      { id: 'S00117', 'create': '18/03/2026 09:41:21', 'expected': '20/03/2026 12:57:26', 'client': 'OSORIO SIGUAS SILVIO VITALIANO', 'total': 'S/ 19,080.00', 'totalInfo': true, 'state': 'sale', 'inv': 'to invoice', 'lines': [{ prod: '[OS007] Sorbete Forrado Premium 10mm', qty: 480, del: 0, inv: 0, uom: 'Unidad', price: 39.75, tax: 'IGV 18%', subtotal: 19080.00 }] },
+    ];
+
+    // ══════════════════════════════════════════════════════════
+    //  STATE
+    // ══════════════════════════════════════════════════════════
+    let selectedRows = new Set();
+    let currentData = [...ROWS];
+    let currentFormId = null;       // null = new record
+    let currentFormIdx = 0;         // index within currentData for pager
+    let formOrderLines = [];        // mutable lines for current form
+    let lineIdCounter = 100;
+
+    // ══════════════════════════════════════════════════════════
+    //  BADGE HELPERS
+    // ══════════════════════════════════════════════════════════
+    function stateBadge(state) {
+      const map = {
+        'draft': ['badge-info', 'Cotización'],
+        'sent': ['badge-secondary', 'Cotización enviada'],
+        'sale': ['badge-success', 'Orden de venta'],
+        'cancel': ['badge-dark', 'Cancelado'],
+      };
+      const [cls, label] = map[state] || ['badge-secondary', state];
+      return '<span class="o-badge-pill ' + cls + '">' + label + '</span>';
+    }
+    function invBadge(inv) {
+      const map = {
+        'invoiced': ['badge-success', 'Facturado por completo'],
+        'to invoice': ['badge-info', 'Por facturar'],
+        'upselling': ['badge-secondary', 'Oportunidad adicional'],
+        'no': ['badge-secondary', 'Nada que facturar'],
+      };
+      const [cls, label] = map[inv] || ['badge-secondary', inv];
+      return '<span class="o-badge-pill ' + cls + '">' + label + '</span>';
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  LIST VIEW RENDER
+    // ══════════════════════════════════════════════════════════
+    function render(data) {
+      const tb = document.getElementById('tbody');
+      tb.innerHTML = data.map(function (r) {
+        const sel = selectedRows.has(r.id);
+        // Use data-id attribute — never inline dynamic values inside onclick quotes
+        return '<tr class="' + (sel ? 'selected' : '') + '" data-id="' + r.id + '">'
+          + '<td class="col-chk" data-id="' + r.id + '" data-action="chk">'
+          + '<div style="display:flex;justify-content:center;">'
+          + '<div class="o-checkbox' + (sel ? ' checked' : '') + '" id="chk-' + r.id + '"></div>'
+          + '</div></td>'
+          + '<td class="fw-bold">' + r.id + '</td>'
+          + '<td>' + r.create + '</td>'
+          + '<td>' + r.expected + '</td>'
+          + '<td style="overflow:hidden;text-overflow:ellipsis;">' + r.client + '</td>'
+          + '<td class="activity-cell"><button class="activity-btn" title="Actividades" data-action="activity"><i class="fa-regular fa-clock fa-lg"></i></button></td>'
+          + '<td class="monetary' + (r.totalInfo ? ' text-info' : '') + '">' + r.total + '</td>'
+          + '<td>' + stateBadge(r.state) + '</td>'
+          + '<td>' + invBadge(r.inv) + '</td>'
+          + '<td></td></tr>';
+      }).join('');
+    }
+
+    // Event delegation for table rows — replaces all inline onclick in rendered rows
+    document.addEventListener('click', function (e) {
+      // Activity button — stop, don't open form
+      if (e.target.closest('[data-action="activity"]')) { e.stopPropagation(); return; }
+      // Checkbox cell
+      const chkCell = e.target.closest('[data-action="chk"]');
+      if (chkCell) { e.stopPropagation(); toggleRow(chkCell.dataset.id, chkCell); return; }
+      // Row click → open form
+      const row = e.target.closest('#tbody tr[data-id]');
+      if (row) {
+        const id = row.dataset.id;
+        const idx = currentData.findIndex(function (r) { return r.id === id; });
+        openForm(id, idx);
+      }
+    });
+
+    // ══════════════════════════════════════════════════════════
+    //  ROW INTERACTIONS (list)
+    // ══════════════════════════════════════════════════════════
+    function toggleRow(id, cell) {
+      if (selectedRows.has(id)) {
+        selectedRows.delete(id);
+        document.getElementById('chk-' + id) && document.getElementById('chk-' + id).classList.remove('checked');
+        cell.closest('tr') && cell.closest('tr').classList.remove('selected');
+      } else {
+        selectedRows.add(id);
+        document.getElementById('chk-' + id) && document.getElementById('chk-' + id).classList.add('checked');
+        cell.closest('tr') && cell.closest('tr').classList.add('selected');
+      }
+      syncHeaderChk();
+    }
+    function toggleAll(el) {
+      if (selectedRows.size === currentData.length) {
+        selectedRows.clear(); el.classList.remove('checked');
+      } else {
+        currentData.forEach(function (r) { selectedRows.add(r.id); }); el.classList.add('checked');
+      }
+      render(currentData);
+    }
+    function syncHeaderChk() {
+      const el = document.getElementById('chk-all');
+      if (!el) return;
+      el.classList.toggle('checked', selectedRows.size === currentData.length && currentData.length > 0);
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  SEARCH / FILTER
+    // ══════════════════════════════════════════════════════════
+    document.getElementById('search-input').addEventListener('input', function () {
+      const q = this.value.toLowerCase();
+      currentData = q ? ROWS.filter(r => r.id.toLowerCase().includes(q) || r.client.toLowerCase().includes(q)) : [...ROWS];
+      selectedRows.clear();
+      render(currentData);
+      updateFooter();
+    });
+    function removeFacet() {
+      currentData = [...ROWS];
+      selectedRows.clear();
+      render(currentData);
+      updateFooter();
+      document.getElementById('facet-mis').style.display = 'none';
+    }
+    function updateFooter() {
+      const total = currentData.reduce((s, r) => s + parseFloat(r.total.replace(/[^0-9.]/g, '') || 0), 0);
+      document.getElementById('total-footer').textContent = 'S/ ' + total.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  SORT
+    // ══════════════════════════════════════════════════════════
+    let sortField = 'num', sortAsc = false;
+    function sortBy(field) {
+      if (sortField === field) sortAsc = !sortAsc; else { sortField = field; sortAsc = true; }
+      currentData = [...currentData].sort((a, b) => {
+        let va = a.id, vb = b.id;
+        if (field === 'client') { va = a.client; vb = b.client; }
+        if (field === 'create') { va = a.create; vb = b.create; }
+        if (field === 'expected') { va = a.expected; vb = b.expected; }
+        if (field === 'total') {
+          const na = parseFloat(a.total.replace(/[^0-9.]/g, '')), nb = parseFloat(b.total.replace(/[^0-9.]/g, ''));
+          return sortAsc ? na - nb : nb - na;
+        }
+        return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+      });
+      render(currentData);
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  LIST PAGER
+    // ══════════════════════════════════════════════════════════
+    let page = 0;
+    const PAGE_SIZE = 80;
+    function pagePrev() { if (page > 0) { page--; updatePager(); } }
+    function pageNext() { if ((page + 1) * PAGE_SIZE < 82) { page++; updatePager(); } }
+    function updatePager() {
+      const s = page * PAGE_SIZE + 1, e = Math.min((page + 1) * PAGE_SIZE, 82);
+      document.getElementById('pager-val').textContent = s + '-' + e;
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  VIEW SWITCHER
+    // ══════════════════════════════════════════════════════════
+    function switchView(btn) {
+      document.querySelectorAll('.o-view-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  NAV DROPDOWN
+    // ══════════════════════════════════════════════════════════
+    function toggleDropMenu(el, id) {
+      const menu = document.getElementById(id);
+      const isOpen = menu.classList.contains('open');
+      document.querySelectorAll('.o-dropdown-menu').forEach(m => m.classList.remove('open'));
+      if (!isOpen) menu.classList.add('open');
+    }
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.o-nav-section')) {
+        document.querySelectorAll('.o-dropdown-menu').forEach(m => m.classList.remove('open'));
+      }
+    });
+
+    // ══════════════════════════════════════════════════════════
+    //  APPS MENU
+    // ══════════════════════════════════════════════════════════
+    function toggleAppsMenu() {
+      const menu = document.getElementById('apps-menu');
+      const overlay = document.getElementById('apps-overlay');
+      const btn = document.getElementById('apps-btn');
+      const isOpen = menu.classList.contains('open');
+      if (isOpen) {
+        menu.classList.remove('open'); overlay.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false'); btn.style.background = '';
+      } else {
+        document.querySelectorAll('.o-dropdown-menu').forEach(m => m.classList.remove('open'));
+        menu.classList.add('open'); overlay.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true'); btn.style.background = 'rgba(255,255,255,0.2)';
+      }
+    }
+    function closeAppsMenu() {
+      document.getElementById('apps-menu').classList.remove('open');
+      document.getElementById('apps-overlay').classList.remove('open');
+      const btn = document.getElementById('apps-btn');
+      btn.setAttribute('aria-expanded', 'false'); btn.style.background = '';
+    }
+    function selectApp(name) {
+      document.querySelectorAll('.o-apps-item').forEach(el => el.classList.toggle('active', el.textContent.trim() === name));
+      document.querySelector('.o-nav-brand').textContent = name;
+      closeAppsMenu();
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  FORM VIEW — OPEN / CLOSE
+    // ══════════════════════════════════════════════════════════
+    function openForm(id, idx) {
+      const listEl = document.getElementById('view-list');
+      const formEl = document.getElementById('view-form');
+      listEl.classList.remove('active');
+      listEl.style.display = 'none';
+      formEl.style.display = 'flex';
+
+      if (id === null) {
+        // NEW record
+        currentFormId = null;
+        currentFormIdx = -1;
+        buildForm(null);
+      } else {
+        currentFormId = id;
+        currentFormIdx = (idx !== undefined) ? idx : currentData.findIndex(r => r.id === id);
+        buildForm(ROWS.find(r => r.id === id));
+      }
+      formEl.scrollTop = 0;
+    }
+
+    function closeForm() {
+      const listEl = document.getElementById('view-list');
+      const formEl = document.getElementById('view-form');
+      formEl.style.display = 'none';
+      listEl.style.display = 'flex';
+      listEl.classList.add('active');
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  FORM VIEW — BUILD
+    // ══════════════════════════════════════════════════════════
+    function buildForm(record) {
+      const isNew = !record;
+      const r = record || { id: 'Nuevo', client: '', create: '', expected: '', state: 'draft', inv: 'no', lines: [], total: 'S/ 0.00' };
+
+      // Breadcrumb + title
+      document.getElementById('form-title-crumb').textContent = isNew ? 'Nuevo' : r.id;
+      document.getElementById('form-id-title').textContent = isNew ? 'Nuevo' : r.id;
+
+      // Pager
+      const total = currentData.length;
+      const pos = isNew ? '—' : (currentFormIdx + 1);
+      document.getElementById('form-pager-val').textContent = pos;
+      document.getElementById('form-pager-total').textContent = total;
+
+      // Fields
+      if (isNew) {
+        document.getElementById('fld-client-val').innerHTML = '<input class="o-field-input" id="fld-client-input" placeholder="Buscar cliente…" style="border:1px solid var(--o-border);border-radius:4px;padding:4px 8px;">';
+        document.getElementById('fld-dir-factura').value = '';
+        document.getElementById('fld-dir-entrega').value = '';
+        document.getElementById('fld-fecha').textContent = new Date().toLocaleString('es-PE');
+        document.getElementById('fld-pricelist').textContent = 'Benelux (PEN)';
+        document.getElementById('fld-payment-term').value = '';
+        document.getElementById('fld-plantilla').value = '';
+      } else {
+        const addr = r.client.includes('COMPAÑIA') ?
+          '<a href="#">' + r.client + '</a><br><span style="color:var(--o-text-muted);font-size:.77rem;">Chiclayo<br>Chiclayo<br>Lambayeque<br>Perú – 20608005235</span>' :
+          '<a href="#">' + r.client + '</a>';
+        document.getElementById('fld-client-val').innerHTML = addr;
+        document.getElementById('fld-dir-factura').value = r.client;
+        document.getElementById('fld-dir-entrega').value = r.client;
+        document.getElementById('fld-fecha').textContent = r.create;
+        document.getElementById('fld-pricelist').textContent = 'Benelux (PEN)';
+        document.getElementById('fld-payment-term').value = '';
+        document.getElementById('fld-plantilla').value = '';
+      }
+
+      // Status bar
+      buildStatusBar(r.state);
+
+      // Action buttons visibility
+      const btnCrearFactura = document.getElementById('btn-crear-factura');
+      const btnCancelarOrder = document.getElementById('btn-cancelar-order');
+      if (r.state === 'sale' && r.inv === 'to invoice') { btnCrearFactura.style.display = ''; } else { btnCrearFactura.style.display = 'none'; }
+      if (r.state === 'cancel') { btnCancelarOrder.style.display = 'none'; } else { btnCancelarOrder.style.display = ''; }
+
+      // Stat button (Entrega)
+      document.getElementById('stat-entregas').textContent = isNew ? '0' : '1';
+      document.getElementById('form-bottom-bar').style.display = (r.state === 'sale' && !isNew) ? '' : 'none';
+
+      // Order lines
+      formOrderLines = isNew ? [] : (r.lines ? r.lines.map((l, i) => Object.assign({ _id: i }, l)) : []);
+      renderOrderLines();
+
+      // Chatter
+      buildChatter(r);
+
+      // Reset to first tab
+      document.querySelectorAll('.o-nb-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.o-nb-panel').forEach(p => p.classList.remove('active'));
+      document.querySelector('.o-nb-tab').classList.add('active');
+      document.getElementById('nb-order-lines').classList.add('active');
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  STATUS BAR
+    // ══════════════════════════════════════════════════════════
+    const STATUS_STEPS = [
+      { val: 'draft', label: 'Cotización' },
+      { val: 'sent', label: 'Cotización enviada' },
+      { val: 'sale', label: 'Orden de venta' },
+    ];
+    function buildStatusBar(currentState) {
+      const bar = document.getElementById('form-statusbar');
+      const ci = STATUS_STEPS.findIndex(s => s.val === currentState);
+      bar.innerHTML = STATUS_STEPS.map((s, i) => {
+        const cls = i < ci ? 'done' : (i === ci ? 'current' : '');
+        return '<button class="o-status-step ' + cls + '" onclick="changeState(\'' + s.val + '\')" ' + (i === ci ? 'disabled' : '') + '>' + s.label + '</button>';
+      }).join('');
+    }
+    function changeState(newState) {
+      if (!currentFormId) return;
+      const r = ROWS.find(r => r.id === currentFormId);
+      if (r) { r.state = newState; buildStatusBar(newState); buildActionBtns(r); }
+    }
+    function buildActionBtns(r) {
+      document.getElementById('btn-crear-factura').style.display = (r.state === 'sale' && r.inv === 'to invoice') ? '' : 'none';
+      document.getElementById('btn-cancelar-order').style.display = r.state === 'cancel' ? 'none' : '';
+    }
+    function cancelOrder() {
+      if (!currentFormId) return;
+      if (!confirm('¿Cancelar esta orden de venta?')) return;
+      const r = ROWS.find(r => r.id === currentFormId);
+      if (r) { r.state = 'cancel'; buildStatusBar('cancel'); buildActionBtns(r); render(currentData); }
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  ORDER LINES
+    // ══════════════════════════════════════════════════════════
+    function renderOrderLines() {
+      const tb = document.getElementById('lines-tbody');
+      if (!formOrderLines.length) { tb.innerHTML = '<tr><td colspan="11" style="text-align:center;color:var(--o-text-muted);font-size:0.78rem;padding:12px;">Sin líneas de productos.</td></tr>'; recalcTotals(); return; }
+      tb.innerHTML = formOrderLines.map(l => '<tr>'
+        + '<td class="handle"><i class="fa-solid fa-grip-vertical" style="font-size:.7rem;color:#ccc;"></i></td>'
+        + '<td><a href="#" style="color:var(--o-purple);text-decoration:none;font-size:0.8rem;">' + l.prod + '</a></td>'
+        + '<td class="num"><input class="o-field-input" style="text-align:right;width:70px;" value="' + l.qty + '.00" onchange="updateLine(' + l._id + ',\'qty\',this.value)"></td>'
+        + '<td class="num">' + l.del.toFixed(2) + '</td>'
+        + '<td style="text-align:center;"><button class="activity-btn" style="font-size:0.8rem;" title="Ver gráfico"><i class="fa-solid fa-chart-area"></i></button></td>'
+        + '<td class="num">' + l.inv.toFixed(2) + '</td>'
+        + '<td>' + l.uom + '</td>'
+        + '<td class="num"><input class="o-field-input" style="text-align:right;width:80px;" value="' + l.price.toFixed(4) + '" onchange="updateLine(' + l._id + ',\'price\',this.value)"></td>'
+        + '<td><span class="o-tag igv">' + l.tax + '</span></td>'
+        + '<td class="num" id="line-sub-' + l._id + '">S/ ' + l.subtotal.toLocaleString('es-PE', { minimumFractionDigits: 2 }) + '</td>'
+        + '<td class="del-btn"><button class="del-row-btn" onclick="deleteLine(' + l._id + ')" title="Eliminar"><i class="fa-solid fa-trash-can"></i></button></td>'
+        + '</tr>'
+      ).join('');
+      recalcTotals();
+    }
+
+    function updateLine(id, field, val) {
+      const line = formOrderLines.find(l => l._id === id);
+      if (!line) return;
+      line[field] = parseFloat(val) || 0;
+      line.subtotal = line.qty * line.price;
+      const el = document.getElementById('line-sub-' + id);
+      if (el) el.textContent = 'S/ ' + line.subtotal.toLocaleString('es-PE', { minimumFractionDigits: 2 });
+      recalcTotals();
+    }
+
+    function deleteLine(id) {
+      formOrderLines = formOrderLines.filter(l => l._id !== id);
+      renderOrderLines();
+    }
+
+    function addOrderLine() {
+      const prod = prompt('Nombre del producto:');
+      if (!prod) return;
+      const qty = parseFloat(prompt('Cantidad:', '1') || '1');
+      const price = parseFloat(prompt('Precio unitario:', '0.00') || '0');
+      formOrderLines.push({ _id: lineIdCounter++, prod, qty, del: 0, inv: 0, uom: 'Unidad', price, tax: 'IGV 18%', subtotal: qty * price });
+      renderOrderLines();
+    }
+    function addSection() { formOrderLines.push({ _id: lineIdCounter++, prod: '── Sección ──', qty: 0, del: 0, inv: 0, uom: '', price: 0, tax: '', subtotal: 0, isSection: true }); renderOrderLines(); }
+    function addNote() { formOrderLines.push({ _id: lineIdCounter++, prod: 'Nota...', qty: 0, del: 0, inv: 0, uom: '', price: 0, tax: '', subtotal: 0, isNote: true }); renderOrderLines(); }
+
+    function recalcTotals() {
+      const IGV_RATE = 0.18;
+      const subtotal = formOrderLines.reduce((s, l) => s + l.subtotal, 0);
+      const igv = subtotal * IGV_RATE;
+      const total = subtotal + igv;
+      document.getElementById('tot-subtotal').textContent = 'S/ ' + subtotal.toLocaleString('es-PE', { minimumFractionDigits: 2 });
+      document.getElementById('tot-igv').textContent = 'S/ ' + igv.toLocaleString('es-PE', { minimumFractionDigits: 2 });
+      document.getElementById('tot-total').textContent = 'S/ ' + total.toLocaleString('es-PE', { minimumFractionDigits: 2 });
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  NOTEBOOK TABS
+    // ══════════════════════════════════════════════════════════
+    function nbTab(panelId, el) {
+      document.querySelectorAll('.o-nb-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.o-nb-panel').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      const panel = document.getElementById('nb-' + panelId);
+      if (panel) panel.classList.add('active');
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  FORM PAGER
+    // ══════════════════════════════════════════════════════════
+    function formPagerPrev() {
+      if (currentFormIdx > 0) {
+        currentFormIdx--;
+        const r = currentData[currentFormIdx];
+        currentFormId = r.id;
+        buildForm(ROWS.find(x => x.id === r.id));
+      }
+    }
+    function formPagerNext() {
+      if (currentFormIdx < currentData.length - 1) {
+        currentFormIdx++;
+        const r = currentData[currentFormIdx];
+        currentFormId = r.id;
+        buildForm(ROWS.find(x => x.id === r.id));
+      }
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  CHATTER
+    // ══════════════════════════════════════════════════════════
+    function buildChatter(r) {
+      const el = document.getElementById('chatter-messages');
+      const isNew = !r || !r.id || r.id === 'Nuevo';
+      if (isNew) { el.innerHTML = '<p style="color:var(--o-text-muted);font-size:0.8rem;padding:16px 0;">El historial aparecerá aquí una vez guardado el registro.</p>'; return; }
+
+      const dateLabel = r.create ? r.create.split(' ')[0] : 'Hoy';
+
+      el.innerHTML = '<div class="o-msg-date-sep"><hr><span>' + dateLabel + '</span><hr></div>'
+        + '<div class="o-message">'
+        + '<div class="o-msg-avatar">EM</div>'
+        + '<div style="flex:1;">'
+        + '<div class="o-msg-header"><span class="o-msg-author">Elí Mandujano</span><span class="o-msg-date">' + r.create + '</span></div>'
+        + '<div class="o-msg-body">'
+        + (r.state === 'sale'
+          ? '<p>Cotización confirmada</p>'
+          + '<div class="o-msg-tracking"><span class="o-msg-track-old">Cotización</span>'
+          + '<i class="fa-solid fa-arrow-right" style="font-size:.7rem;color:#adb5bd;"></i>'
+          + '<span class="o-msg-track-new">Orden de venta</span>'
+          + '<span class="o-msg-track-field">(Estado)</span></div>'
+          : '<p>Orden de venta creado</p>')
+        + '</div></div></div>'
+        + '<div class="o-message">'
+        + '<div class="o-msg-avatar">EM</div>'
+        + '<div style="flex:1;">'
+        + '<div class="o-msg-header"><span class="o-msg-author">Elí Mandujano</span><span class="o-msg-date">' + r.create + '</span></div>'
+        + '<div class="o-msg-body"><p>Orden de venta creado</p></div>'
+        + '</div></div>';
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  INIT
+    // ══════════════════════════════════════════════════════════
+    render(currentData);
+    updateFooter();
+  </script>
+</body>
+
+</html>

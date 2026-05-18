@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SUNAT - Tipo de Cambio Oficial</title>
+    <link href="/cl-at-ittipcam/js/libs/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/cl-at-ittipcam/fonts/font-awesome.min.css" rel="stylesheet">
+    <!--<link href="/cl-at-ittipcam/css/calendario.css" rel="stylesheet">-->
+    <!--<link href="/cl-at-ittipcam/css/asistencia.css" rel="stylesheet">-->
+    <link rel="stylesheet" href="/cl-at-ittipcam/js/libs/bootstrap/3.3.2/plugins/bootstrap-datetimepicker-4.14.30/css/bootstrap-datetimepicker.min.css">
+    
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lte IE 9]>
+        <script src="/cl-at-ittipcam/js/libs/bootstrap/3.3.2/plugins/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="/cl-at-ittipcam/js/libs/bootstrap/3.3.2/plugins/respond/1.4.2/respond.min.js"></script>
+    <![endif]--> 
+        
+    <script src="/cl-at-ittipcam/js/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="/cl-at-ittipcam/js/libs/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <style>
+        			#screenity-ui, #screenity-ui div {
+				background-color: unset;
+				padding: unset;
+				width: unset;
+				box-shadow: unset;
+				display: unset;
+				margin: unset;
+				border-radius: unset;
+			}
+			.screenity-outline {
+				position: absolute;
+				z-index: 99999999999;
+				border: 2px solid #0F877B;
+				outline-offset: -2px;
+				pointer-events: none;
+				border-radius: 5px!important;
+			}
+		.screenity-blur {
+			filter: blur(10px)!important;
+		}
+			.screenity-shadow-dom * {
+				transition: unset;
+			}
+			.screenity-shadow-dom .TooltipContent {
+  border-radius: 8px!important;
+	background-color: #29292F!important;
+  padding: 10px 15px!important;
+  font-size: 12px;
+	margin-bottom: 10px!important;
+	bottom: 100px;
+  line-height: 1;
+	font-family: 'Inter-Medium', sans-serif;
+	z-index: 99999999!important;
+  color: #FFF;
+  box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px!important;
+  user-select: none;
+	transition: opacity 0.3 ease-in-out;
+  will-change: transform, opacity;
+	animation-duration: 400ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.screenity-shadow-dom .hide-tooltip {
+	display: none!important;
+}
+
+.screenity-shadow-dom .tooltip-tall {
+	margin-bottom: 20px;
+}
+
+.screenity-shadow-dom .tooltip-small {
+	margin-bottom: 5px;
+}
+
+.screenity-shadow-dom .TooltipContent[data-state='delayed-open'][data-side='top'] {
+	animation-name: slideDownAndFade;
+}
+.screenity-shadow-dom .TooltipContent[data-state='delayed-open'][data-side='right'] {
+  animation-name: slideLeftAndFade;
+}
+.screenity-shadow-dom.TooltipContent[data-state='delayed-open'][data-side='bottom'] {
+  animation-name: slideUpAndFade;
+}
+.screenity-shadow-dom.TooltipContent[data-state='delayed-open'][data-side='left'] {
+  animation-name: slideRightAndFade;
+}
+
+@keyframes slideUpAndFade {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideRightAndFade {
+  from {
+    opacity: 0;
+    transform: translateX(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideDownAndFade {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideLeftAndFade {
+  from {
+    opacity: 0;
+    transform: translateX(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+#screenity-ui [data-radix-popper-content-wrapper] { z-index: 999999999999!important; } 
+
+.screenity-shadow-dom .CanvasContainer {
+	position: fixed;
+	pointer-events: all!important;
+	top: 0px!important;
+	left: 0px!important;
+	z-index: 99999999999!important;
+}
+.screenity-shadow-dom .canvas {
+	position: fixed;
+	top: 0px!important;
+	left: 0px!important;
+	z-index: 99999999999!important;
+	background: transparent!important;
+}
+.screenity-shadow-dom .canvas-container {
+	top: 0px!important;
+	left: 0px!important;
+	z-index: 99999999999;
+	position: fixed!important;
+	background: transparent!important;
+}
+
+.ScreenityDropdownMenuContent {
+	z-index: 99999999999!important;
+  min-width: 200px;
+  background-color: white;
+  margin-top: 4px;
+  margin-right: 8px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border-radius: 15px;
+  z-index: 99999;
+  font-family: 'Inter-Medium', sans-serif;
+  color: #29292F;
+  box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35),
+    0px 10px 20px -15px rgba(22, 23, 24, 0.2);
+  animation-duration: 400ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+.ScreenityDropdownMenuContent[data-side="top"] {
+  animation-name: slideDownAndFade;
+}
+.ScreenityDropdownMenuContent[data-side="right"] {
+  animation-name: slideLeftAndFade;
+}
+.ScreenityDropdownMenuContent[data-side="bottom"] {
+  animation-name: slideUpAndFade;
+}
+.ScreenityDropdownMenuContent[data-side="left"] {
+  animation-name: slideRightAndFade;
+}
+.ScreenityItemIndicator {
+  position: absolute;
+  right: 12px; 
+  width: 18px;
+  height: 18px;
+  background: #0F877B;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.ScreenityDropdownMenuItem,
+.ScreenityDropdownMenuRadioItem {
+  font-size: 14px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 5px;
+  position: relative;
+  padding-left: 22px;
+  padding-right: 22px;
+  user-select: none;
+  outline: none;
+}
+.ScreenityDropdownMenuItem:hover {
+    background-color: #F6F7FB;
+    cursor: pointer;
+}
+.ScreenityDropdownMenuItem[data-disabled] {
+  color: #6E7684;;
+  cursor: not-allowed;
+  background-color: #F6F7FB;
+}
+
+
+
+@keyframes slideUpAndFade {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideRightAndFade {
+  from {
+    opacity: 0;
+    transform: translateX(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideDownAndFade {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideLeftAndFade {
+  from {
+    opacity: 0;
+    transform: translateX(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+    </style>
+    
+    </head>
+
+<body style="">
+	<div class="container">
+		<div class="row">
+			<div>
+				<h3>SUNAT - Tipo de Cambio Oficial</h3>
+			</div>
+			<div class="panel-group" id="accordion">
+				<div id="divPanelBusquedaResponsableDepe" class="panel panel-primary">
+					<div class="panel-heading">
+						<i class="fa fa-calendar"></i>&nbsp;&nbsp;Consulta de tipo de cambio
+					</div>
+
+					<div class="panel-body">
+					
+						<form id="formBusquedaPapeleta" name="formBusquedaPapeleta" class="form-horizontal" role="form">
+						<div class="row">
+							<div class="col-md-2">
+							    <button type="button" class="btn btn-primary" id="btnDescargar" onclick="javascript:onClickDescargar();">
+                            	    <i class="fa fa-download" aria-hidden="true"></i> Descargar
+                            	</button>
+							</div>
+
+							<div class="col-md-5 form-group">
+							    <label for="desCorreo" class="control-label col-md-5">Enviar Correo :</label>
+							    <div class="col-md-7">
+							        <div class="input-group date">
+							            <input type="text" class="form-control" id="desCorreo" name="desCorreo">
+							            <span class="input-group-addon" id="btnCorreo"><i class="fa fa-send"></i></span>
+                                    </div>
+							    </div>
+							</div>
+
+							<div class="col-md-4 form-group">
+								<label for="fecAsistenciaBusq" class="col-md-6 control-label">Seleccione Mes :</label>
+								<div class="col-md-6">
+									<div class="input-group date" id="fecAsistenciaBusqDiv">
+										<input type="text" class="form-control" id="fecAsistenciaBusq" name="fecAsistenciaBusq" placeholder="mmm aaaa" readonly="">
+										<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-1">
+								<div class="text-right">
+									<button type="button" class="btn btn-primary" id="btnBuscarAsistencias" onclick="javascript:onClickBuscarPapeleta();">
+										<i class="fa fa-search" aria-hidden="true"></i> Buscar
+									</button>
+								</div>
+							</div>
+						</div>
+						</form>
+						
+						<div class="panel panel-default subpanel">
+							<div class="panel-heading subpanel-heading">
+								Tipo de Cambio Mensual
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-md-12">
+										<div id="holder-calendar">      <table class="calendar-table table table-condensed">     <thead>       <tr>         <td colspan="7" style="text-align: center">           <table style="white-space: nowrap; width: 100%">             <tbody><tr>               <td style="text-align: left;" width="30%">                 <span class="btn-group">                   <button class="js-cal-prev btn btn-default">&lt;</button>                   <button class="js-cal-next btn btn-default">&gt;</button>                 </span>                 <button class="js-cal-option btn btn-default active" data-date="2025-07-26T16:52:07.237Z" data-mode="month">Mes Actual</button>               </td>               <td style="text-align: center" width="40%">                 <span class="btn-group btn-group-lg">                                        <button class="js-cal-option btn btn-link disabled" data-mode="year">Julio</button>                                          <button class="js-cal-years btn btn-link disabled">2025</button>                                     </span>                 <button class="js-cal-search" style="display: none;">novisible</button>               </td>               <td style="text-align: left;" width="30%">&nbsp;</td>             </tr>           </tbody></table>                    </td>       </tr>     </thead>               <thead>       <tr class="c-weeks">                    <th class="table-bordered c-name">             Domingo           </th>                    <th class="table-bordered c-name">             Lunes           </th>                    <th class="table-bordered c-name">             Martes           </th>                    <th class="table-bordered c-name">             Miércoles           </th>                    <th class="table-bordered c-name">             Jueves           </th>                    <th class="table-bordered c-name">             Viernes           </th>                    <th class="table-bordered c-name">             Sábado           </th>                </tr>     </thead>     <tbody>                  <tr>                              <td class="table-bordered calendar-day outside _2025_6_29  c-sunday js-cal-option" data-date="2025-06-29T05:00:00.000Z">            <div class="date">29</div>                      </td>                              <td class="table-bordered calendar-day outside _2025_6_30   js-cal-option" data-date="2025-06-30T05:00:00.000Z">            <div class="date">30</div>                      </td>                              <td class="table-bordered calendar-day current _2025_7_1   js-cal-option" data-date="2025-07-01T05:00:00.000Z">            <div class="date">1</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="0"><strong>Compra</strong> 3.534</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="1"><strong>Venta</strong> 3.549</div></td>                              <td class="table-bordered calendar-day current _2025_7_2   js-cal-option" data-date="2025-07-02T05:00:00.000Z">            <div class="date">2</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="2"><strong>Compra</strong> 3.548</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="3"><strong>Venta</strong> 3.556</div></td>                              <td class="table-bordered calendar-day current _2025_7_3   js-cal-option" data-date="2025-07-03T05:00:00.000Z">            <div class="date">3</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="4"><strong>Compra</strong> 3.550</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="5"><strong>Venta</strong> 3.559</div></td>                              <td class="table-bordered calendar-day current _2025_7_4   js-cal-option" data-date="2025-07-04T05:00:00.000Z">            <div class="date">4</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="6"><strong>Compra</strong> 3.538</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="7"><strong>Venta</strong> 3.547</div></td>                              <td class="table-bordered calendar-day current _2025_7_5  c-saturday js-cal-option" data-date="2025-07-05T05:00:00.000Z">            <div class="date">5</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="8"><strong>Compra</strong> 3.541</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="9"><strong>Venta</strong> 3.556</div></td>                  </tr>                     <tr>                              <td class="table-bordered calendar-day current _2025_7_6  c-sunday js-cal-option" data-date="2025-07-06T05:00:00.000Z">            <div class="date">6</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="10"><strong>Compra</strong> 3.541</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="11"><strong>Venta</strong> 3.556</div></td>                              <td class="table-bordered calendar-day current _2025_7_7   js-cal-option" data-date="2025-07-07T05:00:00.000Z">            <div class="date">7</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="12"><strong>Compra</strong> 3.541</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="13"><strong>Venta</strong> 3.556</div></td>                              <td class="table-bordered calendar-day current _2025_7_8   js-cal-option" data-date="2025-07-08T05:00:00.000Z">            <div class="date">8</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="14"><strong>Compra</strong> 3.553</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="15"><strong>Venta</strong> 3.563</div></td>                              <td class="table-bordered calendar-day current _2025_7_9   js-cal-option" data-date="2025-07-09T05:00:00.000Z">            <div class="date">9</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="16"><strong>Compra</strong> 3.557</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="17"><strong>Venta</strong> 3.563</div></td>                              <td class="table-bordered calendar-day current _2025_7_10   js-cal-option" data-date="2025-07-10T05:00:00.000Z">            <div class="date">10</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="18"><strong>Compra</strong> 3.546</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="19"><strong>Venta</strong> 3.555</div></td>                              <td class="table-bordered calendar-day current _2025_7_11   js-cal-option" data-date="2025-07-11T05:00:00.000Z">            <div class="date">11</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="20"><strong>Compra</strong> 3.548</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="21"><strong>Venta</strong> 3.557</div></td>                              <td class="table-bordered calendar-day current _2025_7_12  c-saturday js-cal-option" data-date="2025-07-12T05:00:00.000Z">            <div class="date">12</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="22"><strong>Compra</strong> 3.547</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="23"><strong>Venta</strong> 3.557</div></td>                  </tr>                     <tr>                              <td class="table-bordered calendar-day current _2025_7_13  c-sunday js-cal-option" data-date="2025-07-13T05:00:00.000Z">            <div class="date">13</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="24"><strong>Compra</strong> 3.547</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="25"><strong>Venta</strong> 3.557</div></td>                              <td class="table-bordered calendar-day current _2025_7_14   js-cal-option" data-date="2025-07-14T05:00:00.000Z">            <div class="date">14</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="26"><strong>Compra</strong> 3.547</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="27"><strong>Venta</strong> 3.557</div></td>                              <td class="table-bordered calendar-day current _2025_7_15   js-cal-option" data-date="2025-07-15T05:00:00.000Z">            <div class="date">15</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="28"><strong>Compra</strong> 3.556</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="29"><strong>Venta</strong> 3.569</div></td>                              <td class="table-bordered calendar-day current _2025_7_16   js-cal-option" data-date="2025-07-16T05:00:00.000Z">            <div class="date">16</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="30"><strong>Compra</strong> 3.561</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="31"><strong>Venta</strong> 3.569</div></td>                              <td class="table-bordered calendar-day current _2025_7_17   js-cal-option" data-date="2025-07-17T05:00:00.000Z">            <div class="date">17</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="32"><strong>Compra</strong> 3.548</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="33"><strong>Venta</strong> 3.560</div></td>                              <td class="table-bordered calendar-day current _2025_7_18   js-cal-option" data-date="2025-07-18T05:00:00.000Z">            <div class="date">18</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="34"><strong>Compra</strong> 3.549</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="35"><strong>Venta</strong> 3.556</div></td>                              <td class="table-bordered calendar-day current _2025_7_19  c-saturday js-cal-option" data-date="2025-07-19T05:00:00.000Z">            <div class="date">19</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="36"><strong>Compra</strong> 3.558</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="37"><strong>Venta</strong> 3.568</div></td>                  </tr>                     <tr>                              <td class="table-bordered calendar-day current _2025_7_20  c-sunday js-cal-option" data-date="2025-07-20T05:00:00.000Z">            <div class="date">20</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="38"><strong>Compra</strong> 3.558</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="39"><strong>Venta</strong> 3.568</div></td>                              <td class="table-bordered calendar-day current _2025_7_21   js-cal-option" data-date="2025-07-21T05:00:00.000Z">            <div class="date">21</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="40"><strong>Compra</strong> 3.558</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="41"><strong>Venta</strong> 3.568</div></td>                              <td class="table-bordered calendar-day current _2025_7_22   js-cal-option" data-date="2025-07-22T05:00:00.000Z">            <div class="date">22</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="42"><strong>Compra</strong> 3.554</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="43"><strong>Venta</strong> 3.566</div></td>                              <td class="table-bordered calendar-day current _2025_7_23   js-cal-option" data-date="2025-07-23T05:00:00.000Z">            <div class="date">23</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="44"><strong>Compra</strong> 3.554</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="45"><strong>Venta</strong> 3.561</div></td>                              <td class="table-bordered calendar-day current _2025_7_24   js-cal-option" data-date="2025-07-24T05:00:00.000Z">            <div class="date">24</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="46"><strong>Compra</strong> 3.554</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="47"><strong>Venta</strong> 3.561</div></td>                              <td class="table-bordered calendar-day current _2025_7_25   js-cal-option" data-date="2025-07-25T05:00:00.000Z">            <div class="date">25</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="48"><strong>Compra</strong> 3.542</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="49"><strong>Venta</strong> 3.555</div></td>                              <td class="table-bordered calendar-day current _2025_7_26 selected c-saturday js-cal-option today" data-date="2025-07-26T05:00:00.000Z">            <div class="date">26</div>                      <div class="event normal-all-day begin end" title="Tipo de Cambio" data-index="50"><strong>Compra</strong> 3.540</div><div class="event pap-all-day begin end" title="Tipo de Cambio" data-index="51"><strong>Venta</strong> 3.552</div></td>                  </tr>                     <tr>                              <td class="table-bordered calendar-day current _2025_7_27  c-sunday js-cal-option" data-date="2025-07-27T05:00:00.000Z">            <div class="date">27</div>                      </td>                              <td class="table-bordered calendar-day current _2025_7_28   js-cal-option" data-date="2025-07-28T05:00:00.000Z">            <div class="date">28</div>                      </td>                              <td class="table-bordered calendar-day current _2025_7_29   js-cal-option" data-date="2025-07-29T05:00:00.000Z">            <div class="date">29</div>                      </td>                              <td class="table-bordered calendar-day current _2025_7_30   js-cal-option" data-date="2025-07-30T05:00:00.000Z">            <div class="date">30</div>                      </td>                              <td class="table-bordered calendar-day current _2025_7_31   js-cal-option" data-date="2025-07-31T05:00:00.000Z">            <div class="date">31</div>                      </td>                              <td class="table-bordered calendar-day outside _2025_8_1   js-cal-option" data-date="2025-08-01T05:00:00.000Z">            <div class="date">1</div>                      </td>                              <td class="table-bordered calendar-day outside _2025_8_2  c-saturday js-cal-option" data-date="2025-08-02T05:00:00.000Z">            <div class="date">2</div>                      </td>                  </tr>                         </tbody>             </table> </div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+                            <div class="col-xs-12 text-left"><small><b>Notas</b></small></div>
+                            <div class="col-xs-12 text-left"><small>1.- El tipo de cambio publicado corresponde a la cotización de cierre de la SBS del día anterior.</small></div>
+                            <div class="col-xs-12 text-left"><small>2.- En los días que no se cuente con tipo de cambio publicado, se deberá tomar el del día inmediato anterior.</small></div>
+                            <div class="col-xs-12 text-left"><small>3.- Para efectos del Impuesto a la Renta, se deberá tomar el tipo de cambio de cierre, al 31 de Diciembre del ejercicio correspondiente. Para Renta 2018, <a href="https://orientacion.sunat.gob.pe/index.php/empresas-menu/impuesto-a-la-renta-empresas/declaraciones-anuales-empresas/renta-anual-2018-empresas/7219-13-tipo-de-cambio">ingrese aquí</a>.</small></div>
+                        </div>
+
+					</div>
+				</div><!-- fin panel -->
+				<form id="formHiddenPapeleta" class="form-horizontal" role="form"><!-- verificar uso -->
+					<input type="hidden" id="modProceso" name="modProceso">
+				</form>
+				<form id="frmArchivoDownload" name="frmArchivoDownload" action="/cl-at-ittipcam/tcS01Alias/generarPdf" method="POST" accept-charset="UTF-8">
+                    <input id="tokenDownload" name="token" type="hidden">
+                    <input id="anioDownload" name="anioDownload" type="hidden">
+                    <input id="mesDownload" name="mesDownload" type="hidden">
+                </form>
+			</div>
+		</div>
+	</div>
+
+	<footer>
+		<div class="col-md-10 col-md-offset-1 text-center">
+			<p>
+				<small>© 2020 SUNAT Derechos Reservados</small>
+			</p>
+		</div>
+	</footer>
+ 
+
+
+<script type="text/tmpl" id="tmplCalendar">
+  {{ 
+  var date = date || new Date(),
+      month = date.getMonth(), 
+      year = date.getFullYear(), 
+      first = new Date(year, month, 1), 
+      last = new Date(year, month + 1, 0),
+      startingDay = first.getDay(), 
+      thedate = new Date(year, month, 1 - startingDay),
+      dayclass = lastmonthcss,
+      today = new Date(),
+      i, j; 
+  if (mode === 'week') {
+    thedate = new Date(date);
+    thedate.setDate(date.getDate() - date.getDay());
+    first = new Date(thedate);
+    last = new Date(thedate);
+    last.setDate(last.getDate()+6);
+  } else if (mode === 'day') {
+    thedate = new Date(date);
+    first = new Date(thedate);
+    last = new Date(thedate);
+    last.setDate(thedate.getDate() + 1);
+  }
+  
+  }}
+  <table class="calendar-table table table-condensed">
+    <thead>
+      <tr>
+        <td colspan="7" style="text-align: center">
+          <table style="white-space: nowrap; width: 100%">
+            <tr>
+              <td style="text-align: left;" width="30%">
+                <span class="btn-group">
+                  <button class="js-cal-prev btn btn-default">&lt;</button>
+                  <button class="js-cal-next btn btn-default">&gt;</button>
+                </span>
+                <button class="js-cal-option btn btn-default {{: first.toDateInt() <= today.toDateInt() && today.toDateInt() <= last.toDateInt() ? 'active':'' }}" data-date="{{: today.toISOString()}}" data-mode="month">{{: todayname }}</button>
+              </td>
+              <td style="text-align: center" width="40%">
+                <span class="btn-group btn-group-lg">
+                  {{ if (mode !== 'day') { }}
+                    {{ if (mode === 'month') { }}<button class="js-cal-option btn btn-link disabled" data-mode="year">{{: months[month] }}</button>{{ } }}
+                    {{ if (mode ==='week') { }}
+                      <button class="btn btn-link disabled">{{: shortMonths[first.getMonth()] }} {{: first.getDate() }} - {{: shortMonths[last.getMonth()] }} {{: last.getDate() }}</button>
+                    {{ } }}
+                    <button class="js-cal-years btn btn-link disabled">{{: year}}</button> 
+                  {{ } else { }}
+                    <button class="btn btn-link disabled"> {{: date.toDDMMAAAAString() }} [{{: days[date.getDay()] }}]</button> 
+                  {{ } }}
+                </span>
+                <button class="js-cal-search" style="display: none;">novisible</button>
+              </td>
+              <td style="text-align: left;" width="30%">&nbsp</td>
+            </tr>
+          </table>
+          
+        </td>
+      </tr>
+    </thead>
+    {{ if (mode ==='year') {
+      month = 0;
+    }}
+    <tbody>
+      {{ for (j = 0; j < 3; j++) { }}
+      <tr>
+        {{ for (i = 0; i < 4; i++) { }}
+        <td class="calendar-month month-{{:month}} js-cal-option" data-date="{{: new Date(year, month, 1).toISOString() }}" data-mode="month">
+          {{: months[month] }}
+          {{ month++;}}
+        </td>
+        {{ } }}
+      </tr>
+      {{ } }}
+    </tbody>
+    {{ } }}
+    {{ if (mode ==='month' || mode ==='week') { }}
+    <thead>
+      <tr class="c-weeks">
+        {{ for (i = 0; i < 7; i++) { }}
+          <th class="table-bordered c-name">
+            {{: days[i] }}
+          </th>
+        {{ } }}
+      </tr>
+    </thead>
+    <tbody>
+      {{ for (j = 0; j < 6 && (j < 1 || mode === 'month'); j++) { }}
+		{{ if (thedate <= last) { }}
+      	<tr>
+        	{{ for (i = 0; i < 7; i++) { }}
+        	{{ if (thedate > last) { dayclass = nextmonthcss; } else if (thedate >= first) { dayclass = thismonthcss; } }}
+        	<td class="table-bordered calendar-day {{: dayclass }} {{: thedate.toDateCssClass() }} {{: date.toDateCssClass() === thedate.toDateCssClass() ? 'selected':'' }} {{: daycss[i] }} js-cal-option" data-date="{{: thedate.toISOString() }}">
+          	<div class="date">{{: thedate.getDate() }}</div>
+          	{{ thedate.setDate(thedate.getDate() + 1);}}
+        	</td>
+        	{{ } }}
+      	</tr>
+		{{ } }}
+      {{ } }}
+    </tbody>
+    {{ } }}
+    {{ if (mode ==='day') { }}
+    <tbody>
+      <tr>
+        <td colspan="7" style="border-top:none;">
+          <table class="table table-striped table-condensed table-bordered" >
+            <thead>
+              <tr>
+                <th>Tipo de Marcación / Papeleta</th>
+				<th>Inicio</th>
+				<th>Fin</th>
+				<th>Motivo de Papeleta</th>
+				<th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyAsistencias">
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+    {{ } }}
+  </table>
+</script>
+
+<script>
+
+//extend jquery
+$.extend({
+    quickTemplate: function (template) {
+    	return new Function(
+    			"obj",
+    			"var p=[],   "+
+    			"print=function(){p.push.apply(p,arguments);};    "+
+    			"with(obj){p.push('"+
+    					template.replace(/[\r\t\n]/g," ").split("{{").join("\t")
+    					.replace(/((^|\}\})[^\t]*)'/g,"$1\r")
+    					.replace(/\t:(.*?)\}\}/g,"',$1,'").split("\t").join("');").split("}}").join("p.push('").split("\r").join("\\'")+
+    							"');} "+
+    			"return p.join('');"
+    	)
+    }
+});
+
+$.extend(Date.prototype, {
+  toDateCssClass:  function () { //provides a string that is _year_month_day, intended to be widely usable as a css class
+    return '_' + this.getFullYear() + '_' + (this.getMonth() + 1) + '_' + this.getDate(); 
+  },
+  toDateInt: function () { //this generates a number useful for comparing two dates; 
+    return ((this.getFullYear()*12) + this.getMonth())*32 + this.getDate(); 
+  },
+  toTimeString: function() {
+    var hours = this.getHours(),
+        minutes = this.getMinutes(),
+        hour = (hours > 12) ? (hours - 12) : hours,
+        ampm = (hours >= 12) ? ' pm' : ' am';
+    if (hours === 0 && minutes===0) { return ''; }
+    if (minutes > 0) {
+      return hour + ':' + minutes + ampm;
+    }
+    return hour + ampm;
+  },
+  toISOString:function() {//cause ie
+       return this.getUTCFullYear()
+           + '-' + pad( this.getUTCMonth() + 1 )
+           + '-' + pad( this.getUTCDate() )
+           + 'T' + pad( this.getUTCHours() )
+           + ':' + pad( this.getUTCMinutes() )
+           + ':' + pad( this.getUTCSeconds() )
+           + '.' + String( (this.getUTCMilliseconds()/1000).toFixed(3) ).slice( 2, 5 )
+           + 'Z';
+  },
+  toDDMMAAAAString: function () { 
+    	var mes = this.getMonth() + 1;
+    	var dia = this.getDate();
+    	var strMes = '' + mes;
+    	var strDia = '' + dia;
+    	if(mes < 10)
+    		strMes = '0' + strMes;
+    	if(dia < 10)
+    		strDia = '0' + strDia;
+        return strDia + '/' + strMes + '/' + this.getFullYear(); 
+    }
+});
+
+
+(function ($) {
+	
+  var t = $.quickTemplate($('#tmplCalendar').get(0).innerHTML);//render
+  
+  function calendar($el, options) {
+    
+    $el.on('click', '.js-cal-prev', function () {//actions aren't currently in the template, but could be added easily... //prev
+	      var monthOld = options.date.getMonth();
+	      switch(options.mode) {
+		    case 'year': options.date.setFullYear(options.date.getFullYear() - 1); break;
+		    case 'month': options.date.setMonth(options.date.getMonth() - 1); break;
+		    case 'week': options.date.setDate(options.date.getDate() - 7); break;
+		    case 'day':  options.date.setDate(options.date.getDate() - 1); break;
+	      }
+	      var monthNew = options.date.getMonth();
+	    
+	      if(monthOld != monthNew){
+		    var dataCall = {date: options.date, indMes: '1', mode:options.mode};
+	        recargarCalendarioWithCallback(drawWithData, dataCall);
+	      }else
+	    	draw();
+	      
+    }).on('click', '.js-cal-next', function () {//next
+	      var monthOld = options.date.getMonth();
+	      switch(options.mode) {
+	        case 'year': options.date.setFullYear(options.date.getFullYear() + 1); break;
+	        case 'month': options.date.setMonth(options.date.getMonth() + 1); break;
+	        case 'week': options.date.setDate(options.date.getDate() + 7); break;
+	        case 'day':  options.date.setDate(options.date.getDate() + 1); break;
+	      }
+	      var monthNew = options.date.getMonth();
+	      
+	      if(monthOld != monthNew){
+	    	var dataCall = {date: options.date, indMes: '1', mode:options.mode};
+		    recargarCalendarioWithCallback(drawWithData, dataCall);
+		  }else
+		    draw();
+	      
+    }).on('click', '.js-cal-option', function () {//today year month week day Junio
+    	  var monthOld = options.date.getMonth();
+	      var $t = $(this), o = $t.data();
+	      if (o.date) { o.date = new Date(o.date); }
+	      $.extend(options, o);
+	      var monthNew = options.date.getMonth();
+	      
+		  if(monthOld != monthNew){
+		    var dataCall = {date: options.date, indMes: '1', mode:options.mode};
+		    recargarCalendarioWithCallback(drawWithData, dataCall);
+		  }else
+			draw();
+		  
+    }).on('click', '.event', function () {//event
+	      /*var $t = $(this),
+	          index = +($t.attr('data-index')), 
+	          data;
+	      
+	      if (isNaN(index)) { return true; }
+	      data = options.data[index];
+	      onClickMostrarModalRegistro(data, options.mode);*/
+	      return false;
+	      
+    }).on('click', '.event-day', function () {//event-day
+	      /*var $t = $(this),
+	      index = +($t.attr('data-index')), 
+	      data;
+	    
+		  if (isNaN(index)) { return true; }
+		  data = options.data[index];
+		  onClickMostrarModalRegistro(data, options.mode);*/
+		  return false;
+	    
+  	}).on('click', '.js-cal-search', function () {//search
+
+	    var fecBusqueda = $('#fecAsistenciaBusq').val();
+		var dteBusqueda = obtenerAnioMes(fecBusqueda);
+		var anhoConsulta = dteBusqueda.getFullYear();
+		var mesConsulta = dteBusqueda.getMonth();
+		var dataCall = {date:dteBusqueda, indMes: '1', mode:'month'};
+        recargarCalendarioWithCallback(drawWithData, dataCall);
+		return false;
+	});
+	
+	
+    function dayAddEvent(index, event) {
+	      var $event = $('<div/>', {'class': 'event', text: event.title, title: event.title, 'data-index': index}),
+		      start = event.start,
+	          end = event.end || start,
+	          startint = start.toDateInt(),
+	          dateint = options.date.toDateInt(),
+	          endint = end.toDateInt();
+
+
+	      if (startint > dateint || endint < dateint) { return; }
+	      
+	      options.dateTotalEvent++;
+	      
+	      /*var htmlAsistencia = '<tr>';
+	      htmlAsistencia += '<td class="'+event.tipoAsistencia+'-all-day"><i class="fa fa-square"></i>&nbsp<a class="event-day" data-index="'+index+'" href="#">' + event.title + '</a></td>';
+	      htmlAsistencia += '<td>' + event.horaIngreso + '</td>';
+	      htmlAsistencia += '<td>' + getString(event.horaSalida) + '</td>';
+	      htmlAsistencia += '<td>' + event.obsPapeleta + '</td>';
+	      htmlAsistencia += '<td>' + event.desEstado + '</td>';
+	      htmlAsistencia += '</tr>';*/
+
+	      var htmlAsistencia = '<tr>';
+          	      htmlAsistencia += '<td class="'+event.tipoAsistencia+'-all-day"><i class="fa fa-square"></i>&nbsp<a class="event-day" data-index="'+index+'" href="#">' + 'Titulo222' + '</a></td>';
+          	      htmlAsistencia += '<td>Compra:3.25</td>';
+          	      htmlAsistencia += '<td>Venta:3.55</td>';
+          	      htmlAsistencia += '</tr>';
+
+	      $('#tbodyAsistencias').append(htmlAsistencia);
+    }
+	
+    function monthAddEvent(index, event) {
+	      var $event = $('<div/>', {'class': 'event', text: event.title, title: event.title, 'data-index': index}),
+	          e = new Date(event.start),
+	          dateclass = e.toDateCssClass(),
+	          day = $('.' + e.toDateCssClass()),
+	          empty = $('<div/>', {'class':'clear event', html:'&nbsp;'}), 
+	          numbevents = 0, 
+	          //time = event.start.toTimeString(),
+	          time = '',
+	          endday = event.end && $('.' + event.end.toDateCssClass()).length > 0,
+	          checkanyway = new Date(e.getFullYear(), e.getMonth(), e.getDate()+40),
+	          existing,
+	          i;
+
+	      if(event.hing != null)
+	          time = event.horaIngreso.substr(0,5);
+	    		  
+		  $event.toggleClass(event.tipoAsistencia+'-all-day', true);
+
+	      /*if (!!time) {
+	        $event.html('<strong>' + time + '</strong> ' + $event.html());
+	      }*/
+
+	      $event.html('<strong>' + event.tipoCambio + '</strong> ' + event.monto);
+
+	      if (!event.end) {
+	        $event.addClass('begin end');
+	        $('.' + event.start.toDateCssClass()).append($event);
+	        return;
+	      }
+	            
+	      while (e <= event.end && (day.length || endday || options.date < checkanyway)) {
+	        if(day.length) { 
+	          existing = day.find('.event').length;
+	          numbevents = Math.max(numbevents, existing);
+	          for(i = 0; i < numbevents - existing; i++) {
+	            day.append(empty.clone());
+	          }
+	          day.append(
+	            $event.
+	            toggleClass('begin', dateclass === event.start.toDateCssClass()).
+	            toggleClass('end', dateclass === event.end.toDateCssClass())
+	          );
+	          $event = $event.clone();
+	          $event.html('&nbsp;');
+	        }
+	        e.setDate(e.getDate() + 1);
+	        dateclass = e.toDateCssClass();
+	        day = $('.' + dateclass);
+	      }
+    }
+	
+    function yearAddEvents(events, year) {//not used
+	      var counts = [0,0,0,0,0,0,0,0,0,0,0,0];
+	      $.each(events, function (i, v) {
+	        if (v.start.getFullYear() === year) {
+	            counts[v.start.getMonth()]++;
+	        }
+	      });
+	      $.each(counts, function (i, v) {
+	        if (v!==0) {
+	            $('.month-'+i).append('<span class="badge">'+v+'</span>');
+	        }
+	      });
+    }
+    
+    function draw() {
+	      $el.html(t(options));
+	      $('.' + (new Date()).toDateCssClass()).addClass('today'); //potential optimization (untested), this object could be keyed into a dictionary on the dateclass string; the object would need to be reset and the first entry would have to be made here
+	      if (options.data && options.data.length) {
+	        if (options.mode === 'year') {
+	            yearAddEvents(options.data, options.date.getFullYear());
+	        } else if (options.mode === 'month' || options.mode === 'week') {
+	            $.each(options.data, monthAddEvent);
+	        } else {
+	        	options.dateTotalEvent = 0;
+	            $.each(options.data, dayAddEvent);
+	            if(options.dateTotalEvent == 0)
+	            	$('#tbodyAsistencias').append('<tr><td colspan="5"><i>No se encontraron resultados.</i></td></tr>');
+	        }
+	      }else{
+	    	  if (options.mode === 'day') 
+	    		  $('#tbodyAsistencias').append('<tr><td colspan="5"><i>No se encontraron resultados.</i></td></tr>');
+	      }
+    }
+    
+    var drawWithData = function (dataAsistencia, mode, date) {
+    	options.date = date;
+    	options.mode = mode;
+    	options.data = dataAsistencia;
+    	draw();
+    };
+     
+    var drawWithNoData = function (mode, date) {
+    	options.date = date;
+     	options.mode = mode;
+     	draw();
+    };
+    
+    draw();    
+  };//fin calendar
+  
+  
+  (function (defaults, $, window, document) {//valores por defecto
+	    $.extend({
+	      calendar: function (options) {
+	        return $.extend(defaults, options);
+	      }
+	    }).fn.extend({
+	      calendar: function (options) {
+	        options = $.extend({}, defaults, options);
+	        return $(this).each(function () {
+	          var $this = $(this);
+	          calendar($this, options);
+	        });
+	      }
+	    });
+  })({
+	    days: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+	    months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+	    shortMonths: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+	    date: (new Date()),
+	      daycss: ["c-sunday", "", "", "", "", "", "c-saturday"],
+	      todayname: "Mes Actual",
+	      thismonthcss: "current",
+	      lastmonthcss: "outside",
+	      nextmonthcss: "outside",
+	      mode: "month",
+	      data: []
+  }, jQuery, window, document);
+    
+})(jQuery);
+
+</script>
+
+
+
+<script src="/cl-at-ittipcam/js/libs/bootstrap/3.3.2/js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="/cl-at-ittipcam/js/libs/bootbox/4.4.0/bootbox.js" type="text/javascript"></script>
+<script src="/cl-at-ittipcam/js/jquery.json.min.js"></script>
+<script src="/cl-at-ittipcam/js/libs/bootstrap/3.3.2/plugins/bootstrap-datetimepicker-4.14.30/js/moment.js"></script>
+<script src="/cl-at-ittipcam/js/libs/bootstrap/3.3.2/plugins/bootstrap-datetimepicker-4.14.30/js/es.js"></script>
+<script src="/cl-at-ittipcam/js/libs/bootstrap/3.3.2/plugins/bootstrap-datetimepicker-4.14.30/js/bootstrap-datetimepicker.min.js"></script>
+<script src="/cl-at-ittipcam/js/libs/jquery/plugins/validation/1.13.1/jquery.validate.js"></script>
+<script src="/cl-at-ittipcam/js/libs/jquery/plugins/validation/1.13.1/additional-methods.js"></script>
+<script src="https://jslibs1.sunat.gob.pe/sunatrecaptcha/3.0.2/sunatrecaptcha3.js"></script>
+<script src="/cl-at-ittipcam/js/papeleta/papeleta.js?t=291120202213"></script>
+<script src="/cl-at-ittipcam/js/papeleta/papeleta-validate.js"></script>
+<script src="/cl-at-ittipcam/js/asistencia-util.js"></script>
+
+
+<script type="text/javascript">
+var CONTEXT_APP = "/cl-at-ittipcam";
+
+$(document).ready(function() {
+	//Inicialización
+	$.ajaxSetup({ cache: false });
+	$(document).ajaxStart(function() {
+	    $.blockUI({
+	    	boxed: !0,
+	        baseZ: 2000
+	    })
+	}).ajaxStop($.unblockUI);
+	bootbox.setLocale("es");
+	
+	inicializarDatosPapeleta();
+	validarDatosPapeleta();
+	
+	var dteBusqueda = new Date();
+	var data = {};
+	data.anhoConsulta = dteBusqueda.getFullYear();
+	data.mesConsulta = dteBusqueda.getMonth();
+	data.diaConsulta = dteBusqueda.getDate();
+	data.indMes = '1';
+	data.mode = 'month';
+
+	$('#fecAsistenciaBusq').val(obtenerAnioMesActual());
+
+	setTimeout(function(){
+	    recargarCalendario(data);
+	},2500);
+
+});
+
+function validateEmail(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
+
+function inicializarDatosPapeleta(){
+    $('#fecAsistenciaBusqDiv').datetimepicker({
+        locale: 'es',
+        format: 'MMM YYYY',
+        icons: {date: "fa fa-calendar",up: "fa fa-arrow-up",down: "fa fa-arrow-down"},
+    	useCurrent: false,
+    	ignoreReadonly: true,
+    	maxDate: new Date()
+    }).on('dp.change', function (ev) {
+        return true;
+    });
+    
+    $("#btnCerrarPopupPapeleta").click(function(){
+    	$("#divDatosPapeletaPopup").modal('hide');
+    });
+
+    $("#btnDescargar").click(function(){
+
+        var fecBusqueda = $('#fecAsistenciaBusq').val();
+        var dteBusqueda = obtenerAnioMes(fecBusqueda);
+        if(dteBusqueda!=null){
+
+            grecaptcha.ready(function() {
+                grecaptcha.execute(site_key_sunat, {action: 'token'}).then(function(token) {
+                    $("#tokenDownload").val(token);
+                    $("#anioDownload").val(dteBusqueda.getFullYear());
+                    $("#mesDownload").val(dteBusqueda.getMonth());
+                    $("#frmArchivoDownload").submit();
+                });
+            });
+
+
+        }else{
+            mostrarMensajeError("Seleccione un periodo.");
+        }
+
+    });
+
+    $("#btnCorreo").click(function(){
+        var fecBusqueda = $('#fecAsistenciaBusq').val();
+        var dteBusqueda = obtenerAnioMes(fecBusqueda);
+        if(dteBusqueda!=null){
+
+            if(validateEmail($('#desCorreo').val())){
+                grecaptcha.ready(function() {
+                    grecaptcha.execute(site_key_sunat, {action: 'token'}).then(function(token) {
+                        var params = {};
+                        params["anio"] = dteBusqueda.getFullYear();
+                        params["mes"] = dteBusqueda.getMonth();
+                        params["correo"] = $('#desCorreo').val();
+                        params["token"] = token;
+                        var paramsJson = $.toJSON(params);
+
+                        var URL_CORREO = CONTEXT_APP+"/tcS01Alias/enviarCorreo";
+                        $.ajax({
+                               type: "POST",
+                               url: URL_CORREO,
+                               dataType: 'json',
+                               data: paramsJson,
+                               contentType: "application/json; charset=utf-8",
+                               success: function(resultado){
+                                   if(resultado.enviado=='1'){
+                                        mostrarMensajeExito("Correo enviado.");
+                                   }
+                               }
+                       });
+
+                    });
+                });
+            }else{
+                mostrarMensajeError("Ingrese un correo válido.");
+            }
+
+        }else{
+            mostrarMensajeError("Seleccione un periodo.");
+        }
+
+    });
+}
+
+</script>
+
+
+<img src="https://www.sunat.gob.pe/p/imagenes/logoamplio.png" alt="" style="position: fixed; bottom: 0px; right: 0px; width: 100px; height: auto; z-index: 9999;"><div id="screenity-ui"><div class="screenity-shadow-dom"><div><div class="screenity-scrollbar"></div><div class="screenity-scrollbar"></div></div><style type="text/css">
+
+
+</style></div></div></body>
+
+
+</html>

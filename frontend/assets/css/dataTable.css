@@ -1,0 +1,500 @@
+/**
+ * dataTable.css - Estilos para DataTable con Header-Tools y Selección
+ */
+
+/* ==========================================================================
+   Header Tools Styles
+   ========================================================================== */
+
+   .header-tools {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.header-tools:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header-tools .selection-info {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.header-tools .selection-info i {
+    margin-right: 8px;
+    color: #6c757d;
+}
+
+.header-tools .action-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.header-tools .action-buttons .btn {
+    font-size: 0.875rem;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.header-tools .action-buttons .btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.header-tools .action-buttons .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.header-tools .action-buttons .btn i {
+    margin-right: 6px;
+}
+
+/* Animación para botones habilitados/deshabilitados */
+.header-tools .action-buttons .btn {
+    transition: opacity 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* ==========================================================================
+   Table Container Styles
+   ========================================================================== */
+
+.table-container {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.table-container .table {
+    margin-bottom: 0;
+}
+
+.table-container .table thead th {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+    color: #495057;
+    padding: 2px 2px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.table-container .table thead th.sortable {
+    cursor: pointer;
+    /*user-select: none;*/
+    position: relative;
+    transition: background-color 0.2s ease;
+}
+
+.table-container .table thead th.sortable:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+}
+
+.table-container .table thead th.sortable::after {
+    content: '\f0dc';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.3;
+    transition: opacity 0.2s ease;
+}
+
+.table-container .table thead th.sortable:hover::after {
+    opacity: 0.7;
+}
+
+/* ==========================================================================
+   Row Selection Styles
+   ========================================================================== */
+
+.table-container .table tbody tr {
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.table-container .table tbody tr:hover {
+    background-color: #f8f9fa;
+    transform: translateX(2px);
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+}
+
+.table-container .table tbody tr.selected {
+    background-color: #cce5ff !important;
+    border-left: 4px solid #007bff;
+}
+
+.table-container .table tbody tr.selected:hover {
+    background-color: #b3d9ff !important;
+}
+
+.table-container .table tbody tr td {
+    padding: 3px 2px;
+    vertical-align: middle;
+    border-top: 1px solid #dee2e6;
+}
+
+/* Checkbox Styles */
+.table-container .table input[type="checkbox"] {
+    transform: scale(1.1);
+    margin: 0;
+    cursor: pointer;
+}
+
+.table-container .table input[type="checkbox"]:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+/* ==========================================================================
+   Selection Count Styles
+   ========================================================================== */
+
+#selection-count {
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+#selection-count.text-primary {
+    color: #007bff !important;
+}
+
+#selection-count.fw-bold {
+    font-weight: 600 !important;
+}
+
+/* ==========================================================================
+   Empty State Styles
+   ========================================================================== */
+
+.table-container .empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #6c757d;
+}
+
+.table-container .empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.table-container .empty-state p {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+/* ==========================================================================
+   Loading State Styles
+   ========================================================================== */
+
+.table-container .loading-state {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.table-container .loading-state .spinner-border {
+    width: 2rem;
+    height: 2rem;
+    margin-right: 1rem;
+}
+
+/* ==========================================================================
+   Error State Styles
+   ========================================================================== */
+
+.table-container .error-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #dc3545;
+}
+
+.table-container .error-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .header-tools {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch !important;
+    }
+    
+    .header-tools .action-buttons {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .table-container .table {
+        font-size: 0.875rem;
+    }
+    
+    .table-container .table thead th,
+    .table-container .table tbody td {
+        padding: 8px 4px;
+    }
+    
+    .table-container .table tbody tr:hover {
+        transform: none;
+        box-shadow: none;
+    }
+}
+
+@media (max-width: 576px) {
+    .header-tools .action-buttons .btn {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+    }
+    
+    .table-container .table {
+        font-size: 0.8rem;
+    }
+}
+
+/* ==========================================================================
+   Animation Classes
+   ========================================================================== */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.table-container tbody tr {
+    animation: fadeIn 0.3s ease;
+}
+
+.header-tools {
+    animation: slideInRight 0.4s ease;
+}
+
+/* ==========================================================================
+   Utility Classes
+   ========================================================================== */
+
+.datatable-container {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.datatable-card .card-header {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    border-bottom: none;
+}
+
+.datatable-card .card-header h5 {
+    margin: 0;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   Badge and Status Styles
+   ========================================================================== */
+
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-badge.status-active {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.status-badge.status-inactive {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.status-badge.status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+/* ==========================================================================
+   Action Button Variants
+   ========================================================================== */
+
+.btn-action-view {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    border: none;
+    color: white;
+}
+
+.btn-action-view:hover:not(:disabled) {
+    background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+    color: white;
+}
+
+.btn-action-download {
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    border: none;
+    color: white;
+}
+
+.btn-action-download:hover:not(:disabled) {
+    background: linear-gradient(135deg, #1e7e34 0%, #155724 100%);
+    color: white;
+}
+
+.btn-action-edit {
+    background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+    border: none;
+    color: #212529;
+}
+
+.btn-action-edit:hover:not(:disabled) {
+    background: linear-gradient(135deg, #e0a800 0%, #d39e00 100%);
+    color: #212529;
+}
+
+.btn-action-delete {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    border: none;
+    color: white;
+}
+
+.btn-action-delete:hover:not(:disabled) {
+    background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+    color: white;
+}
+
+/* ==========================================================================
+   Enhanced Visual Effects
+   ========================================================================== */
+
+.table-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.table-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #007bff, transparent);
+    animation: loading-line 2s infinite;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.table-container.loading::before {
+    opacity: 1;
+}
+
+@keyframes loading-line {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+    .header-tools,
+    .pagination {
+        display: none !important;
+    }
+    
+    .table-container {
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+    
+    .table-container .table tbody tr.selected {
+        background-color: #f0f0f0 !important;
+        border-left: none;
+    }
+}
+
+/* ==========================================================================
+   Dark Mode Support (opcional)
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+    .table-container {
+        background: #2d2d2d;
+        color: #ffffff;
+    }
+    
+    .table-container .table thead th {
+        background: linear-gradient(135deg, #3d3d3d 0%, #2d2d2d 100%);
+        color: #ffffff;
+        border-bottom-color: #4d4d4d;
+    }
+    
+    .table-container .table tbody tr {
+        border-color: #4d4d4d;
+    }
+    
+    .table-container .table tbody tr:hover {
+        background-color: #3d3d3d;
+    }
+    
+    .table-container .table tbody tr.selected {
+        background-color: #1a4480 !important;
+        border-left-color: #007bff;
+    }
+    
+    .header-tools {
+        background: linear-gradient(135deg, #3d3d3d 0%, #2d2d2d 100%);
+        border-color: #4d4d4d;
+        color: #ffffff;
+    }
+}

@@ -1,0 +1,618 @@
+/**
+ * document-viewer.css - Estilos específicos para el componente visualizador de documentos
+ * 
+ * Estilos reutilizables para la visualización de facturas y guías de remisión
+ */
+
+/* ===== VARIABLES CSS ===== */
+:root {
+    /* Document viewer colors */
+    --viewer-bg: #ffffff;
+    --viewer-border: #dee2e6;
+    --viewer-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    /* Document colors */
+    --document-bg: #ffffff;
+    --document-border: #000000;
+    --document-text: #000000;
+    --document-text-muted: #6c757d;
+    --document-header-bg: #f8f9fa;
+
+    /* Company info */
+    --company-primary: var(--bs-primary, #0d6efd);
+    --company-secondary: #6c757d;
+
+    /* Table colors */
+    --document-table-border: #000000;
+    --document-table-header-bg: #f8f9fa;
+    --document-table-stripe: #f9f9f9;
+
+    /* QR Code container */
+    --qr-bg: #ffffff;
+    --qr-border: #dee2e6;
+
+    /* Print styles */
+    --print-page-width: 210mm;
+    --print-page-height: 297mm;
+    --print-margin: 10mm;
+}
+
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.document-viewer-section {
+    margin-bottom: 2rem;
+}
+
+.document-viewer-section .card {
+    box-shadow: var(--viewer-shadow);
+    border: 1px solid var(--viewer-border);
+}
+
+.document-viewer-section .card-header {
+    background: linear-gradient(90deg, var(--document-header-bg) 0%, #ffffff 100%);
+    border-bottom: 2px solid var(--viewer-border);
+}
+
+#document-viewer {
+    padding: 0;
+    overflow-x: auto;
+}
+
+/* ===== CONTENEDOR DEL DOCUMENTO ===== */
+.factura-container,
+.guia-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: var(--document-bg);
+    border: 1px solid var(--document-border);
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--document-text);
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== ENCABEZADO DEL DOCUMENTO ===== */
+.invoice-header,
+.guia-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--document-border);
+}
+
+/* Logo de la empresa */
+.logo-company {
+    max-width: 120px;
+    max-height: 80px;
+    object-fit: contain;
+}
+
+/* Información de la empresa */
+.empresa-nombre {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--company-primary);
+    margin: 0 0 10px 0;
+    text-transform: uppercase;
+}
+
+.info-company {
+    font-size: 10px;
+    line-height: 1.3;
+    color: var(--document-text-muted);
+}
+
+.info-company div {
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+}
+
+.info-company i {
+    margin-right: 5px;
+    width: 12px;
+    text-align: center;
+    color: var(--company-primary);
+}
+
+.address-company {
+    font-size: 10px;
+    margin: 0;
+}
+
+/* Cuadro de documento */
+.documento-box {
+    min-width: 200px;
+    text-align: center;
+    padding: 15px;
+    border: 2px solid var(--document-border) !important;
+    border-radius: 8px;
+    background-color: var(--document-header-bg);
+}
+
+.documento-box h4 {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 5px 0;
+    color: var(--document-text);
+}
+
+.documento-box p {
+    font-size: 11px;
+    margin: 3px 0;
+    color: var(--document-text);
+}
+
+/* ===== INFORMACIÓN DE LA FACTURA ===== */
+.invoice-info,
+.guia-info-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid var(--viewer-border);
+    border-radius: 5px;
+    background-color: var(--document-header-bg);
+}
+
+.invoice-info {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.invoice-info-left,
+.invoice-info-right {
+    flex: 1;
+}
+
+.invoice-info-left>div,
+.invoice-info-right>div {
+    display: flex;
+    margin-bottom: 8px;
+}
+
+.invoice-info label {
+    font-weight: bold;
+    min-width: 120px;
+    color: var(--document-text);
+}
+
+.invoice-info div>div {
+    flex: 1;
+    color: var(--document-text);
+}
+
+/* ===== SECCIONES DE GUÍA ===== */
+.section-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--company-primary);
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--viewer-border);
+    padding-bottom: 5px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.info-grid>div {
+    display: flex;
+    align-items: flex-start;
+}
+
+.info-grid label {
+    font-weight: bold;
+    min-width: 100px;
+    color: var(--document-text);
+    margin-right: 10px;
+}
+
+.info-grid span {
+    flex: 1;
+    color: var(--document-text);
+    word-break: break-word;
+}
+
+/* ===== TABLAS DE PRODUCTOS/ITEMS ===== */
+.table-responsive {
+    margin-bottom: 20px;
+    border: 1px solid var(--document-table-border);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.table-bordered {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+}
+
+.table-bordered th,
+.table-bordered td {
+    border: 1px solid var(--document-table-border);
+    padding: 8px 6px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.table-bordered thead th {
+    background-color: var(--document-table-header-bg);
+    font-weight: bold;
+    text-align: center;
+    color: var(--document-text);
+    font-size: 10px;
+}
+
+.table-bordered tbody tr:nth-child(even) {
+    background-color: var(--document-table-stripe);
+}
+
+.table-bordered .text-end {
+    text-align: right;
+}
+
+.table-bordered .text-center {
+    text-align: center;
+}
+
+/* ===== TOTALES ===== */
+.table-total {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    margin-top: 10px;
+}
+
+.table-total tr {
+    border-bottom: 1px solid var(--viewer-border);
+}
+
+.table-total th,
+.table-total td {
+    padding: 5px 8px;
+    text-align: left;
+}
+
+.table-total .total-label {
+    font-weight: bold;
+    color: var(--document-text);
+    width: 140px;
+}
+
+.table-total .total-line {
+    text-align: right;
+    font-family: 'Courier New', monospace;
+    font-weight: 500;
+    color: var(--document-text);
+}
+
+.table-total tr:last-child {
+    background-color: var(--document-header-bg);
+    font-weight: bold;
+    border: 2px solid var(--document-border);
+}
+
+/* ===== MONTO EN LETRAS ===== */
+.monto-letras {
+    font-size: 11px;
+    font-style: italic;
+    color: var(--document-text);
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid var(--viewer-border);
+    border-radius: 3px;
+    background-color: var(--document-header-bg);
+}
+
+/* ===== PIE DE DOCUMENTO ===== */
+.invoice-footer,
+.guia-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid var(--document-border);
+    min-height: 80px;
+}
+
+.qr-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    border: 1px solid var(--qr-border);
+    border-radius: 5px;
+    background-color: var(--qr-bg);
+    padding: 5px;
+}
+
+.qr-container canvas,
+.qr-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.representacion-impresa {
+    flex: 1;
+    margin: 0 20px;
+    text-align: center;
+}
+
+.representacion-impresa p {
+    font-size: 9px;
+    font-style: italic;
+    color: var(--document-text-muted);
+    margin: 0;
+    line-height: 1.3;
+}
+
+.paginacion {
+    font-size: 10px;
+    color: var(--document-text-muted);
+    text-align: right;
+    min-width: 80px;
+}
+
+/* ===== ESTADOS DEL VIEWER ===== */
+.document-viewer-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    color: var(--document-text-muted);
+}
+
+.document-viewer-loading .spinner-border {
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 1rem;
+}
+
+.document-viewer-error {
+    padding: 2rem;
+    text-align: center;
+    color: var(--bs-danger, #dc3545);
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 0.5rem;
+    margin: 1rem;
+}
+
+/* ===== BOTONES DE ACCIÓN DEL VIEWER ===== */
+.document-viewer-actions {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--document-header-bg);
+    padding: 1rem;
+    border-bottom: 1px solid var(--viewer-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.document-viewer-actions .btn {
+    margin-left: 0.5rem;
+}
+
+.document-zoom-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.document-zoom-controls .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+.document-zoom-level {
+    font-size: 0.875rem;
+    color: var(--document-text-muted);
+    min-width: 60px;
+    text-align: center;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+
+    .factura-container,
+    .guia-container {
+        margin: 0;
+        padding: 15px;
+        font-size: 11px;
+    }
+
+    .invoice-header,
+    .guia-header {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+
+    .invoice-info {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .info-grid>div {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .info-grid label {
+        min-width: auto;
+        margin-bottom: 2px;
+    }
+
+    .invoice-footer,
+    .guia-footer {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .qr-container {
+        width: 80px;
+        height: 80px;
+    }
+
+    .representacion-impresa {
+        margin: 0;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .table-bordered {
+        min-width: 600px;
+        font-size: 10px;
+    }
+
+    .table-bordered th,
+    .table-bordered td {
+        padding: 6px 4px;
+    }
+
+    .document-viewer-actions {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .factura-container,
+    .guia-container {
+        padding: 10px;
+        font-size: 10px;
+    }
+
+    .empresa-nombre {
+        font-size: 16px;
+    }
+
+    .documento-box {
+        padding: 10px;
+    }
+
+    .documento-box h4 {
+        font-size: 12px;
+    }
+
+    .table-bordered {
+        font-size: 9px;
+    }
+}
+
+/* ===== ESTILOS DE IMPRESIÓN ===== */
+@media print {
+
+    .document-viewer-section .card-header,
+    .document-viewer-actions,
+    .btn {
+        display: none !important;
+    }
+
+    .factura-container,
+    .guia-container {
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+        border: none;
+        background: white;
+        color: black;
+        font-size: 12px;
+        page-break-inside: avoid;
+    }
+
+    .invoice-header,
+    .guia-header {
+        page-break-after: avoid;
+    }
+
+    .table-responsive {
+        overflow: visible;
+    }
+
+    .table-bordered {
+        page-break-inside: avoid;
+        min-width: auto;
+    }
+
+    .invoice-footer,
+    .guia-footer {
+        page-break-before: avoid;
+        margin-top: 20px;
+    }
+
+    /* Forzar colores en impresión */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+}
+
+/* ===== ANIMACIONES ===== */
+.document-fade-in {
+    animation: documentFadeIn 0.5s ease-in-out;
+}
+
+@keyframes documentFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== MODO OSCURO (Solo para la interfaz, no el documento) ===== */
+@media (prefers-color-scheme: dark) {
+    .document-viewer-section .card {
+        background-color: #2d3236;
+        border-color: #495057;
+    }
+
+    .document-viewer-section .card-header {
+        background: linear-gradient(90deg, #343a40 0%, #2d3236 100%);
+        border-bottom-color: #495057;
+        color: #ffffff;
+    }
+
+    .document-viewer-actions {
+        background-color: #343a40;
+        border-bottom-color: #495057;
+    }
+
+    .document-viewer-loading {
+        color: #adb5bd;
+    }
+
+    /* El documento siempre se mantiene con fondo blanco para fidelidad */
+    .factura-container,
+    .guia-container {
+        background-color: #ffffff;
+        color: #000000;
+    }
+}

@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test OCR - Extracción de Datos de Vouchers Bancarios</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .test-info {
+            background: #e3f2fd;
+            border: 2px solid #1976d2;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px;
+            color: #0d47a1;
+        }
+
+        .test-info h3 {
+            margin-bottom: 10px;
+            color: #1565c0;
+        }
+
+        .test-info ul {
+            margin-left: 20px;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .upload-area {
+            border: 3px dashed #ddd;
+            border-radius: 15px;
+            padding: 60px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .upload-area:hover {
+            border-color: #1e3c72;
+            background: #f0f7ff;
+        }
+
+        .upload-area.dragover {
+            border-color: #1e3c72;
+            background: #e3f2fd;
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .upload-text {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #fd7e14 0%, #ff6b35 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .preview-container {
+            display: none;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .processing {
+            text-align: center;
+            padding: 30px;
+            display: none;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #1e3c72;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #1e3c72;
+            box-shadow: 0 0 0 3px rgba(30, 60, 114, 0.1);
+        }
+
+        .form-group.required label::after {
+            content: " *";
+            color: #e74c3c;
+        }
+
+        .status-indicator {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .status-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .extract-info {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .ocr-results {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .ocr-results h4 {
+            color: #495057;
+            margin-bottom: 15px;
+        }
+
+        .raw-text {
+            background: #ffffff;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .detected-data {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .data-item {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .data-label {
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+        }
+
+        .data-value {
+            color: #212529;
+            font-size: 0.9rem;
+        }
+
+        .confidence-bar {
+            width: 100%;
+            height: 6px;
+            background: #dee2e6;
+            border-radius: 3px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #dc3545 0%, #ffc107 50%, #28a745 100%);
+            transition: width 0.3s ease;
+        }
+
+        .examples {
+            background: #f1f3f4;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .examples h4 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+        }
+
+        .examples ul {
+            margin-left: 20px;
+            color: #495057;
+        }
+
+        .examples li {
+            margin-bottom: 8px;
+        }
+
+        .debug-info {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .toggle-debug {
+            background: #34495e;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧪 Test OCR - Vouchers Bancarios</h1>
+            <p>Prueba de extracción automática de datos de vouchers de pago peruanos</p>
+        </div>
+
+        <div class="test-info">
+            <h3>📋 Instrucciones de Prueba</h3>
+            <p>Este es un entorno de prueba para validar la extracción automática de datos de vouchers bancarios peruanos usando OCR (Reconocimiento Óptico de Caracteres).</p>
+            <br>
+            <strong>📝 Pasos para probar:</strong>
+            <ul>
+                <li>1️⃣ Sube una imagen de un voucher bancario (JPG, PNG, PDF)</li>
+                <li>2️⃣ Haz clic en "🤖 Extraer Datos Automáticamente"</li>
+                <li>3️⃣ Revisa los datos extraídos en el formulario</li>
+                <li>4️⃣ Verifica la precisión de la extracción</li>
+                <li>5️⃣ Modifica manualmente si es necesario</li>
+            </ul>
+            <br>
+            <strong>🏦 Bancos soportados:</strong> BCP, BBVA, Scotiabank, Interbank, BanBif, Banco de la Nación, Mi Banco
+        </div>
+
+        <div class="content">
+            <div class="status-indicator" id="status"></div>
+            
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📎</div>
+                <div class="upload-text">
+                    Arrastra y suelta tu voucher bancario aquí<br>
+                    o haz clic para seleccionar archivo
+                </div>
+                <input type="file" id="fileInput" class="file-input" accept="image/*,.pdf" />
+                <button type="button" class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                    📁 Seleccionar Archivo
+                </button>
+            </div>
+
+            <div class="preview-container" id="previewContainer">
+                <img id="imagePreview" class="image-preview" alt="Vista previa del voucher" />
+                <div>
+                    <button type="button" class="btn btn-warning" onclick="extractDataFromImage()">
+                        🤖 Extraer Datos Automáticamente
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="clearImage()">
+                        🗑️ Limpiar
+                    </button>
+                </div>
+            </div>
+
+            <div class="processing" id="processing">
+                <div class="spinner"></div>
+                <p id="processingText">Procesando imagen y extrayendo datos...</p>
+                <div style="margin-top: 10px; color: #666; font-size: 0.9rem;" id="processingProgress"></div>
+            </div>
+
+            <div class="ocr-results" id="ocrResults">
+                <h4>🔍 Resultados del OCR</h4>
+                <div>
+                    <strong>Texto completo detectado:</strong>
+                    <div class="raw-text" id="rawText"></div>
+                </div>
+                <div>
+                    <strong>Datos extraídos:</strong>
+                    <div class="detected-data" id="detectedData"></div>
+                </div>
+                <button class="toggle-debug" onclick="toggleDebug()">🔧 Mostrar/Ocultar Debug</button>
+                <div class="debug-info" id="debugInfo"></div>
+            </div>
+
+            <div class="extract-info" id="extractInfo">
+                <strong>ℹ️ Extracción Completada:</strong> Los datos han sido detectados automáticamente. 
+                Por favor verifica que sean correctos antes de usar en producción.
+            </div>
+
+            <div class="examples">
+                <h4>💡 Consejos para Mejores Resultados</h4>
+                <ul>
+                    <li><strong>Calidad de imagen:</strong> Usa imágenes claras con buena resolución (mínimo 150 DPI)</li>
+                    <li><strong>Orientación:</strong> Asegúrate de que el texto esté horizontal y legible</li>
+                    <li><strong>Iluminación:</strong> Evita sombras y reflejos en la imagen</li>
+                    <li><strong>Formato:</strong> JPG y PNG funcionan mejor que PDF para OCR</li>
+                    <li><strong>Contraste:</strong> Texto oscuro sobre fondo claro da mejores resultados</li>
+                    <li><strong>Tamaño:</strong> No redimensiones la imagen, mantén el tamaño original</li>
+                </ul>
+            </div>
+
+            <form id="voucherForm">
+                <h3 style="color: #1e3c72; margin-bottom: 20px;">📝 Formulario de Datos del Voucher</h3>
+                
+                <div class="form-grid">
+                    <div class="form-group required">
+                        <label for="facturaId">ID de Factura</label>
+                        <input type="text" id="facturaId" name="facturaId" 
+                               placeholder="Ej: FAC001-2024" value="TEST-VOUCHER-001" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="numeroOperacion">Número de Operación</label>
+                        <input type="text" id="numeroOperacion" name="numeroOperacion" 
+                               placeholder="Número de la operación bancaria" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bancoOrigen">Banco Origen</label>
+                        <select id="bancoOrigen" name="bancoOrigen">
+                            <option value="">Seleccionar banco</option>
+                            <option value="BCP">Banco de Crédito del Perú (BCP)</option>
+                            <option value="BBVA">BBVA Continental</option>
+                            <option value="Scotiabank">Scotiabank Perú</option>
+                            <option value="Interbank">Interbank</option>
+                            <option value="BanBif">BanBif</option>
+                            <option value="Banco de la Nación">Banco de la Nación</option>
+                            <option value="Mi Banco">Mi Banco</option>
+                            <option value="Caja Huancayo">Caja Huancayo</option>
+                            <option value="Caja Arequipa">Caja Arequipa</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bancoDestino">Banco Destino</label>
+                        <select id="bancoDestino" name="bancoDestino">
+                            <option value="">Seleccionar banco</option>
+                            <option value="BCP">Banco de Crédito del Perú (BCP)</option>
+                            <option value="BBVA">BBVA Continental</option>
+                            <option value="Scotiabank">Scotiabank Perú</option>
+                            <option value="Interbank">Interbank</option>
+                            <option value="BanBif">BanBif</option>
+                            <option value="Banco de la Nación">Banco de la Nación</option>
+                            <option value="Mi Banco">Mi Banco</option>
+                            <option value="Caja Huancayo">Caja Huancayo</option>
+                            <option value="Caja Arequipa">Caja Arequipa</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="monto">Monto</label>
+                        <input type="text" id="monto" name="monto" 
+                               placeholder="1,250.00" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="moneda">Moneda</label>
+                        <select id="moneda" name="moneda">
+                            <option value="">Seleccionar moneda</option>
+                            <option value="PEN">Soles Peruanos (PEN - S/)</option>
+                            <option value="USD">Dólares Americanos (USD - US$)</option>
+                            <option value="EUR">Euros (EUR - €)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fechaOperacion">Fecha de Operación</label>
+                        <input type="date" id="fechaOperacion" name="fechaOperacion" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tipoOperacion">Tipo de Operación</label>
+                        <select id="tipoOperacion" name="tipoOperacion">
+                            <option value="">Seleccionar tipo</option>
+                            <option value="Transferencia">Transferencia</option>
+                            <option value="Depósito">Depósito</option>
+                            <option value="Pago">Pago</option>
+                            <option value="Giro">Giro</option>
+                            <option value="Transferencia CCI">Transferencia CCI</option>
+                            <option value="Transferencia Interbancaria">Transferencia Interbancaria</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cuentaOrigen">Cuenta Origen</label>
+                        <input type="text" id="cuentaOrigen" name="cuentaOrigen" 
+                               placeholder="Número de cuenta origen" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cuentaDestino">Cuenta Destino</label>
+                        <input type="text" id="cuentaDestino" name="cuentaDestino" 
+                               placeholder="Número de cuenta destino" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="observaciones">Observaciones / Datos Adicionales</label>
+                    <textarea id="observaciones" name="observaciones" rows="3" 
+                              placeholder="Información adicional extraída o comentarios..."></textarea>
+                </div>
+
+                <button type="button" class="btn btn-success" onclick="testFormData()">
+                    ✅ Validar Datos Extraídos
+                </button>
+                
+                <button type="button" class="btn btn-secondary" onclick="clearForm()">
+                    🔄 Limpiar Formulario
+                </button>
+                
+                <button type="button" class="btn btn-primary" onclick="exportData()">
+                    📤 Exportar Datos (JSON)
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let selectedFile = null;
+        let extractedData = null;
+        let ocrResult = null;
+
+        // Configurar drag and drop
+        function setupDragAndDrop() {
+            const uploadArea = document.getElementById('uploadArea');
+            
+            // Limpiar eventos anteriores para evitar duplicados
+            const newUploadArea = uploadArea.cloneNode(true);
+            uploadArea.parentNode.replaceChild(newUploadArea, uploadArea);
+            
+            // Configurar nuevos eventos
+            newUploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                newUploadArea.classList.add('dragover');
+            });
+            
+            newUploadArea.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                newUploadArea.classList.remove('dragover');
+            });
+            
+            newUploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                newUploadArea.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFileSelect(files[0]);
+                }
+            });
+            
+            newUploadArea.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                document.getElementById('fileInput').click();
+            });
+        }
+
+        // Configurar input de archivo
+        function setupFileInput() {
+            const fileInput = document.getElementById('fileInput');
+            
+            // Limpiar eventos anteriores
+            const newFileInput = fileInput.cloneNode(true);
+            fileInput.parentNode.replaceChild(newFileInput, fileInput);
+            
+            newFileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleFileSelect(e.target.files[0]);
+                }
+            });
+        }
+
+        // Manejar selección de archivo
+        function handleFileSelect(file) {
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
+            
+            if (!allowedTypes.includes(file.type)) {
+                showStatus('error', 'Por favor selecciona un archivo de imagen válido (JPG, PNG, GIF) o PDF');
+                return;
+            }
+            
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            if (file.size > maxSize) {
+                showStatus('error', 'El archivo es demasiado grande. Máximo 10MB permitido.');
+                return;
+            }
+            
+            selectedFile = file;
+            
+            // Mostrar preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('imagePreview').src = e.target.result;
+                document.getElementById('previewContainer').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+            
+            showStatus('success', `Archivo cargado: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB)`);
+            
+            // Limpiar resultados anteriores
+            clearResults();
+        }
+
+        // Extraer datos de la imagen usando OCR
+        async function extractDataFromImage() {
+            if (!selectedFile) {
+                showStatus('error', 'Primero selecciona una imagen');
+                return;
+            }
+            
+            document.getElementById('processing').style.display = 'block';
+            document.getElementById('extractInfo').style.display = 'none';
+            document.getElementById('ocrResults').style.display = 'none';
+            
+            const processingText = document.getElementById('processingText');
+            const processingProgress = document.getElementById('processingProgress');
+            
+            try {
+                processingText.textContent = 'Inicializando OCR...';
+                processingProgress.textContent = '';
+                
+                // Configurar Tesseract con progress tracking
+                const { data: { text, confidence } } = await Tesseract.recognize(selectedFile, 'spa+eng', {
+                    logger: m => {
+                        console.log(m);
+                        if (m.status === 'recognizing text') {
+                            const progress = Math.round(m.progress * 100);
+                            processingText.textContent = `Reconociendo texto... ${progress}%`;
+                            processingProgress.textContent = `Estado: ${m.status}`;
+                        } else {
+                            processingProgress.textContent = `Estado: ${m.status}`;
+                        }
+                    }
+                });
+                
+                console.log('Texto extraído:', text);
+                console.log('Confianza:', confidence);
+                
+                ocrResult = { text, confidence };
+                
+                // Procesar el texto extraído
+                extractedData = parseVoucherText(text);
+                
+                // Mostrar resultados del OCR
+                displayOCRResults(text, extractedData, confidence);
+                
+                // Llenar el formulario con los datos extraídos
+                fillFormWithExtractedData(extractedData);
+                
+                document.getElementById('processing').style.display = 'none';
+                document.getElementById('extractInfo').style.display = 'block';
+                document.getElementById('ocrResults').style.display = 'block';
+                
+                showStatus('success', `Extracción completada con ${confidence.toFixed(1)}% de confianza. Revisa los datos extraídos.`);
+                
+            } catch (error) {
+                console.error('Error en OCR:', error);
+                document.getElementById('processing').style.display = 'none';
+                showStatus('error', `Error al procesar la imagen: ${error.message}. Intenta con otra imagen o verifica que sea legible.`);
+            }
+        }
+
+        // Parsear texto extraído del voucher (versión mejorada)
+        function parseVoucherText(text) {
+            const data = {};
+            const lines = text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+            const fullText = text.toLowerCase();
+            
+            // Patrones de expresiones regulares más específicos para vouchers peruanos
+            const patterns = {
+                // Número de operación (más variaciones)
+                numeroOperacion: [
+                    /(?:n[úu]mero|num|op|operaci[óo]n|transacci[óo]n|ref|referencia)[:\s#]*([0-9]{6,20})/i,
+                    /(?:^|\s)([0-9]{8,20})(?:\s|$)/,
+                    /codigo[:\s]*([0-9]{6,20})/i
+                ],
+                
+                // Monto en diferentes monedas (actualizado para Perú)
+                monto: [
+                    // Soles peruanos
+                    /(?:s\/|pen|soles?|importe|monto)[:\s]*([0-9,]+\.?[0-9]*)/i,
+                    /(?:^|\s)((?:[0-9]{1,3}(?:,?[0-9]{3})*)?(?:\.[0-9]{2})?)\s*(?:s\/|soles?|pen)/i,
+                    // Dólares americanos
+                    /(?:us\$|usd|d[óo]lares?|dollars?)[:\s]*([0-9,]+\.?[0-9]*)/i,
+                    /(?:^|\s)((?:[0-9]{1,3}(?:,?[0-9]{3})*)?(?:\.[0-9]{2})?)\s*(?:us\$|usd|d[óo]lares?)/i,
+                    /\$\s*([0-9,]+\.?[0-9]*)/,
+                    // Formato general con simbolos
+                    /(?:total|amount|importe)[:\s]*(?:s\/|us\$|\$)?\s*([0-9,]+\.?[0-9]*)/i
+                ],
+                
+                // Detección específica de moneda
+                moneda: [
+                    /(?:s\/|soles?|pen)/i,
+                    /(?:us\$|usd|d[óo]lares?|dollars?)/i,
+                    /(?:eur|euros?|€)/i
+                ],
+                
+                // Fecha (múltiples formatos)
+                fecha: [
+                    /(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4})/,
+                    /(\d{1,2}\s+(?:ene|feb|mar|abr|may|jun|jul|ago|sep|oct|nov|dic)\w*\s+\d{2,4})/i,
+                    /(?:fecha)[:\s]*(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4})/i
+                ],
+                
+                // Hora
+                hora: /(\d{1,2}:\d{2}(?::\d{2})?(?:\s*[ap]m)?)/i,
+                
+                // Bancos (más específico)
+                banco: [
+                    /(?:banco\s+de\s+cr[eé]dito|bcp)/i,
+                    /(?:bbva|continental)/i,
+                    /scotiabank/i,
+                    /interbank/i,
+                    /banbif/i,
+                    /(?:banco\s+de\s+la\s+naci[óo]n|nacion)/i,
+                    /mi\s*banco/i,
+                    /(?:caja\s+huancayo)/i,
+                    /(?:caja\s+arequipa)/i
+                ],
+                
+                // Cuentas bancarias
+                cuentaBancaria: [
+                    /(?:cuenta|cta|account)[:\s]*([0-9\-]{8,20})/i,
+                    /(?:^|\s)([0-9]{3}\-[0-9]{6}\-[0-9]{2})(?:\s|$)/,
+                    /(?:^|\s)([0-9]{14,20})(?:\s|$)/
+                ],
+                
+                // Tipo de operación
+                tipoOperacion: [
+                    /(transferencia(?:\s+interbancaria)?)/i,
+                    /(dep[óo]sito)/i,
+                    /(pago)/i,
+                    /(giro)/i,
+                    /(transferencia\s+cci)/i
+                ],
+                
+                // CCI (Código de Cuenta Interbancario)
+                cci: /(?:cci)[:\s]*([0-9]{20})/i
+            };
+            
+            // Extraer número de operación
+            for (const pattern of patterns.numeroOperacion) {
+                const match = fullText.match(pattern);
+                if (match) {
+                    data.numeroOperacion = match[1];
+                    break;
+                }
+            }
+            
+            // Extraer monto y moneda
+            let montoDetectado = null;
+            let monedaDetectada = null;
+            
+            for (const pattern of patterns.monto) {
+                const match = text.match(pattern);
+                if (match) {
+                    montoDetectado = match[1].replace(/,/g, '');
+                    break;
+                }
+            }
+            
+            // Detectar tipo de moneda
+            if (fullText.match(patterns.moneda[0])) {
+                monedaDetectada = 'PEN';
+                data.monto = 'S/ ' + (montoDetectado || '0.00');
+            } else if (fullText.match(patterns.moneda[1])) {
+                monedaDetectada = 'USD';
+                data.monto = 'US$ ' + (montoDetectado || '0.00');
+            } else if (fullText.match(patterns.moneda[2])) {
+                monedaDetectada = 'EUR';
+                data.monto = '€ ' + (montoDetectado || '0.00');
+            } else if (montoDetectado) {
+                // Si encontramos monto pero no moneda, asumir soles (más común en Perú)
+                monedaDetectada = 'PEN';
+                data.monto = 'S/ ' + montoDetectado;
+            }
+            
+            data.monedaDetectada = monedaDetectada;
+            data.montoNumerico = montoDetectado;
+            
+            // Extraer fecha
+            for (const pattern of patterns.fecha) {
+                const match = text.match(pattern);
+                if (match) {
+                    data.fechaTexto = match[1];
+                    // Convertir a formato YYYY-MM-DD si es posible
+                    const fechaPartes = match[1].split(/[\/\-]/);
+                    if (fechaPartes.length === 3) {
+                        let [day, month, year] = fechaPartes;
+                        if (year.length === 2) {
+                            year = '20' + year;
+                        }
+                        if (day.length === 1) day = '0' + day;
+                        if (month.length === 1) month = '0' + month;
+                        data.fechaOperacion = `${year}-${month}-${day}`;
+                    }
+                    break;
+                }
+            }
+            
+            // Extraer hora
+            const horaMatch = text.match(patterns.hora);
+            if (horaMatch) {
+                data.hora = horaMatch[1];
+            }
+            
+            // Detectar banco
+            const bancoNames = [
+                { pattern: patterns.banco[0], name: 'BCP' },
+                { pattern: patterns.banco[1], name: 'BBVA' },
+                { pattern: patterns.banco[2], name: 'Scotiabank' },
+                { pattern: patterns.banco[3], name: 'Interbank' },
+                { pattern: patterns.banco[4], name: 'BanBif' },
+                { pattern: patterns.banco[5], name: 'Banco de la Nación' },
+                { pattern: patterns.banco[6], name: 'Mi Banco' },
+                { pattern: patterns.banco[7], name: 'Caja Huancayo' },
+                { pattern: patterns.banco[8], name: 'Caja Arequipa' }
+            ];
+            
+            for (const banco of bancoNames) {
+                if (fullText.match(banco.pattern)) {
+                    data.bancoDetectado = banco.name;
+                    break;
+                }
+            }
+            
+            // Extraer cuentas bancarias
+            for (const pattern of patterns.cuentaBancaria) {
+                const match = fullText.match(pattern);
+                if (match) {
+                    if (!data.cuentas) data.cuentas = [];
+                    data.cuentas.push(match[1]);
+                }
+            }
+            
+            // Detectar tipo de operación
+            for (const pattern of patterns.tipoOperacion) {
+                const match = fullText.match(pattern);
+                if (match) {
+                    data.tipoOperacion = match[1].charAt(0).toUpperCase() + match[1].slice(1).toLowerCase();
+                    break;
+                }
+            }
+            
+            // Extraer CCI
+            const cciMatch = fullText.match(patterns.cci);
+            if (cciMatch) {
+                data.cci = cciMatch[1];
+            }
+            
+            // Datos adicionales para debugging
+            data.totalLines = lines.length;
+            data.totalCharacters = text.length;
+            data.detectedKeywords = [];
+            
+            const keywords = ['banco', 'transferencia', 'deposito', 'pago', 'soles', 'pen', 'operacion', 'fecha', 'monto'];
+            keywords.forEach(keyword => {
+                if (fullText.includes(keyword)) {
+                    data.detectedKeywords.push(keyword);
+                }
+            });
+            
+            return data;
+        }
+
+        // Mostrar resultados del OCR
+        function displayOCRResults(rawText, parsedData, confidence) {
+            document.getElementById('rawText').textContent = rawText;
+            
+            const detectedDataDiv = document.getElementById('detectedData');
+            detectedDataDiv.innerHTML = '';
+            
+            // Mostrar datos detectados
+            const dataItems = [
+                { label: 'Número de Operación', value: parsedData.numeroOperacion, field: 'numeroOperacion' },
+                { label: 'Monto', value: parsedData.monto, field: 'monto' },
+                { label: 'Moneda Detectada', value: parsedData.monedaDetectada, field: 'moneda' },
+                { label: 'Monto Numérico', value: parsedData.montoNumerico, field: 'montoNumerico' },
+                { label: 'Fecha', value: parsedData.fechaTexto || parsedData.fechaOperacion, field: 'fecha' },
+                { label: 'Hora', value: parsedData.hora, field: 'hora' },
+                { label: 'Banco Detectado', value: parsedData.bancoDetectado, field: 'banco' },
+                { label: 'Tipo de Operación', value: parsedData.tipoOperacion, field: 'tipo' },
+                { label: 'Cuentas', value: parsedData.cuentas ? parsedData.cuentas.join(', ') : null, field: 'cuentas' },
+                { label: 'CCI', value: parsedData.cci, field: 'cci' }
+            ];
+            
+            dataItems.forEach(item => {
+                if (item.value) {
+                    const dataItem = document.createElement('div');
+                    dataItem.className = 'data-item';
+                    
+                    // Calcular confianza específica (simulada basada en el patrón)
+                    let itemConfidence = confidence;
+                    if (item.field === 'numeroOperacion' && item.value.length >= 8) itemConfidence += 10;
+                    if (item.field === 'monto' && item.value.includes('S/')) itemConfidence += 15;
+                    if (item.field === 'fecha' && item.value.includes('/')) itemConfidence += 10;
+                    
+                    itemConfidence = Math.min(itemConfidence, 100);
+                    
+                    dataItem.innerHTML = `
+                        <div class="data-label">${item.label}</div>
+                        <div class="data-value">${item.value}</div>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" style="width: ${itemConfidence}%"></div>
+                        </div>
+                        <div style="font-size: 0.7rem; color: #666; margin-top: 2px;">
+                            Confianza: ${itemConfidence.toFixed(1)}%
+                        </div>
+                    `;
+                    
+                    detectedDataDiv.appendChild(dataItem);
+                }
+            });
+            
+            // Información de debug
+            const debugInfo = document.getElementById('debugInfo');
+            debugInfo.innerHTML = `
+OCR Confidence: ${confidence.toFixed(2)}%
+Total Lines: ${parsedData.totalLines}
+Total Characters: ${parsedData.totalCharacters}
+Keywords Detected: ${parsedData.detectedKeywords.join(', ')}
+
+Raw OCR Text (first 500 chars):
+${rawText.substring(0, 500)}${rawText.length > 500 ? '...' : ''}
+
+Parsed Data Object:
+${JSON.stringify(parsedData, null, 2)}
+            `;
+        }
+
+        // Llenar formulario con datos extraídos
+        function fillFormWithExtractedData(data) {
+            if (data.numeroOperacion) {
+                document.getElementById('numeroOperacion').value = data.numeroOperacion;
+            }
+            if (data.montoNumerico) {
+                document.getElementById('monto').value = data.montoNumerico;
+            }
+            if (data.monedaDetectada) {
+                document.getElementById('moneda').value = data.monedaDetectada;
+            }
+            if (data.fechaOperacion) {
+                document.getElementById('fechaOperacion').value = data.fechaOperacion;
+            }
+            if (data.bancoDetectado) {
+                document.getElementById('bancoOrigen').value = data.bancoDetectado;
+                document.getElementById('bancoDestino').value = data.bancoDetectado;
+            }
+            if (data.tipoOperacion) {
+                document.getElementById('tipoOperacion').value = data.tipoOperacion;
+            }
+            if (data.cuentas && data.cuentas.length > 0) {
+                document.getElementById('cuentaOrigen').value = data.cuentas[0];
+                if (data.cuentas.length > 1) {
+                    document.getElementById('cuentaDestino').value = data.cuentas[1];
+                }
+            }
+            
+            // Llenar observaciones con información adicional
+            let observaciones = [];
+            if (data.hora) observaciones.push(`Hora: ${data.hora}`);
+            if (data.cci) observaciones.push(`CCI: ${data.cci}`);
+            if (data.detectedKeywords) observaciones.push(`Keywords: ${data.detectedKeywords.join(', ')}`);
+            if (data.monto) observaciones.push(`Monto completo detectado: ${data.monto}`);
+            
+            if (observaciones.length > 0) {
+                document.getElementById('observaciones').value = observaciones.join('\n');
+            }
+        }
+
+        // Funciones auxiliares
+        function showStatus(type, message) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = `status-indicator status-${type}`;
+            statusDiv.textContent = message;
+            statusDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, type === 'error' ? 8000 : 5000);
+        }
+
+        function clearImage() {
+            selectedFile = null;
+            document.getElementById('previewContainer').style.display = 'none';
+            document.getElementById('fileInput').value = '';
+            clearResults();
+            showStatus('info', 'Imagen eliminada');
+        }
+
+        function clearResults() {
+            document.getElementById('ocrResults').style.display = 'none';
+            document.getElementById('extractInfo').style.display = 'none';
+            document.getElementById('processing').style.display = 'none';
+            extractedData = null;
+            ocrResult = null;
+        }
+
+        function clearForm() {
+            document.getElementById('voucherForm').reset();
+            document.getElementById('facturaId').value = 'TEST-VOUCHER-001';
+            showStatus('info', 'Formulario limpiado');
+        }
+
+        function testFormData() {
+            const form = document.getElementById('voucherForm');
+            const formData = new FormData(form);
+            const data = {};
+            
+            for (let [key, value] of formData.entries()) {
+                if (value.trim()) data[key] = value;
+            }
+            
+            console.log('Datos del formulario:', data);
+            
+            // Validaciones básicas
+            const validations = [];
+            
+            if (!data.facturaId) validations.push('ID de Factura es requerido');
+            if (data.numeroOperacion && data.numeroOperacion.length < 6) {
+                validations.push('Número de operación parece muy corto');
+            }
+            if (data.monto && !data.monto.includes('S/')) {
+                validations.push('Formato de monto no incluye moneda (S/)');
+            }
+            
+            if (validations.length > 0) {
+                showStatus('warning', `Advertencias: ${validations.join(', ')}`);
+            } else {
+                showStatus('success', 'Validación exitosa. Datos listos para enviar a la API.');
+            }
+            
+            // Mostrar resultado en consola
+            const resultDiv = document.createElement('div');
+            resultDiv.className = 'debug-info';
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+<strong>📋 DATOS VALIDADOS PARA ENVÍO A API:</strong>
+
+Archivo: ${selectedFile ? selectedFile.name : 'No seleccionado'}
+Tamaño: ${selectedFile ? (selectedFile.size / 1024 / 1024).toFixed(2) + 'MB' : 'N/A'}
+
+Datos del formulario:
+${JSON.stringify(data, null, 2)}
+
+OCR Results (si disponible):
+${ocrResult ? JSON.stringify(ocrResult, null, 2) : 'No ejecutado'}
+
+Estado: ✅ LISTO PARA PRODUCCIÓN
+            `;
+            
+            // Reemplazar debug anterior si existe
+            const existingResult = document.querySelector('.validation-result');
+            if (existingResult) {
+                existingResult.remove();
+            }
+            
+            resultDiv.classList.add('validation-result');
+            document.getElementById('voucherForm').appendChild(resultDiv);
+        }
+
+        function exportData() {
+            const form = document.getElementById('voucherForm');
+            const formData = new FormData(form);
+            const data = {};
+            
+            for (let [key, value] of formData.entries()) {
+                if (value.trim()) data[key] = value;
+            }
+            
+            // Agregar metadata
+            data._metadata = {
+                extractedAt: new Date().toISOString(),
+                fileName: selectedFile ? selectedFile.name : null,
+                fileSize: selectedFile ? selectedFile.size : null,
+                ocrConfidence: ocrResult ? ocrResult.confidence : null,
+                rawOcrText: ocrResult ? ocrResult.text : null,
+                extractedData: extractedData
+            };
+            
+            // Crear y descargar archivo JSON
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `voucher_data_${new Date().toISOString().slice(0, 10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showStatus('success', 'Datos exportados a archivo JSON');
+        }
+
+        function toggleDebug() {
+            const debugDiv = document.getElementById('debugInfo');
+            debugDiv.style.display = debugDiv.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            setupDragAndDrop();
+            setupFileInput();
+            
+            // Mensaje de bienvenida
+            showStatus('info', '🧪 Entorno de prueba listo. Sube una imagen de voucher para comenzar.');
+            
+            console.log('🧪 Test Frontend OCR inicializado');
+            console.log('📋 Funciones disponibles:', [
+                'extractDataFromImage()', 
+                'clearImage()', 
+                'clearForm()', 
+                'testFormData()', 
+                'exportData()',
+                'toggleDebug()'
+            ]);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,266 @@
+/* Estilos personalizados para el Sistema de Gestión de Facturas Electrónicas */
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+}
+
+/* Estilos para la sección de visualización de factura */
+.factura-container {
+    position: relative;
+    display: block;
+    width: 794px;
+    height: 1123px;
+    padding: 20px;
+    background-color: #fff;
+}
+
+.documento-box {
+    background-color: #f8f9fa;
+}
+
+/* Estilos para los loaders y mensajes */
+.loader {
+    width: 24px;
+    height: 24px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.alert {
+    margin-top: 10px;
+}
+
+/* Estilos para el visor de factura */
+.empresa-nombre {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.documento-box h4 {
+    font-weight: bold;
+    color: #000066;
+}
+
+
+
+.monto-letras {
+    font-weight: bold;
+}
+
+.representacion-impresa {
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+/* Estilos para la versión impresa */
+@media print {
+    header, 
+    footer, 
+    #upload-section, 
+    #search-section, 
+    #factura-list-section,
+    #generate-pdf-btn, 
+    #close-viewer-btn {
+        display: none !important;
+    }
+
+    .card {
+        border: none !important;
+    }
+
+    .card-header {
+        background-color: white !important;
+    }
+
+    #factura-viewer-section {
+        display: block !important;
+    }
+}
+
+/* Estilos para las distintas unidades de medida */
+.unidad-medida {
+    font-size: 0.8rem;
+}
+
+/* Estilos para el QR code */
+#qrcode img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Ajustes de responsividad */
+@media (max-width: 768px) {
+    .documento-box {
+        margin-top: 20px;
+    }
+}
+
+/* Estilos para el paginador */
+.pagination {
+    margin-bottom: 0;
+}
+
+/* Estilos para los items de la factura */
+.items-container tr:hover {
+    background-color: #f1f8ff !important;
+}
+
+/* Estilos para los mensajes de error y éxito */
+.status-message {
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.status-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.status-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.status-loading {
+    background-color: #e9ecef;
+    color: #495057;
+    border: 1px solid #ced4da;
+}
+
+.invoice-header{
+    display: grid;
+    grid-template-columns: 3fr 7fr 8fr; /* Tres columnas de diferentes tamaños */
+    gap: 9px; /* Espacio entre columnas */
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.info-company{
+    font-size: x-small;
+    
+}
+
+.logo-company{
+    height: 90%;
+    width: auto;
+}
+.address-company{
+    margin: 0px;
+}
+
+.empresa-nombre{
+    color: #000066;
+}
+
+.total-line{
+    text-align: right;
+    width: 200px;
+    padding: 0px;
+}
+
+
+.total-label{
+    text-align:left;
+    width: 250px;
+    padding: 0px;
+}
+.invoice-footer{
+    position: absolute;
+    width: 794px;
+
+    bottom: 5px;
+    display: grid;
+    grid-template-columns: 3fr 8fr 2fr; /* Tres columnas de diferentes tamaños */
+    gap: 6px;
+    height: 110px;
+}
+
+.qr-container{
+    position: relative;
+    left: 18px;
+    height: 100%;
+}
+
+.representacion-impresa p{
+    position: relative;
+    padding-top: 20px;
+    height: 100%;
+width: 100%;
+
+}
+#factura-viewer{
+    background-color: #b8b8b8;
+    padding: 50px;
+}
+
+.table-bordered tr{
+    padding: 0px;
+    margin: 0px;
+    border-color: #000066;
+}
+
+.table-bordered{
+    width: 100%;
+}
+
+.table-bordered thead{
+    background-color: #000066;
+    color: white;
+}
+
+.invoice-info{
+    display: grid;
+    grid-template-columns: 10fr 8fr; /* Tres columnas de diferentes tamaños */
+    gap: 9px;
+    margin-bottom: 9px;
+}
+
+.invoice-info-left, .invoice-info-right{
+    border: solid 1px #000066;
+    border-radius: 6px;
+    height: 100%;
+    width: 100%;
+    padding: 3px;
+    font-size: 12px;
+}
+
+.invoice-info-left  > div, .invoice-info-right > div{
+    padding-left: 3px;
+    display: flex;
+    align-items: center;
+}
+
+.invoice-info-left  label, .invoice-info-right label{
+    font-weight: bold;
+    font-size: 12px;
+    text-transform:uppercase;
+    width: 120px;
+}
+
+.paginacion {
+    text-align: right;
+    padding-top: 40px;
+    padding-right: 30px;
+}
+
+
+
