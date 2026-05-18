@@ -1,5 +1,6 @@
 // api/iaQuery.php
 <?php
+//no sé que hace este archivo ni de donde lo traje. creo que hay que eliminarlo.
 header('Content-Type: application/json');
 require_once '../config/conexion.php';
 
