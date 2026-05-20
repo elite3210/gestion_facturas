@@ -9,6 +9,20 @@
 function switchView(btn) {
     document.querySelectorAll('.o-view-btn').forEach(b => b.classList.remove('active'));
     if (btn) btn.classList.add('active');
+
+    const viewName = btn ? (btn.dataset.view || 'list') : 'list';
+    
+    // Ocultar todas las vistas principales
+    const views = ['list', 'kanban', 'pivot', 'graph'];
+    views.forEach(v => {
+        const el = document.getElementById('view-' + v);
+        if (el) {
+            el.style.display = (v === viewName) ? 'block' : 'none';
+        }
+    });
+
+    // Disparar evento personalizado para que appFactura.js lo detecte y cargue los datos
+    document.dispatchEvent(new CustomEvent('odooViewChanged', { detail: { view: viewName } }));
 }
 
 // ══════════════════════════════════════════════════════════

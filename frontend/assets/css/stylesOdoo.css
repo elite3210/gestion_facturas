@@ -1410,3 +1410,29 @@ table.o-list-table tfoot td.monetary {
   from { opacity: 0; transform: translateY(-6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* ── PIVOT VIEW ──────────────────────────────────────────── */
+.o-pivot-table {
+  background: var(--o-bg-white);
+  border: 1px solid var(--o-border-table);
+}
+.o-pivot-table th {
+  background-color: var(--o-bg-row-even) !important;
+  font-weight: 600;
+  color: var(--o-text);
+  border-bottom: 2px solid var(--o-border-table) !important;
+  vertical-align: middle;
+}
+.o-pivot-table td {
+  vertical-align: middle;
+  border-color: var(--o-border-light);
+}
+.o-pivot-controls .btn-outline-secondary {
+  border-color: var(--o-btn-secondary-border);
+  color: var(--o-text);
+}
+.o-pivot-controls .btn-check:checked + .btn-outline-secondary {
+  background-color: var(--o-purple-light);
+  border-color: var(--o-purple-light);
+  color: white;
+}

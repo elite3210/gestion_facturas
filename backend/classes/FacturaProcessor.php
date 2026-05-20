@@ -97,7 +97,8 @@ class FacturaProcessor
             'codigo_moneda' => $this->getXPathValue($xpath, '//cbc:DocumentCurrencyCode'),
             'serie_numero_guia' => str_replace(' ', '', $this->getXPathValue($xpath, '//cac:DespatchDocumentReference/cbc:ID')),
             'amount_untaxed' => $this->getXPathValue($xpath, '//cac:LegalMonetaryTotal/cbc:LineExtensionAmount'),
-            'amount_tax' => $this->getXPathValue($xpath, '//cac:TaxTotal/cbc:TaxAmount')
+            'amount_tax' => $this->getXPathValue($xpath, '//cac:TaxTotal/cbc:TaxAmount'),
+            'l10n_latam_document_type_id' => intval($this->getXPathValue($xpath, '//cbc:InvoiceTypeCode'))
         ];
 
         // Validar datos minimos requeridos
@@ -134,8 +135,8 @@ class FacturaProcessor
             // ✅ SINTAXIS POSTGRESQL: ON CONFLICT en lugar de ON DUPLICATE KEY UPDATE
             $query = "INSERT INTO facturas_electronicas 
                      (contenido_xml, numero_factura, fecha_emision, 
-                      ruc_emisor, ruc_receptor, nombre_emisor, nombre_receptor, monto_total, codigo_moneda, serie_numero_guia, move_type, amount_untaxed, amount_tax, fecha_creacion) 
-                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+                      ruc_emisor, ruc_receptor, nombre_emisor, nombre_receptor, monto_total, codigo_moneda, serie_numero_guia, move_type, amount_untaxed, amount_tax, l10n_latam_document_type_id, fecha_creacion) 
+                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
                       ON CONFLICT (numero_factura) 
                       DO UPDATE SET 
                       contenido_xml = EXCLUDED.contenido_xml,
@@ -150,6 +151,7 @@ class FacturaProcessor
                       move_type = EXCLUDED.move_type,
                       amount_untaxed = EXCLUDED.amount_untaxed,
                       amount_tax = EXCLUDED.amount_tax,
+                      l10n_latam_document_type_id = EXCLUDED.l10n_latam_document_type_id,
                       fecha_actualizacion = NOW()";
 
             $params = [
@@ -165,7 +167,8 @@ class FacturaProcessor
                 $facturaData['serie_numero_guia'],
                 $facturaData['move_type'],
                 $facturaData['amount_untaxed'] ?: null,
-                $facturaData['amount_tax'] ?: null
+                $facturaData['amount_tax'] ?: null,
+                $facturaData['l10n_latam_document_type_id'] ?: null
             ];
 
             $stmt = $this->db->executeQuery($query, $params);
@@ -184,18 +187,15 @@ class FacturaProcessor
         } catch (Exception $e) {
             // Database::executeQuery lanza una Exception base, no PDOException
             $msg = $e->getMessage();
-            
+
             // Intentar detectar el código de error si está en el mensaje (ej: SQLSTATE[23505])
             if (strpos($msg, '23505') !== false) {
                 throw new Exception("Error: La factura con el número '{$facturaData['numero_factura']}' ya existe.");
-            }
-            elseif (strpos($msg, '23503') !== false) {
+            } elseif (strpos($msg, '23503') !== false) {
                 throw new Exception("Error de integridad: Violación de clave foránea.");
-            }
-            elseif (strpos($msg, '22001') !== false) {
+            } elseif (strpos($msg, '22001') !== false) {
                 throw new Exception("Error: Algunos datos son demasiado largos para los campos de la base de datos.");
-            }
-            else {
+            } else {
                 // Propagar el error original para que la API lo devuelva con HTTP 500
                 throw new Exception("Error al guardar la factura en BD: " . $msg);
             }
@@ -277,6 +277,112 @@ class FacturaProcessor
 
         $stmt = $this->db->executeQuery($query, $params);
         return $stmt->fetchAll();
+    }
+
+    /**
+     * Obtener datos agrupados para vistas dinámicas (Pivot/Graph)
+     * 
+     * @param array $filters Filtros de búsqueda (igual que getFacturas)
+     * @param array $groupBy Lista de campos por los que agrupar
+     * @param array $measures Lista de medidas
+     * @return array Datos agrupados
+     */
+    public function getFacturasAgrupadas($filters = [], $groupBy = [], $measures = [])
+    {
+        $selects = [];
+        $groupBys = [];
+        
+        // Mapeo de campos groupBy permitidos a expresiones SQL (PostgreSQL)
+        $allowedGroupBy = [
+            'cliente' => 'nombre_receptor',
+            'fecha_mes' => "TO_CHAR(fecha_emision, 'YYYY-MM')", 
+            'fecha_anio' => "TO_CHAR(fecha_emision, 'YYYY')",
+            'estado' => 'state',
+            'tipo_comprobante' => 'l10n_latam_document_type_id',
+            'move_type' => 'move_type'
+        ];
+        
+        foreach ($groupBy as $groupField) {
+            if (isset($allowedGroupBy[$groupField])) {
+                $sqlExpr = $allowedGroupBy[$groupField];
+                $selects[] = "$sqlExpr AS $groupField";
+                $groupBys[] = $sqlExpr;
+            }
+        }
+        
+        // Mapeo de medidas
+        $allowedMeasures = [
+            'monto_total' => 'SUM(COALESCE(monto_total, 0))',
+            'amount_untaxed' => 'SUM(COALESCE(amount_untaxed, 0))',
+            'amount_tax' => 'SUM(COALESCE(amount_tax, 0))',
+            'count' => 'COUNT(id)'
+        ];
+        
+        foreach ($measures as $measure) {
+            if (isset($allowedMeasures[$measure])) {
+                $sqlExpr = $allowedMeasures[$measure];
+                $selects[] = "$sqlExpr AS $measure";
+            }
+        }
+        
+        // Si no hay medidas, por defecto devolvemos count
+        if (empty($selects)) {
+            $selects[] = "COUNT(id) AS count";
+        }
+        
+        $query = "SELECT " . implode(', ', $selects) . " FROM facturas_electronicas";
+        
+        $params = [];
+        $whereConditions = [];
+        
+        // Aplicar filtros (mismo lógica que getFacturas)
+        if (!empty($filters)) {
+            foreach ($filters as $field => $value) {
+                if (!empty($value)) {
+                    switch ($field) {
+                        case 'numero_factura':
+                        case 'serie_numero_guia':
+                        case 'nombre_receptor':
+                            $whereConditions[] = "$field ILIKE ?";
+                            $params[] = "%$value%";
+                            break;
+                        case 'search':
+                            $whereConditions[] = "(numero_factura ILIKE ? OR nombre_receptor ILIKE ? OR ruc_receptor ILIKE ?)";
+                            $params[] = "%$value%";
+                            $params[] = "%$value%";
+                            $params[] = "%$value%";
+                            break;
+                        case 'fecha_desde':
+                            $whereConditions[] = "fecha_emision >= ?";
+                            $params[] = $value;
+                            break;
+                        case 'fecha_hasta':
+                            $whereConditions[] = "fecha_emision <= ?";
+                            $params[] = $value;
+                            break;
+                        case 'ruc_emisor':
+                        case 'ruc_receptor':
+                        case 'move_type':
+                        case 'state':
+                            $whereConditions[] = "$field = ?";
+                            $params[] = $value;
+                            break;
+                    }
+                }
+            }
+        }
+        
+        if (!empty($whereConditions)) {
+            $query .= " WHERE " . implode(' AND ', $whereConditions);
+        }
+        
+        if (!empty($groupBys)) {
+            $query .= " GROUP BY " . implode(', ', $groupBys);
+            $query .= " ORDER BY " . implode(', ', $groupBys) . " ASC";
+        }
+        
+        $stmt = $this->db->executeQuery($query, $params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -484,6 +590,23 @@ class FacturaProcessor
         $query = "UPDATE facturas_electronicas SET state = ? WHERE id = ?";
         $this->db->executeQuery($query, [$newState, $id]);
         return true;
+    }
+
+    /**
+     * Regularizar guías huérfanas ejecutando el procedimiento almacenado
+     * 
+     * @return bool Éxito de la operación
+     */
+    public function regularizarFacturasHuerfanas()
+    {
+        try {
+            $query = "CALL public.sp_regularizar_facturas_huerfanas()";
+            $stmt = $this->db->getConnection()->prepare($query);
+            $stmt->execute();
+            return true;
+        } catch (Exception $e) {
+            throw new Exception("Error al regularizar facturas huerfanas: " . $e->getMessage());
+        }
     }
 
     /**

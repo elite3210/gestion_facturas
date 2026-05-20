@@ -43,8 +43,25 @@ $method = $_SERVER['REQUEST_METHOD'];
 try {
     switch ($method) {
         case 'GET':
-            // Manejar solicitud GET (listar o detallar facturas)
-            if (isset($_GET['id'])) {
+            // Manejar solicitud GET (listar, detallar, o datos agrupados)
+            if (isset($_GET['action']) && $_GET['action'] === 'get_pivot_data') {
+                // Filtros
+                $filters = [];
+                $allowedFilters = ['numero_factura', 'fecha_desde', 'fecha_hasta', 'ruc_emisor', 'ruc_receptor', 'serie_numero_guia', 'nombre_receptor', 'search', 'move_type', 'state'];
+                
+                foreach ($allowedFilters as $filter) {
+                    if (isset($_GET[$filter]) && !empty($_GET[$filter])) {
+                        $filters[$filter] = trim($_GET[$filter]);
+                    }
+                }
+                
+                $groupBy = isset($_GET['groupBy']) ? explode(',', $_GET['groupBy']) : [];
+                $measures = isset($_GET['measures']) ? explode(',', $_GET['measures']) : [];
+                
+                $data = $facturaProcessor->getFacturasAgrupadas($filters, $groupBy, $measures);
+                Response::success($data);
+            }
+            elseif (isset($_GET['id'])) {
                 // Obtener detalle de una factura específica
                 $id = filter_var($_GET['id'], FILTER_VALIDATE_INT);
                 if (!$id) {
@@ -111,8 +128,11 @@ try {
             break;
             
         case 'POST':
-            // Manejar solicitud POST (crear/subir factura)
-            if (isset($_FILES['xml_file'])) {
+            // Manejar solicitud POST (crear/subir factura o acciones especiales)
+            if (isset($_GET['action']) && $_GET['action'] === 'regularizar_facturas') {
+                $facturaProcessor->regularizarFacturasHuerfanas();
+                Response::success(['mensaje' => 'Guias encontradas para facturas' ], 'Operación exitosa', 200);
+            } elseif (isset($_FILES['xml_file'])) {
                 // Procesar archivo subido
                 $facturaData = $facturaProcessor->processXmlFile($_FILES['xml_file']);
                 

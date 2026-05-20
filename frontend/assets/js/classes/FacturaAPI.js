@@ -53,6 +53,41 @@ export class FacturaAPI {
     }
 
     /**
+     * Obtener datos agrupados para vistas dinámicas (Pivot/Graph)
+     * 
+     * @param {Object} filters Filtros para la búsqueda
+     * @param {Array} groupBy Campos por los que agrupar
+     * @param {Array} measures Medidas a calcular
+     * @returns {Promise} Promesa con los datos agrupados
+     */
+    async getPivotData(filters = {}, groupBy = [], measures = []) {
+        let url = new URL(this.baseUrl, window.location.origin);
+        
+        url.searchParams.append('action', 'get_pivot_data');
+        url.searchParams.append('groupBy', groupBy.join(','));
+        url.searchParams.append('measures', measures.join(','));
+
+        Object.keys(filters).forEach(key => {
+            if (filters[key]) {
+                url.searchParams.append(key, filters[key]);
+            }
+        });
+
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Error al obtener datos pivot');
+            }
+            return data;
+        } catch (error) {
+            console.error('Error en getPivotData:', error);
+            throw error;
+        }
+    }
+
+    /**
      * Obtener detalle de una factura
      * 
      * @param {number} id ID de la factura
@@ -128,6 +163,32 @@ export class FacturaAPI {
             return data;
         } catch (error) {
             console.error('Error en updateState:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Llama al procedimiento almacenado para regularizar facturas huérfanas
+     * @returns {Promise<Object>} Resultado de la operación
+     */
+    async regularizarFacturas() {
+        let url = new URL(this.baseUrl, window.location.origin);
+        url.searchParams.append('action', 'regularizar_facturas');
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST'
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Error al regularizar facturas');
+            }
+
+            return data;
+        } catch (error) {
+            console.error('Error en regularizarFacturas:', error);
             throw error;
         }
     }

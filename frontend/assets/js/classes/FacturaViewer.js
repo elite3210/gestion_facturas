@@ -158,7 +158,7 @@ export class FacturaViewer {
         setVal('#monto-total', this.formatMoney(data.detalles.totales.total, data.detalles.factura.moneda));
 
         // Generar QR code
-        const qrCodeElement = facturaElement.querySelector('#qrcode');
+        const qrCodeElement = facturaElement.querySelector('#qr-code-container');
         if (qrCodeElement) {
             setTimeout(() => {
                 this.generateQRCode(qrCodeElement, data.detalles.emisor.ruc, data.detalles.receptor.ruc, data.detalles.factura.serie);
@@ -183,8 +183,50 @@ export class FacturaViewer {
         const modalEl = document.getElementById('modal-print-view');
         if (modalEl) {
             modalEl.style.display = 'flex';
+            this.initZoom();
         } else {
             console.error("No se encontró el modal-print-view en el DOM");
+        }
+    }
+
+    /**
+     * Inicializa los controles de zoom para la previsualización A4
+     */
+    initZoom() {
+        if (this._zoomInitialized) return;
+        this._zoomInitialized = true;
+        this.currentZoom = 1;
+        
+        const btnIn = document.getElementById('btn-zoom-in');
+        const btnOut = document.getElementById('btn-zoom-out');
+        const zoomLevel = document.getElementById('zoom-level');
+        const container = document.getElementById('factura-viewer-container');
+        
+        const updateZoom = () => {
+            if (container) {
+                container.style.transform = `scale(${this.currentZoom})`;
+            }
+            if (zoomLevel) {
+                zoomLevel.textContent = Math.round(this.currentZoom * 100) + '%';
+            }
+        };
+
+        if (btnIn) {
+            btnIn.addEventListener('click', () => {
+                if (this.currentZoom < 2.0) {
+                    this.currentZoom += 0.1;
+                    updateZoom();
+                }
+            });
+        }
+
+        if (btnOut) {
+            btnOut.addEventListener('click', () => {
+                if (this.currentZoom > 0.4) {
+                    this.currentZoom -= 0.1;
+                    updateZoom();
+                }
+            });
         }
     }
 
@@ -375,31 +417,30 @@ export class FacturaViewer {
      * @param {Array} items Lista de items a mostrar
      */
     renderItems(container, items) {
-        if (!container || !this.itemTemplate || !items || !items.length) return;
+        if (!container || !items || !items.length) {
+            console.warn("No se puede renderizar items: faltan datos o contenedor", { container, items });
+            return;
+        }
 
         // Limpiar contenedor
         container.innerHTML = '';
 
-        items.forEach(item => {
-            const itemElement = this.itemTemplate.content.cloneNode(true);
+        items.forEach((item, index) => {
+            const moneda = this.currentFacturaData ? this.currentFacturaData.detalles.factura.moneda : 'PEN';
+            const igvVal = item.igv !== undefined ? item.igv : (item.valorUnitario * item.cantidad * 0.18);
+            const importeVal = item.valorUnitario * item.cantidad;
 
-            itemElement.querySelector('.item-cantidad').textContent = item.cantidad;
-            itemElement.querySelector('.item-unidad').textContent = this.getUnidadMedidaText(item.unidad);
-            itemElement.querySelector('.item-descripcion').textContent = item.descripcion;
-            
-            // Usamos clases o IDs según lo que tenga item-template
-            const moneda = this.currentData ? this.currentData.detalles.factura.moneda : 'PEN';
-            const vuEl = itemElement.querySelector('.item-valor') || itemElement.querySelector('td:nth-child(5)');
-            if (vuEl) vuEl.textContent = this.formatMoney(item.valorUnitario, moneda);
-            
-            const impEl = itemElement.querySelector('.item-importe') || itemElement.querySelector('td:nth-child(7)');
-            if (impEl) impEl.textContent = this.formatMoney(item.valorUnitario * item.cantidad, moneda);
-            
-            // También rellenamos P.U. si existe la 6ta columna
-            const puEl = itemElement.querySelector('td:nth-child(6)');
-            if (puEl) puEl.textContent = this.formatMoney(item.valorUnitario, moneda); // Simplificado
-
-            container.appendChild(itemElement);
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="text-center item-numero border-secondary">${index + 1}</td>
+                <td class="text-center item-cantidad border-secondary">${item.cantidad}</td>
+                <td class="text-center item-unidad border-secondary">${this.getUnidadMedidaText(item.unidad)}</td>
+                <td class="text-start item-descripcion border-secondary">${item.descripcion}</td>
+                <td class="text-end item-valor border-secondary">${this.formatMoney(item.valorUnitario, moneda)}</td>
+                <td class="text-end item-igv border-secondary">${this.formatMoney(igvVal, moneda)}</td>
+                <td class="text-end item-importe border-secondary">${this.formatMoney(importeVal, moneda)}</td>
+            `;
+            container.appendChild(tr);
         });
     }
 

@@ -184,11 +184,8 @@
         <a class="o-mobile-drawer-item" href="guia.html">🚚 Guías de Remisión</a>
     </div>
 
-    <!-- ── LIST VIEW ─────────────────────────────────────────── -->
-    <div id="view-list" class="active">
-
-        <!-- Control Panel -->
-        <div class="o-control-panel">
+    <!-- Control Panel (Common for List, Pivot, Graph) -->
+    <div class="o-control-panel">
             <div class="o-cp-top">
                 <div class="o-cp-left">
                     <button class="o-btn o-btn-primary"
@@ -209,6 +206,8 @@
                                     PDF</a>
                                 <div class="o-dropdown-sep"></div>
                                 <a class="o-dropdown-item" href="#">Exportar</a>
+                                <div class="o-dropdown-sep"></div>
+                                <a class="o-dropdown-item" href="#" id="btn-regularizar-guias"><i class="fa-solid fa-wand-magic-sparkles me-2"></i>Encontrar Guias</a>
                             </div>
                         </div>
                     </div>
@@ -224,8 +223,8 @@
                         <!-- Contenedor de facetas activas (se inyectan dinámicamente) -->
                         <div id="facets-container"></div>
                         <!-- Input de texto libre -->
-                        <input class="o-search-input" type="text"
-                            placeholder="Buscar…" id="search-input" autocomplete="off">
+                        <input class="o-search-input" type="text" placeholder="Buscar…" id="search-input"
+                            autocomplete="off">
                     </div>
                     <!-- Botón ▼ para abrir el panel -->
                     <button class="o-search-dropdown-btn" id="search-dropdown-btn"
@@ -243,52 +242,44 @@
                                 Filtros
                             </div>
                             <!-- Filtros predefinidos -->
-                            <button class="o-sp-filter-item" data-facet-id="draft"
-                                data-facet-label="Borradores" data-facet-field="state"
-                                data-facet-value="draft" data-facet-icon="filter">
+                            <button class="o-sp-filter-item" data-facet-id="draft" data-facet-label="Borradores"
+                                data-facet-field="state" data-facet-value="draft" data-facet-icon="filter">
                                 Borradores
                             </button>
-                            <button class="o-sp-filter-item" data-facet-id="posted"
-                                data-facet-label="Confirmadas" data-facet-field="state"
-                                data-facet-value="posted" data-facet-icon="filter">
+                            <button class="o-sp-filter-item" data-facet-id="posted" data-facet-label="Confirmadas"
+                                data-facet-field="state" data-facet-value="posted" data-facet-icon="filter">
                                 Confirmadas
                             </button>
-                            <button class="o-sp-filter-item" data-facet-id="cancel"
-                                data-facet-label="Canceladas" data-facet-field="state"
-                                data-facet-value="cancel" data-facet-icon="filter">
+                            <button class="o-sp-filter-item" data-facet-id="cancel" data-facet-label="Canceladas"
+                                data-facet-field="state" data-facet-value="cancel" data-facet-icon="filter">
                                 Canceladas
                             </button>
                             <div class="o-sp-separator"></div>
                             <button class="o-sp-filter-item" data-facet-id="not_paid"
-                                data-facet-label="Pendientes de pago"
-                                data-facet-field="payment_status" data-facet-value="not_paid"
-                                data-facet-icon="clock">
+                                data-facet-label="Pendientes de pago" data-facet-field="payment_status"
+                                data-facet-value="not_paid" data-facet-icon="clock">
                                 Pendientes de pago
                             </button>
-                            <button class="o-sp-filter-item" data-facet-id="paid"
-                                data-facet-label="Pagadas" data-facet-field="payment_status"
-                                data-facet-value="paid" data-facet-icon="check">
+                            <button class="o-sp-filter-item" data-facet-id="paid" data-facet-label="Pagadas"
+                                data-facet-field="payment_status" data-facet-value="paid" data-facet-icon="check">
                                 Pagadas
                             </button>
                             <div class="o-sp-separator"></div>
-                            <button class="o-sp-filter-item" data-facet-id="today"
-                                data-facet-label="Emitidas hoy" data-facet-field="fecha_hoy"
-                                data-facet-value="today" data-facet-icon="calendar">
+                            <button class="o-sp-filter-item" data-facet-id="today" data-facet-label="Emitidas hoy"
+                                data-facet-field="fecha_hoy" data-facet-value="today" data-facet-icon="calendar">
                                 Emitidas hoy
                             </button>
-                            <button class="o-sp-filter-item" data-facet-id="this_month"
-                                data-facet-label="Este mes" data-facet-field="fecha_mes"
-                                data-facet-value="this_month" data-facet-icon="calendar">
+                            <button class="o-sp-filter-item" data-facet-id="this_month" data-facet-label="Este mes"
+                                data-facet-field="fecha_mes" data-facet-value="this_month" data-facet-icon="calendar">
                                 Este mes
                             </button>
-                            <button class="o-sp-filter-item" data-facet-id="last_month"
-                                data-facet-label="Mes pasado" data-facet-field="fecha_mes_pasado"
-                                data-facet-value="last_month" data-facet-icon="calendar">
+                            <button class="o-sp-filter-item" data-facet-id="last_month" data-facet-label="Mes pasado"
+                                data-facet-field="fecha_mes_pasado" data-facet-value="last_month"
+                                data-facet-icon="calendar">
                                 Mes pasado
                             </button>
-                            <button class="o-sp-filter-item" data-facet-id="this_year"
-                                data-facet-label="Este año" data-facet-field="fecha_anio"
-                                data-facet-value="this_year" data-facet-icon="calendar">
+                            <button class="o-sp-filter-item" data-facet-id="this_year" data-facet-label="Este año"
+                                data-facet-field="fecha_anio" data-facet-value="this_year" data-facet-icon="calendar">
                                 Este año
                             </button>
                         </div>
@@ -303,12 +294,12 @@
                             <div id="favorites-list"></div>
                             <!-- Form para guardar favorito -->
                             <button class="o-sp-filter-item" id="btn-save-favorite">
-                                <i class="fa-solid fa-floppy-disk" style="font-size:0.75rem;color:var(--o-text-muted);"></i>
+                                <i class="fa-solid fa-floppy-disk"
+                                    style="font-size:0.75rem;color:var(--o-text-muted);"></i>
                                 Guardar búsqueda actual
                             </button>
                             <div id="save-favorite-form" style="display:none; padding:6px 10px;">
-                                <input type="text" id="favorite-name-input"
-                                    placeholder="Nombre de la búsqueda…"
+                                <input type="text" id="favorite-name-input" placeholder="Nombre de la búsqueda…"
                                     style="width:100%;border:1px solid var(--o-border);border-radius:4px;padding:4px 8px;font-size:0.8rem;margin-bottom:6px;">
                                 <div style="display:flex;gap:6px;">
                                     <button class="o-sp-save-btn" id="btn-confirm-save">Guardar</button>
@@ -338,21 +329,31 @@
                             <button class="o-pager-btn" id="btn-pager-next" title="Siguiente"><i
                                     class="fa-solid fa-chevron-right"></i></button>
                         </div>
+
                         <div class="o-view-switcher" style="margin-left:8px;">
-                            <button class="o-view-btn active" title="Lista" onclick="uiOdoo.switchView(this)"><i
-                                    class="fa-solid fa-list"></i></button>
-                            <button class="o-view-btn" title="Kanban" onclick="uiOdoo.switchView(this)"><i
-                                    class="fa-solid fa-table-cells-large"></i></button>
-                            <button class="o-view-btn" title="Calendario" onclick="uiOdoo.switchView(this)"><i
-                                    class="fa-regular fa-calendar"></i></button>
+                            <button class="o-view-btn active" title="Lista" data-view="list" onclick="uiOdoo.switchView(this)">
+                                <i class="fa-solid fa-list"></i>
+                            </button>
+                            <button class="o-view-btn" title="Kanban" data-view="kanban" onclick="uiOdoo.switchView(this)">
+                                <i class="fa-solid fa-table-cells-large"></i>
+                            </button>
+                            <button class="o-view-btn" title="Tabla dinámica" data-view="pivot" onclick="uiOdoo.switchView(this)">
+                                <i class="fa-solid fa-table"></i>
+                            </button>
+                            <button class="o-view-btn" title="Gráfico" data-view="graph" onclick="uiOdoo.switchView(this)">
+                                <i class="fa-solid fa-chart-area"></i>
+                            </button>
+
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> <!-- /.o-control-panel -->
 
+    <!-- ── LIST VIEW ─────────────────────────────────────────── -->
+    <div id="view-list" class="active" style="flex: 1; display: flex; flex-direction: column;">
         <!-- List Table -->
-        <div class="o-list-container" style="position:relative;">
+        <div class="o-list-container" style="position:relative; flex: 1;">
 
             <!-- Panel de columnas opcionales (estilo Odoo) -->
             <div class="o-opt-col-panel" id="opt-col-panel" style="display:none;">
@@ -454,13 +455,27 @@
         </div>
     </div><!-- /#view-list -->
 
-    <div id="form-view-container"></div>
+    <!-- ── KANBAN VIEW ───────────────────────────────────────── -->
+    <div id="view-kanban" style="display:none; padding: 16px; min-height: 500px;">
+        <!-- El contenido será inyectado por OdooKanbanView.js -->
+    </div>
+
+    <!-- ── PIVOT VIEW ────────────────────────────────────────── -->
+    <div id="view-pivot" style="display:none; padding: 16px; background: var(--o-bg-white); min-height: 500px;">
+        <!-- El contenido será inyectado por OdooPivotView.js -->
+    </div>
+
+    <!-- ── GRAPH VIEW ────────────────────────────────────────── -->
+    <div id="view-graph" style="display:none; padding: 16px; background: var(--o-bg-white); min-height: 500px;">
+        <!-- El contenido será inyectado por OdooGraphView.js -->
+    </div>    <div id="form-view-container"></div>
 
     <!-- Dependencias externas -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- UI Odoo y Lógica -->
     <script src="../assets/js/uiOdoo.js"></script>
