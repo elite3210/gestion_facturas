@@ -25,11 +25,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!container) return;
 
         // Si la plantilla no ha sido inyectada aún, descargarla
-        if (!document.getElementById('view-form')) {
+        if (!document.getElementById('form-action-btns')) {
             try {
                 // Obtener ruta base según la ubicación actual (puede estar en /views/ o en /views/facturas/)
                 const basePath = window.location.pathname.includes('/facturas/') ? '../' : './';
-                const resp = await fetch(basePath + 'templates/detalleFactura.html');
+                const resp = await fetch(basePath + 'templates/detalleFactura.html?v=' + Date.now());
                 if (!resp.ok) throw new Error('No se pudo cargar la plantilla del detalle');
                 const html = await resp.text();
                 container.innerHTML = html;
@@ -73,12 +73,10 @@ document.addEventListener('DOMContentLoaded', function () {
         // Asegurarnos de comparar como strings o números de manera uniforme
         const index = data.findIndex(item => String(item.id) === String(currentId));
 
-        const valEl = document.getElementById('form-pager-val');
-        const totalEl = document.getElementById('form-pager-total');
+        const valEl = document.getElementById('pager-val');
 
-        if (valEl && totalEl) {
-            valEl.textContent = index !== -1 ? (index + 1) : 1;
-            totalEl.textContent = total;
+        if (valEl) {
+            valEl.textContent = `${index !== -1 ? (index + 1) : 1} / ${total}`;
         }
     }
 
@@ -103,10 +101,30 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
+    // Vincular botones globales de pager para la vista de detalle
+    const btnPrev = document.getElementById('btn-pager-prev');
+    const btnNext = document.getElementById('btn-pager-next');
+    if (btnPrev) {
+        btnPrev.addEventListener('click', () => {
+            const formEl = document.getElementById('view-form');
+            if (formEl && formEl.style.display !== 'none' && window.navigateForm) {
+                window.navigateForm(-1);
+            }
+        });
+    }
+    if (btnNext) {
+        btnNext.addEventListener('click', () => {
+            const formEl = document.getElementById('view-form');
+            if (formEl && formEl.style.display !== 'none' && window.navigateForm) {
+                window.navigateForm(1);
+            }
+        });
+    }
+
     // Inicializar la lista de facturas de Odoo
     const facturaList = new FacturaOdooList(
         api,
-        'main-table',
+        'view-list-inner',
         null,
         null,
         null,

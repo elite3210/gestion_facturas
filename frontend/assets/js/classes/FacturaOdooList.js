@@ -11,9 +11,106 @@ export class FacturaOdooList {
     constructor(api, tableContainerId, headerToolsId, paginationId, paginationInfoId, onFacturaSelected) {
         this.api = api;
         this.onFacturaSelected = onFacturaSelected;
+
+        // Configuración de columnas específicas para la vista de listado de Facturas
+        const columns = [
+            {
+                id: 'col-chk',
+                label: '',
+                sortable: false,
+                optional: false
+            },
+            {
+                id: 'numero_factura',
+                field: 'numero_factura',
+                label: 'Número',
+                class: 'col-num fw-bold',
+                sortable: true,
+                optional: false
+            },
+            {
+                id: 'col-date',
+                field: 'fecha_emision',
+                label: 'Fecha de Emisión',
+                class: 'col-date',
+                sortable: true,
+                optional: true
+            },
+            {
+                id: 'nombre_receptor',
+                field: 'nombre_receptor',
+                label: 'Cliente',
+                class: 'col-client',
+                sortable: true,
+                optional: false
+            },
+            {
+                id: 'col-ruc',
+                field: 'ruc_receptor',
+                label: 'RUC',
+                class: 'col-ruc',
+                sortable: true,
+                optional: true,
+                footerLabel: 'Totales:'
+            },
+            {
+                id: 'col-subtotal',
+                field: 'amount_untaxed',
+                label: 'Subtotal',
+                class: 'col-total text-right monetary',
+                sortable: true,
+                optional: true,
+                footerId: 'subtotal-footer',
+                footerClass: 'monetary fw-bold'
+            },
+            {
+                id: 'col-igv',
+                field: 'amount_tax',
+                label: 'IGV',
+                class: 'col-total text-right monetary',
+                sortable: true,
+                optional: true,
+                footerId: 'igv-footer',
+                footerClass: 'monetary fw-bold'
+            },
+            {
+                id: 'col-total-pen',
+                field: 'monto_total',
+                label: 'Total PEN',
+                class: 'col-total text-right monetary fw-bold',
+                sortable: true,
+                optional: true,
+                footerId: 'total-footer',
+                footerClass: 'monetary fw-bold'
+            },
+            {
+                id: 'col-state',
+                field: 'estado',
+                label: 'Estado',
+                class: 'col-state',
+                sortable: true,
+                optional: true
+            },
+            {
+                id: 'col-guia',
+                field: 'serie_numero_guia',
+                label: 'Guía Remisión',
+                class: 'col-inv',
+                sortable: true,
+                optional: true
+            },
+            {
+                id: 'col-opt',
+                label: '',
+                sortable: false,
+                optional: false
+            }
+        ];
         
         // Inicializar la tabla genérica con la configuración específica de Facturas
         this.dataTable = new OdooDataTable({
+            containerId: tableContainerId || 'view-list',
+            columns: columns,
             storageKeyPrefix: 'facturas',
             defaultFilters: { move_type: 'out_invoice' },
             defaultSort: 'fecha_emision',

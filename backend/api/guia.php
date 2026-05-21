@@ -6,12 +6,8 @@
  * a través de métodos HTTP (GET, POST, PUT, DELETE)
  */
 
-// Prevenir acceso directo al archivo
-if (!defined('ACCESO_API')) {
-    header('HTTP/1.1 403 Forbidden');
-    echo 'Acceso denegado';
-    exit;
-}
+// Definir constante para permitir acceso desde la API
+define('ACCESO_API', true);
 
 
 // Habilitar CORS para peticiones desde el frontend

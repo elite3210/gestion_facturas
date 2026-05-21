@@ -8,8 +8,16 @@ export class GuiaAPI {
      * Constructor
      * @param {string} baseUrl URL base para las peticiones API
      */
-    constructor(baseUrl = 'https://facturas.heinzsport.com/backend/api/apiGuia.php') {
-        this.baseUrl = baseUrl;
+    constructor(baseUrl = null) {
+        if (!baseUrl) {
+            if ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && window.location.port === '5501') {
+                this.baseUrl = 'https://facturas.heinzsport.com/backend/api/guia.php';
+            } else {
+                this.baseUrl = '../../backend/api/guia.php';
+            }
+        } else {
+            this.baseUrl = baseUrl;
+        }
     }
 
     /**
@@ -22,7 +30,7 @@ export class GuiaAPI {
      */
     async getGuias(filters = {}, page = 1, limit = 20) {
         // Construir URL con parámetros de consulta
-        let url = new URL(this.baseUrl, window.location.origin);
+        let url = new URL(this.baseUrl, window.location.href);
 
         // Añadir parámetros de paginación
         url.searchParams.append('page', page);
@@ -57,7 +65,7 @@ export class GuiaAPI {
      * @returns {Promise} Promesa con los detalles de la guía
      */
     async getGuiaById(id) {
-        let url = new URL(this.baseUrl, window.location.origin);
+        let url = new URL(this.baseUrl, window.location.href);
         url.searchParams.append('id', id);
 
         try {

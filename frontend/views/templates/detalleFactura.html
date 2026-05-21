@@ -1,57 +1,4 @@
 <!-- ── FORM VIEW ─────────────────────────────────────────── -->
-<div id="view-form" style="display:flex;">
-    <!-- Form Control Panel -->
-    <div class="o-form-cp">
-        <div class="o-form-cp-row1">
-            <div class="o-cp-left">
-                <!-- Secondary action -->
-                <button class="o-btn o-btn-secondary">Subir</button>
-                <a href="#" class="o-breadcrumb-back" onclick="uiOdoo.closeFormView(); return false;">Facturas</a>
-                <span class="o-breadcrumb-sep">/</span>
-                <span class="o-breadcrumb-current">
-                    <span id="form-title-crumb">Cargando...</span>
-                    <div style="display:inline-block; position:relative; margin-left:4px;">
-                        <button class="o-breadcrumb-gear" title="Acciones"
-                            onclick="uiOdoo.toggleDropMenu(this, 'form-gear-menu')"
-                            style="color:var(--o-text-muted); background:none; border:none; padding:2px;">
-                            <i class="fa-solid fa-gear" style="font-size:0.85rem;"></i>
-                        </button>
-                        <div class="o-dropdown-menu" id="form-gear-menu">
-                            <a class="o-dropdown-item" href="#"
-                                onclick="if(window.facturaViewer) window.facturaViewer.downloadPDF(); return false;">Descargar
-                                PDF</a>
-                            <div class="o-dropdown-sep"></div>
-                            <a class="o-dropdown-item" href="#"
-                                onclick="if(window.facturaViewer) window.facturaViewer.openPrintPreview(); return false;">Ver
-                                Factura Impresa</a>
-                        </div>
-                    </div>
-                </span>
-            </div>
-            <!-- Center: stat buttons -->
-            <div style="display:flex;align-items:center;gap:8px;" id="form-stat-btns">
-                <button class="o-stat-btn" id="btn-entrega">
-                    <i class="fa-solid fa-truck" style="color:var(--o-purple);font-size:1rem;"></i>
-                    <div>
-                        <div class="stat-val" id="stat-entregas">1</div>
-                        <div class="stat-lbl">Entrega</div>
-                    </div>
-                </button>
-            </div>
-            <div class="o-pager">
-                <span class="o-pager-counter"><span id="form-pager-val">1</span> / <span
-                        id="form-pager-total">1</span></span>
-                <div class="o-pager-btns">
-                    <button class="o-pager-btn" onclick="if(window.navigateForm) window.navigateForm(-1); return false;"
-                        title="Anterior"><i class="fa-solid fa-chevron-left"></i></button>
-                    <button class="o-pager-btn" onclick="if(window.navigateForm) window.navigateForm(1); return false;"
-                        title="Siguiente"><i class="fa-solid fa-chevron-right"></i></button>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
     <div
         style="background:var(--o-bg-white);border-bottom:1px solid var(--o-border-light);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;flex-shrink:0;">
         <!-- Action buttons -->
@@ -176,9 +123,13 @@
                 <h5 style="margin:0; font-size:1.25rem; font-weight:600; color:var(--o-text);">Visor de Factura (A4)
                 </h5>
                 <div style="display: flex; align-items: center; background: #f0f0f0; border-radius: 4px; padding: 2px;">
-                    <button type="button" id="btn-zoom-out" style="border:none; background:transparent; padding:4px 8px; cursor:pointer;" title="Alejar"><i class="fa-solid fa-minus"></i></button>
+                    <button type="button" id="btn-zoom-out"
+                        style="border:none; background:transparent; padding:4px 8px; cursor:pointer;" title="Alejar"><i
+                            class="fa-solid fa-minus"></i></button>
                     <span id="zoom-level" style="font-size:0.85rem; padding: 0 8px; font-weight:bold;">100%</span>
-                    <button type="button" id="btn-zoom-in" style="border:none; background:transparent; padding:4px 8px; cursor:pointer;" title="Acercar"><i class="fa-solid fa-plus"></i></button>
+                    <button type="button" id="btn-zoom-in"
+                        style="border:none; background:transparent; padding:4px 8px; cursor:pointer;" title="Acercar"><i
+                            class="fa-solid fa-plus"></i></button>
                 </div>
             </div>
             <button type="button" onclick="document.getElementById('modal-print-view').style.display='none'"
@@ -409,9 +360,11 @@
                             <!-- El QR generado dinámicamente o por backend -->
                         </div>
                         <div style="font-size: 0.75rem;" class="text-muted">
-                            <p class="mb-1 fst-italic text-dark" style="margin-bottom: 0.25rem;">Esta es una representación impresa de la Factura
+                            <p class="mb-1 fst-italic text-dark" style="margin-bottom: 0.25rem;">Esta es una
+                                representación impresa de la Factura
                                 Electrónica, generada en el Sistema de SUNAT. verificarla utilizando su clave SOL.</p>
-                            <p class="mb-1 text-dark" style="margin-bottom: 0;">Consulte su documento en: <br><span id="url-consulta"
+                            <p class="mb-1 text-dark" style="margin-bottom: 0;">Consulte su documento en: <br><span
+                                    id="url-consulta"
                                     class="text-primary">https://ww1.sunat.gob.pe/ol-ti-itconsvalicpe/ConsValiCpe.htm</span>
                             </p>
                         </div>
@@ -420,7 +373,8 @@
             </div>
 
             <div class="col-sm-5 mt-4 mt-sm-0" style="width: 40%;">
-                <table class="table table-sm table-bordered border-secondary mb-0" style="font-size: 0.85rem; width: 100%;">
+                <table class="table table-sm table-bordered border-secondary mb-0"
+                    style="font-size: 0.85rem; width: 100%;">
                     <tbody>
                         <tr>
                             <td class="fw-bold" style="background-color: #f0f0f0; color: #000;">Sub Total Ventas:</td>
@@ -446,7 +400,7 @@
                 </table>
             </div>
         </div>
-    </div>
+    
 </template>
 
 <template id="item-template">

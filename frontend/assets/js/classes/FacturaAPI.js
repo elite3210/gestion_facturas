@@ -8,8 +8,16 @@ export class FacturaAPI {
      * Constructor
      * @param {string} baseUrl URL base para las peticiones API
      */
-    constructor(baseUrl = 'https://facturas.heinzsport.com/backend/api/apiFactura.php') {
-        this.baseUrl = baseUrl;
+    constructor(baseUrl = null) {
+        if (!baseUrl) {
+            if ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && window.location.port === '5501') {
+                this.baseUrl = 'https://facturas.heinzsport.com/backend/api/factura.php';
+            } else {
+                this.baseUrl = '/backend/api/factura.php';
+            }
+        } else {
+            this.baseUrl = baseUrl;
+        }
     }
 
     /**
@@ -22,7 +30,7 @@ export class FacturaAPI {
      */
     async getFacturas(filters = {}, page = 1, limit = 20, sort = 'fecha_emision', order = 'DESC') {
         // Construir URL con parámetros de consulta
-        let url = new URL(this.baseUrl, window.location.origin);
+        let url = new URL(this.baseUrl, window.location.href);
 
         // Añadir parámetros de paginación
         url.searchParams.append('page', page);
@@ -61,8 +69,8 @@ export class FacturaAPI {
      * @returns {Promise} Promesa con los datos agrupados
      */
     async getPivotData(filters = {}, groupBy = [], measures = []) {
-        let url = new URL(this.baseUrl, window.location.origin);
-        
+        let url = new URL(this.baseUrl, window.location.href);
+
         url.searchParams.append('action', 'get_pivot_data');
         url.searchParams.append('groupBy', groupBy.join(','));
         url.searchParams.append('measures', measures.join(','));
@@ -94,8 +102,9 @@ export class FacturaAPI {
      * @returns {Promise} Promesa con los detalles de la factura
      */
     async getFacturaById(id) {
-        let url = new URL(this.baseUrl, window.location.origin);
+        let url = new URL(this.baseUrl, window.location.href);
         url.searchParams.append('id', Number(id));
+        console.log('URL to API:', url.href);
 
         try {
             const response = await fetch(url);
@@ -172,7 +181,7 @@ export class FacturaAPI {
      * @returns {Promise<Object>} Resultado de la operación
      */
     async regularizarFacturas() {
-        let url = new URL(this.baseUrl, window.location.origin);
+        let url = new URL(this.baseUrl, window.location.href);
         url.searchParams.append('action', 'regularizar_facturas');
 
         try {

@@ -8,6 +8,8 @@
 export class OdooDataTable {
     constructor(config) {
         this.config = {
+            containerId: 'view-list',
+            columns: [],
             storageKeyPrefix: 'odoo_table',
             defaultFilters: {},
             defaultFacets: [],
@@ -32,14 +34,18 @@ export class OdooDataTable {
         this.currentSort = this.config.defaultSort;
         this.currentOrder = this.config.defaultOrder;
 
-        // Referencias DOM fijas
-        this.tbody = document.getElementById('tbody');
+        // Referencias DOM fijas (se inicializarán en renderLayout)
+        this.tbody = null;
+        this.chkAll = null;
+        this.mainTable = null;
+        this.optColPanel = null;
+        this.optColBtn = null;
         this.pagerVal = document.getElementById('pager-val');
-        this.chkAll = document.getElementById('chk-all');
         this.searchTimeout = null;
     }
 
     init() {
+        this.renderLayout();
         this.setupEvents();
         this.initOptColPanel();
         this.initSearchPanel();
@@ -54,13 +60,135 @@ export class OdooDataTable {
         this.loadData();
     }
 
+    // Renderizado dinámico de la estructura HTML de la tabla
+    renderLayout() {
+        const container = document.getElementById(this.config.containerId);
+        if (!container) {
+            console.error(`Container with ID "${this.config.containerId}" not found.`);
+            return;
+        }
+
+        // 1. Panel de columnas opcionales
+        const optionalColumns = this.config.columns.filter(col => col.optional);
+        const optColItemsHTML = optionalColumns.map(col => {
+            const storageKey = `${this.config.storageKeyPrefix}_hidden_cols`;
+            const stored = JSON.parse(localStorage.getItem(storageKey) || '[]');
+            const checked = !stored.includes(col.id) ? 'checked' : '';
+            return `
+                <label class="o-opt-col-item">
+                    <input type="checkbox" data-col="${col.id}" ${checked}> ${col.label}
+                </label>
+            `;
+        }).join('');
+
+        const optColPanelHTML = optionalColumns.length > 0 ? `
+            <div class="o-opt-col-panel" id="opt-col-panel" style="display:none;">
+                <div class="o-opt-col-header">Columnas opcionales</div>
+                ${optColItemsHTML}
+            </div>
+        ` : '';
+
+        // 2. Cabeceras (thead)
+        const headersHTML = this.config.columns.map(col => {
+            const dataColAttr = col.optional ? `data-col="${col.id}"` : '';
+            const dataSortAttr = col.sortable && col.field ? `data-sort="${col.field}"` : '';
+            
+            const isSorted = this.currentSort === col.field;
+            const sortedClass = isSorted ? 'sorted' : '';
+            const sortIconHTML = col.sortable && col.field ? `
+                <i class="fa-solid fa-arrow-${this.currentOrder === 'desc' ? 'down' : 'up'} sort-icon"></i>
+            ` : '';
+
+            if (col.id === 'col-chk') {
+                return `
+                    <th class="col-chk">
+                        <div style="display:flex;justify-content:center;">
+                            <div class="o-checkbox" id="chk-all"></div>
+                        </div>
+                    </th>
+                `;
+            }
+
+            if (col.id === 'col-opt') {
+                return `
+                    <th class="col-opt">
+                        <button class="opt-col-btn" id="opt-col-btn" title="Columnas opcionales"><i
+                                class="fa-solid fa-sliders"></i></button>
+                    </th>
+                `;
+            }
+
+            return `
+                <th class="${col.class || ''} ${sortedClass}" ${dataColAttr} ${dataSortAttr}>
+                    ${col.label} ${sortIconHTML}
+                    <div class="th-resize"></div>
+                </th>
+            `;
+        }).join('');
+
+        // 3. Footer (tfoot)
+        const footersHTML = this.config.columns.map(col => {
+            const dataColAttr = col.optional ? `data-col="${col.id}"` : '';
+            
+            if (col.id === 'col-chk') {
+                return `<td></td>`;
+            }
+            if (col.id === 'col-opt') {
+                return `<td class="col-opt"></td>`;
+            }
+            if (col.footerId) {
+                return `
+                    <td class="${col.footerClass || ''}" ${dataColAttr} id="${col.footerId}">S/ 0.00</td>
+                `;
+            }
+            if (col.footerLabel) {
+                return `
+                    <td ${dataColAttr} style="font-weight:600; text-align:right; color:var(--o-text-muted); font-size:0.8em;">
+                        ${col.footerLabel}
+                    </td>
+                `;
+            }
+            return `<td ${dataColAttr}></td>`;
+        }).join('');
+
+        // 4. Inyectar todo al contenedor
+        container.innerHTML = `
+            <div class="o-list-container" style="position:relative; flex: 1;">
+                ${optColPanelHTML}
+
+                <table class="o-list-table" id="main-table">
+                    <thead>
+                        <tr>
+                            ${headersHTML}
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        <!-- Renderizado dinámicamente -->
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            ${footersHTML}
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        `;
+
+        // Guardar referencias internas
+        this.tbody = container.querySelector('#tbody');
+        this.chkAll = container.querySelector('#chk-all');
+        this.mainTable = container.querySelector('#main-table');
+        this.optColPanel = container.querySelector('#opt-col-panel');
+        this.optColBtn = container.querySelector('#opt-col-btn');
+    }
+
     // ════════════════════════════════════════════════════════
     //  COLUMNAS OPCIONALES
     // ════════════════════════════════════════════════════════
 
     initOptColPanel() {
-        const btn = document.getElementById('opt-col-btn');
-        const panel = document.getElementById('opt-col-panel');
+        const btn = this.optColBtn;
+        const panel = this.optColPanel;
         if (!btn || !panel) return;
 
         const storageKey = `${this.config.storageKeyPrefix}_hidden_cols`;
@@ -98,7 +226,7 @@ export class OdooDataTable {
     }
 
     _setColVisible(colId, visible) {
-        const table = document.getElementById('main-table');
+        const table = this.mainTable;
         if (!table) return;
         table.querySelectorAll(`[data-col="${colId}"]`).forEach(el => {
             el.style.display = visible ? '' : 'none';
@@ -108,7 +236,7 @@ export class OdooDataTable {
     applyColVisibility() {
         const storageKey = `${this.config.storageKeyPrefix}_hidden_cols`;
         const stored = JSON.parse(localStorage.getItem(storageKey) || '[]');
-        const table = document.getElementById('main-table');
+        const table = this.mainTable;
         if (!table) return;
 
         table.querySelectorAll('[data-col]').forEach(el => el.style.display = '');
@@ -382,7 +510,7 @@ export class OdooDataTable {
             });
         }
 
-        const headers = document.querySelectorAll('th[data-sort]');
+        const headers = (this.mainTable || document).querySelectorAll('th[data-sort]');
         headers.forEach(th => {
             th.addEventListener('click', () => {
                 const sortField = th.dataset.sort;
@@ -416,8 +544,16 @@ export class OdooDataTable {
 
         const btnPrev = document.getElementById('btn-pager-prev');
         const btnNext = document.getElementById('btn-pager-next');
-        if (btnPrev) btnPrev.addEventListener('click', () => { if (this.currentPage > 1) { this.currentPage--; this.loadData(); } });
-        if (btnNext) btnNext.addEventListener('click', () => { this.currentPage++; this.loadData(); });
+        if (btnPrev) btnPrev.addEventListener('click', () => { 
+            const formEl = document.getElementById('view-form');
+            if (formEl && formEl.style.display !== 'none') return;
+            if (this.currentPage > 1) { this.currentPage--; this.loadData(); } 
+        });
+        if (btnNext) btnNext.addEventListener('click', () => { 
+            const formEl = document.getElementById('view-form');
+            if (formEl && formEl.style.display !== 'none') return;
+            this.currentPage++; this.loadData(); 
+        });
     }
 
     async loadData() {
@@ -453,6 +589,7 @@ export class OdooDataTable {
     }
 
     updatePager(paginacion) {
+        this.lastPagination = paginacion;
         if (!this.pagerVal) return;
 
         if (!paginacion || typeof paginacion !== 'object') {

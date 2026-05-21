@@ -1,0 +1,386 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "API de Facturación Heinz",
+    "description": "Especificación de la API de facturas electrónicas y guías de remisión electrónicas, adecuada para migración a FastAPI.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://facturas.heinzsport.com/backend/api",
+      "description": "Servidor de producción (actual PHP)"
+    },
+    {
+      "url": "http://localhost:8000/api/v1",
+      "description": "Servidor de desarrollo futuro (FastAPI)"
+    }
+  ],
+  "paths": {
+    "/factura.php": {
+      "get": {
+        "summary": "Obtener lista de facturas o detalle de una factura",
+        "description": "Retorna una lista paginada y filtrada de facturas electrónicas, o los detalles del XML de una factura si se especifica el ID, o datos agregados para la vista Pivot/Gráfico.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "ID único de la factura para ver detalles",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "action",
+            "in": "query",
+            "description": "Acción específica (ej: get_pivot_data)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["get_pivot_data"]
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número de página para la paginación",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Cantidad de resultados por página",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Campo por el que ordenar los resultados",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "fecha_emision"
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "Dirección de ordenamiento",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["ASC", "DESC"],
+              "default": "DESC"
+            }
+          },
+          {
+            "name": "numero_factura",
+            "in": "query",
+            "description": "Filtrar por número de factura",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "description": "Filtrar por estado de la factura",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["draft", "posted", "cancel"]
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Término de búsqueda global (cliente o número)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "groupBy",
+            "in": "query",
+            "description": "Campos separados por coma para agrupar (solo acción get_pivot_data)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "measures",
+            "in": "query",
+            "description": "Medidas/métricas para calcular (solo acción get_pivot_data)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respuesta exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "message": { "type": "string" },
+                    "data": { "type": "object" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Subir XML de factura o ejecutar regularización",
+        "description": "Procesa un archivo XML de factura subido por el cliente o ejecuta la regularización de facturas huérfanas.",
+        "parameters": [
+          {
+            "name": "action",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["regularizar_facturas"]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "xml_file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Archivo XML de factura electrónica UBL 2.1"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Factura procesada correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer" },
+                        "mensaje": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Actualizar estado de una factura",
+        "description": "Modifica el estado de una factura (borrador, confirmado, cancelado).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["id", "state"],
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID de la factura a actualizar"
+                  },
+                  "state": {
+                    "type": "string",
+                    "enum": ["draft", "posted", "cancel"],
+                    "description": "Nuevo estado"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Estado actualizado con éxito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/facturaDownload.php": {
+      "get": {
+        "summary": "Descargar representación impresa (PDF) de una factura",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Archivo PDF",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/guia.php": {
+      "get": {
+        "summary": "Listar guías de remisión o ver detalle de una guía",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          },
+          {
+            "name": "numero_guia",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "numero_factura",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Listado de guías o detalle de guía procesado de XML",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": { "type": "object" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Subir XML de guía de remisión",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "xml_file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Guía creada correctamente"
+          }
+        }
+      }
+    },
+    "/guiaDownload.php": {
+      "get": {
+        "summary": "Descargar representación impresa (PDF) de una guía de remisión",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Archivo PDF",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

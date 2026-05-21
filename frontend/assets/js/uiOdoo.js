@@ -12,12 +12,12 @@ function switchView(btn) {
 
     const viewName = btn ? (btn.dataset.view || 'list') : 'list';
     
-    // Ocultar todas las vistas principales
-    const views = ['list', 'kanban', 'pivot', 'graph'];
+    // Ocultar todas las acciones/vistas internas
+    const views = ['list-inner', 'kanban', 'pivot', 'graph'];
     views.forEach(v => {
         const el = document.getElementById('view-' + v);
         if (el) {
-            el.style.display = (v === viewName) ? 'block' : 'none';
+            el.style.display = (v === viewName || (v === 'list-inner' && viewName === 'list')) ? 'flex' : 'none';
         }
     });
 
@@ -101,27 +101,40 @@ function nbTab(panelId, el) {
 //  LIST / FORM VIEW TOGGLE
 // ══════════════════════════════════════════════════════════
 function openFormView() {
-    const listEl = document.getElementById('view-list');
-    const formEl = document.getElementById('view-form');
-    if (listEl) {
-        listEl.classList.remove('active');
-        listEl.style.display = 'none';
+    // Al usar Action Manager, cada vista tiene su propio Control Panel.
+    // Solo necesitamos alternar la visibilidad de los contenedores padre.
+    
+    // Ocultar el multi-view
+    const multiEl = document.getElementById('action-multi-view');
+    if (multiEl) {
+        multiEl.style.display = 'none';
     }
+
+    // Mostrar form
+    const formEl = document.getElementById('view-form');
     if (formEl) {
         formEl.style.display = 'flex';
-        formEl.scrollTop = 0;
+        const formContent = document.getElementById('form-view-container');
+        if (formContent) formContent.scrollTop = 0;
     }
 }
 
 function closeFormView(pushState = true) {
-    const listEl = document.getElementById('view-list');
+    // Ocultar form
     const formEl = document.getElementById('view-form');
     if (formEl) {
         formEl.style.display = 'none';
     }
-    if (listEl) {
-        listEl.style.display = 'flex';
-        listEl.classList.add('active');
+
+    // Mostrar multi-view
+    const multiEl = document.getElementById('action-multi-view');
+    if (multiEl) {
+        multiEl.style.display = 'flex';
+    }
+
+    // Refresh global pager to match list view state
+    if (window.facturaList && window.facturaList.dataTable && window.facturaList.dataTable.lastPagination) {
+        window.facturaList.dataTable.updatePager(window.facturaList.dataTable.lastPagination);
     }
     
     if (pushState) {

@@ -1,0 +1,581 @@
+<div class="o_action_manager">
+    <div class="o_pivot_view o_view_controller o_action">
+        <div class="o_control_panel d-flex flex-column gap-3 px-3 pt-2 pb-3" data-command-category="actions">
+            <div
+                class="o_control_panel_main d-flex flex-wrap flex-lg-nowrap justify-content-between align-items-lg-start gap-2 gap-lg-3 flex-grow-1">
+                <div class="o_control_panel_breadcrumbs d-flex align-items-center gap-1 order-0 h-lg-100">
+                    <div class="o_control_panel_main_buttons d-flex gap-1 d-empty-none d-print-none">
+                        <div class="d-inline-flex gap-1"></div>
+                    </div>
+                    <div class="o_breadcrumb d-flex gap-1 text-truncate">
+                        <div class="o_last_breadcrumb_item active d-flex fs-4 min-w-0 align-items-center"><span
+                                class="min-w-0 text-truncate">Cotizaciones</span></div>
+                        <div class="o_control_panel_breadcrumbs_actions d-inline-flex d-print-none"></div>
+                    </div>
+                    <div class="me-auto"></div>
+                </div>
+                <div
+                    class="o_control_panel_actions d-empty-none d-flex align-items-center justify-content-start justify-content-lg-around order-2 order-lg-1 w-100 mw-100 w-lg-auto">
+                    <div class="o_cp_searchview d-flex input-group" role="search">
+                        <div class="o_searchview form-control d-print-contents d-flex align-items-center py-1 border-end-0"
+                            role="search" aria-autocomplete="list"><button class="d-print-none btn border-0 p-0"
+                                role="button" aria-label="Buscar…" title="Buscar…"><i
+                                    class="o_searchview_icon oi oi-search me-2" role="img"></i></button>
+                            <div class="o_searchview_input_container d-flex flex-grow-1 flex-wrap gap-1 mw-100">
+                                <div class="o_searchview_facet position-relative d-inline-flex align-items-stretch rounded-2 bg-200 text-nowrap opacity-trigger-hover mw-100 o_facet_with_domain"
+                                    role="listitem" aria-label="buscar" tabindex="0">
+                                    <div
+                                        class="position-absolute start-0 top-0 bottom-0 end-0 bg-view border rounded-2 shadow opacity-0 opacity-100-hover">
+                                    </div>
+                                    <div class="o_searchview_facet_label position-relative rounded-start-2 px-1 rounded-end-0 p-0 btn btn-primary"
+                                        role="button"><i class="small fa-fw fa fa-filter" role="image"></i><span
+                                            class="position-absolute start-0 top-0 bottom-0 end-0 bg-inherit opacity-0 opacity-100-hover"><i
+                                                class="fa fa-fw fa-cog"></i></span></div>
+                                    <div
+                                        class="o_facet_values position-relative d-flex flex-wrap align-items-center ps-2 rounded-end-2 text-wrap overflow-hidden">
+                                        <small class="o_facet_value text-truncate" title="Mis cotizaciones">Mis
+                                            cotizaciones</small><button
+                                            class="o_facet_remove oi oi-close btn btn-link py-0 px-2 text-danger d-print-none"
+                                            role="button" aria-label="Eliminar" title="Eliminar"></button></div>
+                                </div>
+                                <div class="o_searchview_facet position-relative d-inline-flex align-items-stretch rounded-2 bg-200 text-nowrap opacity-trigger-hover mw-100"
+                                    role="listitem" aria-label="buscar" tabindex="0">
+                                    <div
+                                        class="position-absolute start-0 top-0 bottom-0 end-0 bg-view border rounded-2 shadow opacity-0 opacity-100-hover">
+                                    </div>
+                                    <div class="o_searchview_facet_label position-relative rounded-start-2 px-1 rounded-end-0 p-0 text-bg-action"
+                                        role="img"><i class="small fa-fw oi oi-group" role="image"></i></div>
+                                    <div
+                                        class="o_facet_values position-relative d-flex flex-wrap align-items-center ps-2 rounded-end-2 text-wrap overflow-hidden">
+                                        <small class="o_facet_value text-truncate"
+                                            title="Cliente">Cliente</small><button
+                                            class="o_facet_remove oi oi-close btn btn-link py-0 px-2 text-danger d-print-none"
+                                            role="button" aria-label="Eliminar" title="Eliminar"></button></div>
+                                </div><input type="text"
+                                    class="o_searchview_input o_input d-print-none flex-grow-1 w-auto border-0"
+                                    accesskey="Q" placeholder="Buscar…" role="searchbox">
+                            </div>
+                        </div><button
+                            class="o_searchview_dropdown_toggler d-print-none btn btn-outline-secondary o-dropdown-caret rounded-start-0 o-dropdown dropdown-toggle dropdown"
+                            data-hotkey="shift+q" title="Mostrar u ocultar panel de búsqueda"
+                            aria-expanded="false"></button>
+                    </div>
+                </div>
+                <div
+                    class="o_control_panel_navigation d-flex flex-wrap flex-md-nowrap justify-content-end gap-1 gap-xl-3 order-1 order-lg-2 flex-grow-1">
+                    <nav class="o_cp_switch_buttons d-print-none d-inline-flex btn-group"><button
+                            class="btn btn-secondary o_switch_view o_list" data-tooltip="Lista"><i
+                                class="oi oi-view-list"></i></button><button
+                            class="btn btn-secondary o_switch_view o_kanban" data-tooltip="Kanban"><i
+                                class="oi oi-view-kanban"></i></button><button
+                            class="btn btn-secondary o_switch_view o_calendar" data-tooltip="Calendario"><i
+                                class="fa fa-calendar"></i></button><button
+                            class="btn btn-secondary o_switch_view o_pivot active" data-tooltip="Tabla dinámica"
+                            title=""><i class="oi oi-view-pivot"></i></button><button
+                            class="btn btn-secondary o_switch_view o_graph" data-tooltip="Gráfico"><i
+                                class="fa fa-area-chart"></i></button><button
+                            class="btn btn-secondary o_switch_view o_activity" data-tooltip="Actividad"><i
+                                class="fa fa-clock-o"></i></button></nav>
+                </div>
+            </div>
+        </div>
+        <div class="o_content">
+            <div class="o_pivot_buttons d-flex d-print-none gap-1 mt-2 mx-3 mb-3">
+                <div class="btn-group" role="toolbar" aria-label="Acciones principales"><button
+                        class="btn btn-primary o-dropdown dropdown-toggle dropdown" aria-expanded="false"> Medidas <i
+                            class="fa fa-caret-down ms-1"></i></button></div>
+                <div class="btn-group" role="toolbar" aria-label="Ajustes de tabla dinámica"><button
+                        class="btn btn-secondary fa fa-exchange o_pivot_flip_button" data-tooltip="Invertir eje"
+                        aria-label="Invertir eje"></button><button
+                        class="btn btn-secondary fa fa-arrows o_pivot_expand_button" data-tooltip="Expandir todo"
+                        aria-label="Expandir todo"></button><button
+                        class="btn btn-secondary fa fa-download o_pivot_download" data-tooltip="Descargar xlsx"
+                        aria-label="Descargar xlsx"></button></div>
+            </div>
+            <div class="o_pivot mx-3">
+                <table class="table-hover table table-sm table-bordered table-borderless o_enable_linking">
+                    <thead>
+                        <tr class="border-top-0">
+                            <th class="border-0 bg-100 fw-normal" colspan="1" rowspan="3"></th>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none border-top o-dropdown dropdown o_pivot_header_cell_opened"
+                                colspan="5" rowspan="1" data-tooltip-position="right" aria-expanded="false"><i
+                                    class="fa me-1 fa-minus-square-o"></i><span>Total</span></th>
+                            <th class="border-0 bg-100 fw-normal" colspan="1" rowspan="2"></th>
+                        </tr>
+                        <tr class="border-top-0">
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed border-top o-dropdown dropdown"
+                                colspan="1" rowspan="1" data-tooltip="Fecha de la orden" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>enero 2026</span></th>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed border-top o-dropdown dropdown"
+                                colspan="1" rowspan="1" data-tooltip="Fecha de la orden" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>febrero 2026</span>
+                            </th>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed border-top o-dropdown dropdown"
+                                colspan="1" rowspan="1" data-tooltip="Fecha de la orden" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>marzo 2026</span></th>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed border-top o-dropdown dropdown"
+                                colspan="1" rowspan="1" data-tooltip="Fecha de la orden" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>abril 2026</span></th>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed border-top o-dropdown dropdown"
+                                colspan="1" rowspan="1" data-tooltip="Fecha de la orden" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>mayo 2026</span></th>
+                        </tr>
+                        <tr class="border-top-0">
+                            <th class="bg-view text-muted text-center text-nowrap fw-normal o_pivot_measure_row cursor-pointer user-select-none"
+                                colspan="1" rowspan="1">Total</th>
+                            <th class="bg-view text-muted text-center text-nowrap fw-normal o_pivot_measure_row cursor-pointer user-select-none"
+                                colspan="1" rowspan="1">Total</th>
+                            <th class="bg-view text-muted text-center text-nowrap fw-normal o_pivot_measure_row cursor-pointer user-select-none"
+                                colspan="1" rowspan="1">Total</th>
+                            <th class="bg-view text-muted text-center text-nowrap fw-normal o_pivot_measure_row cursor-pointer user-select-none"
+                                colspan="1" rowspan="1">Total</th>
+                            <th class="bg-view text-muted text-center text-nowrap fw-normal o_pivot_measure_row cursor-pointer user-select-none"
+                                colspan="1" rowspan="1">Total</th>
+                            <th class="bg-view text-muted text-center text-nowrap fw-normal o_pivot_measure_row cursor-pointer user-select-none"
+                                colspan="1" rowspan="1">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_opened o-dropdown dropdown"
+                                style="padding-left: 5px;" data-tooltip-position="right" aria-expanded="false"><i
+                                    class="fa fa-minus-square-o me-1"></i><span>Total</span></th>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">27,065.97</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">75,015.34</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">45,622.60</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">32,342.50</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">39,292.40</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">219,338.81</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed o-dropdown dropdown"
+                                style="padding-left: 35px;" data-tooltip="Cliente" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>ALVARADO ROMAN ISOLINA
+                                    SILVIA</span></th>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">3,000.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">1,350.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">1,155.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">5,505.00</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed o-dropdown dropdown"
+                                style="padding-left: 35px;" data-tooltip="Cliente" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>BIOSELVA PACK
+                                    S.A.C.</span></th>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">8,451.16</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">8,451.16</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed o-dropdown dropdown"
+                                style="padding-left: 35px;" data-tooltip="Cliente" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>CAMPOS AVILA DEINER
+                                    RUBEN</span></th>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">1,050.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">1,050.00</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed o-dropdown dropdown"
+                                style="padding-left: 35px;" data-tooltip="Cliente" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>CAMPOS MAZA
+                                    GENESIS</span></th>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">5,655.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">5,655.00</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed o-dropdown dropdown"
+                                style="padding-left: 35px;" data-tooltip="Cliente" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>CLIENTES VARIOS</span>
+                            </th>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">19.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">310.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">329.00</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed o-dropdown dropdown"
+                                style="padding-left: 35px;" data-tooltip="Cliente" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>COMPAÑIA DE EMPAQUES
+                                    ARRUE S.A.C.</span></th>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">14,209.56</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">9,551.40</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">23,760.96</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed o-dropdown dropdown"
+                                style="padding-left: 35px;" data-tooltip="Cliente" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>COORPORACION YOLPLAST
+                                    E.I.R.L.</span></th>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">540.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">540.00</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed o-dropdown dropdown"
+                                style="padding-left: 35px;" data-tooltip="Cliente" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>CREADORES DE LEGADOS
+                                    DE VALOR E.I.R.L.</span></th>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">2,103.60</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">288.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">2,391.60</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed o-dropdown dropdown"
+                                style="padding-left: 35px;" data-tooltip="Cliente" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>FAROBEN DEL PERU
+                                    E.I.R.L.</span></th>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">2,550.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">7,530.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">10,080.00</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed o-dropdown dropdown"
+                                style="padding-left: 35px;" data-tooltip="Cliente" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>FREDY PONCE &amp;
+                                    MARANATHA S.A.C.</span></th>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">3,400.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">14,240.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">17,640.00</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed o-dropdown dropdown"
+                                style="padding-left: 35px;" data-tooltip="Cliente" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>GARAY RUDY HENRY
+                                    MESA</span></th>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">3,929.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">3,943.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">2,428.50</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">1,816.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">12,116.50</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed o-dropdown dropdown"
+                                style="padding-left: 35px;" data-tooltip="Cliente" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>GARCIA VILCHEZ PAOLA
+                                    LIZBETH</span></th>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">1,928.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">4,519.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">520.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">6,967.00</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed o-dropdown dropdown"
+                                style="padding-left: 35px;" data-tooltip="Cliente" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>HUAMAN AGUILAR
+                                    FERNANDO</span></th>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">14,880.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">14,880.00</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed o-dropdown dropdown"
+                                style="padding-left: 35px;" data-tooltip="Cliente" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>INVERSIONES MEGAPLAS
+                                    S.A.C.</span></th>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">780.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">780.00</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed o-dropdown dropdown"
+                                style="padding-left: 35px;" data-tooltip="Cliente" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>LEGUIA DACOSTA CLAUDIA
+                                    HILARY</span></th>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">1,555.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">1,555.00</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed o-dropdown dropdown"
+                                style="padding-left: 35px;" data-tooltip="Cliente" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>LINGAN SEJURO OSCAR
+                                    ANTONIO</span></th>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">1,350.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">2,239.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">3,589.00</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed o-dropdown dropdown"
+                                style="padding-left: 35px;" data-tooltip="Cliente" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>MAMANI CATUNTA MARIA
+                                    SALOME</span></th>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">4,020.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">4,020.00</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed o-dropdown dropdown"
+                                style="padding-left: 35px;" data-tooltip="Cliente" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>MULTIPRODUCTOS MARY
+                                    E.I.R.L.</span></th>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">3,900.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">3,900.00</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed o-dropdown dropdown"
+                                style="padding-left: 35px;" data-tooltip="Cliente" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>OSORIO SIGUAS SILVIO
+                                    VITALIANO</span></th>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">10,000.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">30,226.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">19,080.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">11,040.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">70,346.00</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed o-dropdown dropdown"
+                                style="padding-left: 35px;" data-tooltip="Cliente" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>PALAVA E.I.R.L.</span>
+                            </th>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">3,600.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">1,800.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">3,396.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">8,796.00</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed o-dropdown dropdown"
+                                style="padding-left: 35px;" data-tooltip="Cliente" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>TORIBIO NEYRA ROBERTO
+                                    HENRY</span></th>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">1,140.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">375.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">3,257.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">1,540.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">6,312.00</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed o-dropdown dropdown"
+                                style="padding-left: 35px;" data-tooltip="Cliente" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>UNIVERSAL PLASTICOS
+                                    &amp; DESCARTABLES SCRL</span></th>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">4,744.97</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">2,247.62</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">6,992.59</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-view text-nowrap cursor-pointer fw-normal user-select-none o_pivot_header_cell_closed o-dropdown dropdown"
+                                style="padding-left: 35px;" data-tooltip="Cliente" data-tooltip-position="right"
+                                aria-expanded="false"><i class="fa fa-plus-square me-1"></i><span>VALCARCEL SUCASACA
+                                    CARLOS RAUL</span></th>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">1,822.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer">
+                                <div class="o_value">1,860.00</div>
+                            </td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 o_empty"></td>
+                            <td class="o_pivot_cell_value bg-100 cursor-pointer fw-bold">
+                                <div class="o_value">3,682.00</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

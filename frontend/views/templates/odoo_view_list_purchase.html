@@ -1,0 +1,566 @@
+<div class="o_action_manager">
+    <div class="o_list_view o_purchase_dashboard_list_view o_purchase_order o_view_controller o_action">
+        <div class="o_control_panel d-flex flex-column gap-3 px-3 pt-2 pb-3" data-command-category="actions">
+            <div
+                class="o_control_panel_main d-flex flex-wrap flex-lg-nowrap justify-content-between align-items-lg-start gap-2 gap-lg-3 flex-grow-1">
+                <div class="o_control_panel_breadcrumbs d-flex align-items-center gap-1 order-0 h-lg-100">
+                    <div class="o_control_panel_main_buttons d-flex gap-1 d-empty-none d-print-none">
+                        <div class="d-inline-flex gap-1"><button type="button" class="btn btn-primary o_list_button_add"
+                                data-hotkey="c" data-bounce-button=""> Nuevo </button>
+                            <div class="o_list_buttons d-flex gap-1 d-empty-none align-items-baseline" role="toolbar"
+                                aria-label="Acciones principales"></div>
+                        </div>
+                    </div>
+                    <div class="o_breadcrumb d-flex gap-1 text-truncate">
+                        <div class="o_last_breadcrumb_item active d-flex fs-4 min-w-0 align-items-center"><span
+                                class="min-w-0 text-truncate">Solicitudes de cotización</span></div>
+                        <div class="o_control_panel_breadcrumbs_actions d-inline-flex d-print-none">
+                            <div class="o_cp_action_menus d-flex align-items-center gap-1 pe-2">
+                                <div class="lh-1"><button
+                                        class="d-print-none btn lh-sm p-0 border-0 o-dropdown dropdown-toggle dropdown"
+                                        data-hotkey="u" data-tooltip="Acciones" aria-expanded="false"><i
+                                            class="fa fa-fw fa-cog"></i></button></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="me-auto"></div>
+                </div>
+                <div
+                    class="o_control_panel_actions d-empty-none d-flex align-items-center justify-content-start justify-content-lg-around order-2 order-lg-1 w-100 mw-100 w-lg-auto">
+                    <div class="o_cp_searchview d-flex input-group" role="search">
+                        <div class="o_searchview form-control d-print-contents d-flex align-items-center py-1 border-end-0"
+                            role="search" aria-autocomplete="list"><button class="d-print-none btn border-0 p-0"
+                                role="button" aria-label="Buscar…" title="Buscar…"><i
+                                    class="o_searchview_icon oi oi-search me-2" role="img"></i></button>
+                            <div class="o_searchview_input_container d-flex flex-grow-1 flex-wrap gap-1 mw-100"><input
+                                    type="text"
+                                    class="o_searchview_input o_input d-print-none flex-grow-1 w-auto border-0"
+                                    accesskey="Q" placeholder="Buscar…" role="searchbox"></div>
+                        </div><button
+                            class="o_searchview_dropdown_toggler d-print-none btn btn-outline-secondary o-dropdown-caret rounded-start-0 o-dropdown dropdown-toggle dropdown"
+                            data-hotkey="shift+q" title="Mostrar u ocultar panel de búsqueda"
+                            aria-expanded="false"></button>
+                    </div>
+                </div>
+                <div
+                    class="o_control_panel_navigation d-flex flex-wrap flex-md-nowrap justify-content-end gap-1 gap-xl-3 order-1 order-lg-2 flex-grow-1">
+                    <div class="o_cp_pager text-nowrap " role="search">
+                        <nav class="o_pager d-flex gap-2 h-100" aria-label="Paginador"><span
+                                class="o_pager_counter align-self-center"><span
+                                    class="o_pager_value d-inline-block border-bottom border-transparent mb-n1">1-26</span><span>
+                                    / </span><span class="o_pager_limit">26</span></span><span
+                                class="btn-group d-print-none" aria-atomic="true"><button type="button"
+                                    class="btn btn-secondary o_pager_previous px-2 rounded-start" aria-label="Anterior"
+                                    data-tooltip="Anterior" tabindex="-1" data-hotkey="p" disabled=""><i
+                                        class="oi oi-chevron-left"></i></button><button type="button"
+                                    class="btn btn-secondary o_pager_next px-2 rounded-end" aria-label="Siguiente"
+                                    data-tooltip="Siguiente" tabindex="-1" data-hotkey="n" disabled=""><i
+                                        class="oi oi-chevron-right"></i></button></span></nav>
+                    </div>
+                    <nav class="o_cp_switch_buttons d-print-none d-inline-flex btn-group"><button
+                            class="btn btn-secondary o_switch_view o_list active" data-tooltip="Lista"><i
+                                class="oi oi-view-list"></i></button><button
+                            class="btn btn-secondary o_switch_view o_kanban" data-tooltip="Kanban"><i
+                                class="oi oi-view-kanban"></i></button><button
+                            class="btn btn-secondary o_switch_view o_pivot" data-tooltip="Tabla dinámica"><i
+                                class="oi oi-view-pivot"></i></button><button
+                            class="btn btn-secondary o_switch_view o_graph" data-tooltip="Gráfico"><i
+                                class="fa fa-area-chart"></i></button><button
+                            class="btn btn-secondary o_switch_view o_calendar" data-tooltip="Calendario"><i
+                                class="fa fa-calendar"></i></button><button
+                            class="btn btn-secondary o_switch_view o_activity" data-tooltip="Actividad"><i
+                                class="fa fa-clock-o"></i></button></nav>
+                </div>
+            </div>
+        </div>
+        <div class="o_content">
+            <div class="o_purchase_dashboard container-fluid py-4 border-bottom bg-view">
+                <div class="row justify-content-between gap-3 gap-lg-0">
+                    <div class="col-12 col-lg-5 col-xl-5 col-xxl-4 flex-grow-1 flex-lg-grow-0 flex-shrink-0">
+                        <div class="grid gap-4">
+                            <div
+                                class="g-col-3 g-col-sm-2 d-flex align-items-center py-2 justify-content-end text-end justify-content-lg-start text-lg-start text-break">
+                                Todas las solicitudes de cotización </div>
+                            <div class="g-col-9 g-col-sm-10 grid gap-1">
+                                <div class="g-col-4 p-0" title="Todos los borradores de solicitudes de cotización"
+                                    filter_name="draft_rfqs"><a href="#"
+                                        class="btn btn-primary w-100 h-100 border-0 rounded-0 text-capitalize text-break fw-normal">
+                                        <div class="fs-2">1</div>Por enviar
+                                    </a></div>
+                                <div class="g-col-4 p-0" title="Todas las solicitudes de cotización en espera"
+                                    filter_name="waiting_rfqs"><a href="#"
+                                        class="btn btn-primary w-100 h-100 border-0 rounded-0 text-capitalize text-break fw-normal">
+                                        <div class="fs-2">0</div>En espera
+                                    </a></div>
+                                <div class="g-col-4 p-0" title="Todas las solicitudes de cotización atrasadas "
+                                    filter_name="late_rfqs"><a href="#"
+                                        class="btn btn-primary w-100 h-100 border-0 rounded-0 text-capitalize text-break fw-normal">
+                                        <div class="fs-2">1</div>Atrasado
+                                    </a></div>
+                            </div>
+                        </div>
+                        <div class="grid gap-4">
+                            <div
+                                class="g-col-3 g-col-sm-2 d-flex align-items-center py-2 justify-content-end text-end justify-content-lg-start text-lg-start text-break">
+                                Mis solicitudes de cotización </div>
+                            <div class="g-col-9 g-col-sm-10 grid gap-2">
+                                <div class="g-col-4 p-0" title="Mis solicitudes de cotización en borrador"
+                                    filter_name="draft_rfqs,my_purchases"><a href="#"
+                                        class="btn btn-light d-flex align-items-center w-100 h-100 p-0 border-0 bg-100 fw-normal">
+                                        <div class="w-100 p-2">1</div>
+                                    </a></div>
+                                <div class="g-col-4 p-0" title="Mis solicitudes de cotización en espera"
+                                    filter_name="waiting_rfqs,my_purchases"><a href="#"
+                                        class="btn btn-light d-flex align-items-center w-100 h-100 p-0 border-0 bg-100 fw-normal">
+                                        <div class="w-100 p-2">0</div>
+                                    </a></div>
+                                <div class="g-col-4 p-0" title="Mis solicitudes de cotización atrasadas"
+                                    filter_name="late_rfqs,my_purchases"><a href="#"
+                                        class="btn btn-light d-flex align-items-center w-100 h-100 p-0 border-0 bg-100 fw-normal">
+                                        <div class="w-100 p-2">1</div>
+                                    </a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-7 col-xl-6 col-xxl-5 flex-shrink-0">
+                        <div class="d-flex flex-column justify-content-between gap-2 h-100">
+                            <div class="grid gap-2 h-100">
+                                <div class="g-col-6 g-col-md-6 grid gap-1 gap-md-4">
+                                    <div
+                                        class="g-col-12 g-col-sm-4 g-col-lg-6 d-flex align-items-center justify-content-center text-center justify-content-md-end text-md-end mt-4 mt-sm-0 text-break">
+                                        Valor promedio de la orden </div>
+                                    <div
+                                        class="g-col-12 g-col-sm-8 g-col-lg-5 d-flex align-items-center justify-content-center py-2 bg-100">
+                                        <span>S/&nbsp;3,808.15</span>
+                                    </div>
+                                </div>
+                                <div class="g-col-6 g-col-md-6 grid gap-1 gap-md-4">
+                                    <div
+                                        class="g-col-12 g-col-sm-4 g-col-lg-6 d-flex align-items-center py-2 justify-content-center text-center justify-content-md-end text-md-end mt-4 mt-sm-0 text-break">
+                                        Comprado en los últimos 7 días </div>
+                                    <div
+                                        class="g-col-12 g-col-sm-8 g-col-lg-6 d-flex align-items-center justify-content-center py-2 bg-100">
+                                        <span>S/&nbsp;6,260.53</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="grid gap-2 h-100">
+                                <div class="g-col-6 g-col-md-6 grid gap-1 gap-md-4">
+                                    <div
+                                        class="g-col-12 g-col-sm-4 g-col-lg-6 d-flex align-items-center justify-content-center text-center justify-content-md-end text-md-end mt-4 mt-sm-0 text-break">
+                                        Plazo de compra </div>
+                                    <div
+                                        class="g-col-12 g-col-sm-8 g-col-lg-5 d-flex align-items-center justify-content-center py-2 bg-100">
+                                        <span>2.95 Días</span>
+                                    </div>
+                                </div>
+                                <div class="g-col-6 g-col-md-6 grid gap-1 gap-md-4">
+                                    <div
+                                        class="g-col-12 g-col-md-4 g-col-sm-4 g-col-lg-6 d-flex align-items-center justify-content-center text-center justify-content-md-end text-md-end mt-4 mt-sm-0 text-break">
+                                        Solicitudes de cotización enviadas los últimos 7 días </div>
+                                    <div
+                                        class="g-col-12 g-col-sm-8 g-col-lg-6 d-flex align-items-center justify-content-center py-2 bg-100">
+                                        <span>0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="o_list_renderer o_renderer table-responsive" tabindex="-1">
+                <table
+                    class="o_list_table table table-sm table-hover position-relative mb-0 o_list_table_ungrouped table-striped"
+                    style="table-layout: fixed;">
+                    <thead>
+                        <tr>
+                            <th class="o_list_record_selector o_list_controller align-middle pe-1 cursor-pointer"
+                                tabindex="-1" style="width: 40px;">
+                                <div class="o-checkbox form-check d-flex m-0"><input type="checkbox"
+                                        class="form-check-input" id="checkbox-comp-373"><label class="form-check-label"
+                                        for="checkbox-comp-373"></label></div>
+                            </th>
+                            <th data-tooltip-delay="1000" tabindex="-1" data-name="priority"
+                                class="align-middle cursor-default o_priority_cell opacity-trigger-hover w-print-auto"
+                                style="width: 89px;"></th>
+                            <th data-tooltip-delay="1000" tabindex="-1" data-name="name"
+                                class="align-middle o_column_sortable position-relative cursor-pointer opacity-trigger-hover w-print-auto"
+                                style="width: 89px;">
+                                <div class="d-flex" data-tooltip-template="web.ListHeaderTooltip"
+                                    data-tooltip-info="{&quot;viewMode&quot;:&quot;list&quot;,&quot;resModel&quot;:&quot;purchase.order&quot;,&quot;debug&quot;:false,&quot;field&quot;:{&quot;name&quot;:&quot;name&quot;,&quot;label&quot;:&quot;Referencia de la orden&quot;,&quot;type&quot;:&quot;char&quot;,&quot;widget&quot;:null,&quot;context&quot;:&quot;{}&quot;,&quot;invisible&quot;:null,&quot;column_invisible&quot;:null,&quot;readonly&quot;:&quot;1&quot;,&quot;required&quot;:&quot;True&quot;,&quot;changeDefault&quot;:false}}">
+                                    <span
+                                        class="d-block min-w-0 text-truncate flex-grow-1 flex-shrink-1">Referencia</span>
+                                    <div class="o_list_header_label_spacer"></div><i
+                                        class="o_list_sortable_caret fa fa-lg fa-angle-down opacity-0 opacity-100-hover"></i>
+                                </div><span
+                                    class="o_resize position-absolute top-0 end-0 bottom-0 ps-1 bg-black-25 opacity-0 opacity-50-hover z-1"></span>
+                            </th>
+                            <th data-tooltip-delay="1000" tabindex="-1" data-name="partner_id"
+                                class="align-middle o_column_sortable position-relative cursor-pointer opacity-trigger-hover w-print-auto"
+                                style="width: 184px;">
+                                <div class="d-flex" data-tooltip-template="web.ListHeaderTooltip"
+                                    data-tooltip-info="{&quot;viewMode&quot;:&quot;list&quot;,&quot;resModel&quot;:&quot;purchase.order&quot;,&quot;debug&quot;:false,&quot;field&quot;:{&quot;name&quot;:&quot;partner_id&quot;,&quot;label&quot;:&quot;Proveedor&quot;,&quot;help&quot;:&quot;Puede encontrar un proveedor por su nombre, NIF, correo electrónico o referencia interna.&quot;,&quot;type&quot;:&quot;many2one&quot;,&quot;widget&quot;:null,&quot;context&quot;:&quot;{}&quot;,&quot;domain&quot;:&quot;(company_id and ['|', ('company_id', '=', False), ('company_id', 'parent_of', [company_id])] or ['|', ('company_id', '=', False), ('company_id', 'parent_of', '')]) + ([])&quot;,&quot;invisible&quot;:null,&quot;column_invisible&quot;:null,&quot;readonly&quot;:&quot;1&quot;,&quot;required&quot;:&quot;True&quot;,&quot;changeDefault&quot;:true,&quot;relation&quot;:&quot;res.partner&quot;}}">
+                                    <span
+                                        class="d-block min-w-0 text-truncate flex-grow-1 flex-shrink-1">Proveedor</span>
+                                    <div class="o_list_header_label_spacer"></div><i
+                                        class="o_list_sortable_caret fa fa-lg fa-angle-down opacity-0 opacity-100-hover"></i>
+                                </div><span
+                                    class="o_resize position-absolute top-0 end-0 bottom-0 ps-1 bg-black-25 opacity-0 opacity-50-hover z-1"></span>
+                            </th>
+                            <th data-tooltip-delay="1000" tabindex="-1" data-name="company_id"
+                                class="align-middle o_column_sortable position-relative cursor-pointer opacity-trigger-hover w-print-auto"
+                                style="width: 89px;">
+                                <div class="d-flex" data-tooltip-template="web.ListHeaderTooltip"
+                                    data-tooltip-info="{&quot;viewMode&quot;:&quot;list&quot;,&quot;resModel&quot;:&quot;purchase.order&quot;,&quot;debug&quot;:false,&quot;field&quot;:{&quot;name&quot;:&quot;company_id&quot;,&quot;label&quot;:&quot;Empresa&quot;,&quot;type&quot;:&quot;many2one&quot;,&quot;widget&quot;:null,&quot;context&quot;:&quot;{}&quot;,&quot;domain&quot;:[],&quot;invisible&quot;:null,&quot;column_invisible&quot;:null,&quot;readonly&quot;:&quot;1&quot;,&quot;required&quot;:&quot;True&quot;,&quot;changeDefault&quot;:false,&quot;relation&quot;:&quot;res.company&quot;}}">
+                                    <span class="d-block min-w-0 text-truncate flex-grow-1 flex-shrink-1">Empresa</span>
+                                    <div class="o_list_header_label_spacer"></div><i
+                                        class="o_list_sortable_caret fa fa-lg fa-angle-down opacity-0 opacity-100-hover"></i>
+                                </div><span
+                                    class="o_resize position-absolute top-0 end-0 bottom-0 ps-1 bg-black-25 opacity-0 opacity-50-hover z-1"></span>
+                            </th>
+                            <th data-tooltip-delay="1000" tabindex="-1" data-name="user_id"
+                                class="align-middle o_column_sortable position-relative cursor-pointer o_many2one_avatar_user_cell opacity-trigger-hover w-print-auto"
+                                style="width: 119px;">
+                                <div class="d-flex" data-tooltip-template="web.ListHeaderTooltip"
+                                    data-tooltip-info="{&quot;viewMode&quot;:&quot;list&quot;,&quot;resModel&quot;:&quot;purchase.order&quot;,&quot;debug&quot;:false,&quot;field&quot;:{&quot;name&quot;:&quot;user_id&quot;,&quot;label&quot;:&quot;Comprador&quot;,&quot;type&quot;:&quot;many2one&quot;,&quot;widget&quot;:&quot;many2one_avatar_user&quot;,&quot;widgetDescription&quot;:&quot;Many2one&quot;,&quot;context&quot;:&quot;{}&quot;,&quot;domain&quot;:&quot;(company_id and [('company_ids', 'in', [company_id])] or []) + ([])&quot;,&quot;invisible&quot;:null,&quot;column_invisible&quot;:null,&quot;readonly&quot;:null,&quot;required&quot;:null,&quot;changeDefault&quot;:false,&quot;relation&quot;:&quot;res.users&quot;}}">
+                                    <span
+                                        class="d-block min-w-0 text-truncate flex-grow-1 flex-shrink-1">Comprador</span>
+                                    <div class="o_list_header_label_spacer"></div><i
+                                        class="o_list_sortable_caret fa fa-lg fa-angle-down opacity-0 opacity-100-hover"></i>
+                                </div><span
+                                    class="o_resize position-absolute top-0 end-0 bottom-0 ps-1 bg-black-25 opacity-0 opacity-50-hover z-1"></span>
+                            </th>
+                            <th data-tooltip-delay="1000" tabindex="-1" data-name="date_order"
+                                class="align-middle o_column_sortable position-relative cursor-pointer o_remaining_days_cell opacity-trigger-hover w-print-auto"
+                                style="width: 89px;">
+                                <div class="d-flex" data-tooltip-template="web.ListHeaderTooltip"
+                                    data-tooltip-info="{&quot;viewMode&quot;:&quot;list&quot;,&quot;resModel&quot;:&quot;purchase.order&quot;,&quot;debug&quot;:false,&quot;field&quot;:{&quot;name&quot;:&quot;date_order&quot;,&quot;label&quot;:&quot;Fecha límite de la orden&quot;,&quot;help&quot;:&quot;Representa la fecha en la que la solicitud de cotización debe validarse y convertirse en una orden de compra.&quot;,&quot;type&quot;:&quot;datetime&quot;,&quot;widget&quot;:&quot;remaining_days&quot;,&quot;widgetDescription&quot;:&quot;Días restantes&quot;,&quot;context&quot;:&quot;{}&quot;,&quot;invisible&quot;:&quot;state == 'purchase' or state == 'done' or state == 'cancel'&quot;,&quot;column_invisible&quot;:&quot;not context.get('quotation_only', False)&quot;,&quot;readonly&quot;:&quot;state in ['cancel', 'done', 'purchase']&quot;,&quot;required&quot;:&quot;True&quot;,&quot;changeDefault&quot;:false}}">
+                                    <span class="d-block min-w-0 text-truncate flex-grow-1 flex-shrink-1">Fecha límite
+                                        de la orden</span>
+                                    <div class="o_list_header_label_spacer"></div><i
+                                        class="o_list_sortable_caret fa fa-lg fa-angle-down opacity-0 opacity-100-hover"></i>
+                                </div><span
+                                    class="o_resize position-absolute top-0 end-0 bottom-0 ps-1 bg-black-25 opacity-0 opacity-50-hover z-1"></span>
+                            </th>
+                            <th data-tooltip-delay="1000" tabindex="-1" data-name="activity_ids"
+                                class="align-middle cursor-default o_list_activity_cell opacity-trigger-hover w-print-auto"
+                                style="width: 89px;">
+                                <div class="d-flex" data-tooltip-template="web.ListHeaderTooltip"
+                                    data-tooltip-info="{&quot;viewMode&quot;:&quot;list&quot;,&quot;resModel&quot;:&quot;purchase.order&quot;,&quot;debug&quot;:false,&quot;field&quot;:{&quot;name&quot;:&quot;activity_ids&quot;,&quot;label&quot;:&quot;Actividades&quot;,&quot;type&quot;:&quot;one2many&quot;,&quot;widget&quot;:&quot;list_activity&quot;,&quot;widgetDescription&quot;:&quot;Lista de actividades&quot;,&quot;context&quot;:&quot;{}&quot;,&quot;domain&quot;:[],&quot;invisible&quot;:null,&quot;column_invisible&quot;:null,&quot;readonly&quot;:null,&quot;required&quot;:null,&quot;changeDefault&quot;:false,&quot;relation&quot;:&quot;mail.activity&quot;}}">
+                                    <span
+                                        class="d-block min-w-0 text-truncate flex-grow-1 flex-shrink-1">Actividades</span>
+                                    <div class="o_list_header_label_spacer"></div><i
+                                        class="o_list_sortable_caret d-none fa-angle-down opacity-0 opacity-100-hover"></i>
+                                </div><span
+                                    class="o_resize position-absolute top-0 end-0 bottom-0 ps-1 bg-black-25 opacity-0 opacity-50-hover z-1"></span>
+                            </th>
+                            <th data-tooltip-delay="1000" tabindex="-1" data-name="origin"
+                                class="align-middle o_column_sortable position-relative cursor-pointer opacity-trigger-hover w-print-auto"
+                                style="width: 94px;">
+                                <div class="d-flex" data-tooltip-template="web.ListHeaderTooltip"
+                                    data-tooltip-info="{&quot;viewMode&quot;:&quot;list&quot;,&quot;resModel&quot;:&quot;purchase.order&quot;,&quot;debug&quot;:false,&quot;field&quot;:{&quot;name&quot;:&quot;origin&quot;,&quot;label&quot;:&quot;Documento origen&quot;,&quot;help&quot;:&quot;Referencia del documento que generó esta solicitud de orden de compra (por ejemplo, una orden de venta)&quot;,&quot;type&quot;:&quot;char&quot;,&quot;widget&quot;:null,&quot;context&quot;:&quot;{}&quot;,&quot;invisible&quot;:null,&quot;column_invisible&quot;:null,&quot;readonly&quot;:null,&quot;required&quot;:null,&quot;changeDefault&quot;:false}}">
+                                    <span class="d-block min-w-0 text-truncate flex-grow-1 flex-shrink-1">Documento
+                                        origen</span>
+                                    <div class="o_list_header_label_spacer"></div><i
+                                        class="o_list_sortable_caret fa fa-lg fa-angle-down opacity-0 opacity-100-hover"></i>
+                                </div><span
+                                    class="o_resize position-absolute top-0 end-0 bottom-0 ps-1 bg-black-25 opacity-0 opacity-50-hover z-1"></span>
+                            </th>
+                            <th data-tooltip-delay="1000" tabindex="-1" data-name="amount_total"
+                                class="align-middle o_column_sortable position-relative cursor-pointer o_list_number_th o_monetary_cell opacity-trigger-hover w-print-auto"
+                                style="width: 114px;">
+                                <div class="d-flex" data-tooltip-template="web.ListHeaderTooltip"
+                                    data-tooltip-info="{&quot;viewMode&quot;:&quot;list&quot;,&quot;resModel&quot;:&quot;purchase.order&quot;,&quot;debug&quot;:false,&quot;field&quot;:{&quot;name&quot;:&quot;amount_total&quot;,&quot;label&quot;:&quot;Total&quot;,&quot;type&quot;:&quot;monetary&quot;,&quot;widget&quot;:&quot;monetary&quot;,&quot;widgetDescription&quot;:&quot;Monetario&quot;,&quot;context&quot;:&quot;{}&quot;,&quot;invisible&quot;:null,&quot;column_invisible&quot;:null,&quot;readonly&quot;:&quot;True&quot;,&quot;required&quot;:null,&quot;changeDefault&quot;:false}}">
+                                    <span
+                                        class="d-block min-w-0 text-truncate flex-grow-1 flex-shrink-1 o_list_number_th">Total</span>
+                                    <div class="o_list_header_label_spacer"></div><i
+                                        class="o_list_sortable_caret fa fa-lg fa-angle-down opacity-0 opacity-100-hover"></i>
+                                </div><span
+                                    class="o_resize position-absolute top-0 end-0 bottom-0 ps-1 bg-black-25 opacity-0 opacity-50-hover z-1"></span>
+                            </th>
+                            <th data-tooltip-delay="1000" tabindex="-1" data-name="state"
+                                class="align-middle o_column_sortable position-relative cursor-pointer o_badge_cell opacity-trigger-hover w-print-auto"
+                                style="width: 89px;">
+                                <div class="d-flex" data-tooltip-template="web.ListHeaderTooltip"
+                                    data-tooltip-info="{&quot;viewMode&quot;:&quot;list&quot;,&quot;resModel&quot;:&quot;purchase.order&quot;,&quot;debug&quot;:false,&quot;field&quot;:{&quot;name&quot;:&quot;state&quot;,&quot;label&quot;:&quot;Estado&quot;,&quot;type&quot;:&quot;selection&quot;,&quot;widget&quot;:&quot;badge&quot;,&quot;widgetDescription&quot;:&quot;Insignia&quot;,&quot;context&quot;:&quot;{}&quot;,&quot;invisible&quot;:null,&quot;column_invisible&quot;:null,&quot;readonly&quot;:&quot;True&quot;,&quot;required&quot;:null,&quot;changeDefault&quot;:false,&quot;selection&quot;:[[&quot;draft&quot;,&quot;Solicitud de cotización&quot;],[&quot;sent&quot;,&quot;Solicitud de cotización enviada&quot;],[&quot;to approve&quot;,&quot;Por aprobar&quot;],[&quot;purchase&quot;,&quot;Orden de compra&quot;],[&quot;done&quot;,&quot;Bloqueado&quot;],[&quot;cancel&quot;,&quot;Cancelado&quot;]]}}">
+                                    <span class="d-block min-w-0 text-truncate flex-grow-1 flex-shrink-1">Estado</span>
+                                    <div class="o_list_header_label_spacer"></div><i
+                                        class="o_list_sortable_caret fa fa-lg fa-angle-down opacity-0 opacity-100-hover"></i>
+                                </div><span
+                                    class="o_resize position-absolute top-0 end-0 bottom-0 ps-1 bg-black-25 opacity-0 opacity-50-hover z-1"></span>
+                            </th>
+                            <th class="o_list_controller o_list_actions_header w-print-0 p-print-0 position-sticky end-0"
+                                style="width: 32px;">
+                                <div class="o_optional_columns_dropdown d-print-none text-center border-top-0"><button
+                                        class="btn p-0 o-dropdown dropdown-toggle dropdown" tabindex="-1"
+                                        aria-expanded="false"><i
+                                            class="o_optional_columns_dropdown_toggle oi oi-fw oi-settings-adjust"></i></button>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="ui-sortable">
+                        <tr class="o_data_row" data-id="datapoint_1269">
+                            <td class="o_list_record_selector user-select-none" tabindex="-1">
+                                <div class="o-checkbox form-check"><input type="checkbox" class="form-check-input"
+                                        id="checkbox-comp-374"><label class="form-check-label"
+                                        for="checkbox-comp-374"></label></div>
+                            </td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_priority_cell"
+                                data-tooltip-delay="1000" tabindex="-1" name="priority">
+                                <div name="priority" class="o_field_widget o_field_priority">
+                                    <div class="o_priority" role="radiogroup" name="priority" aria-label="Prioridad"><a
+                                            href="#" class="o_priority_star fa fa-star-o" role="radio" tabindex="0"
+                                            data-tooltip="Prioridad: Urgente" aria-checked="false"
+                                            aria-label="Urgente"></a></div>
+                                </div>
+                            </td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_char o_required_modifier o_readonly_modifier fw-bold"
+                                data-tooltip-delay="1000" tabindex="-1" name="name" data-tooltip="P00045">P00045</td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_many2one o_required_modifier o_readonly_modifier"
+                                data-tooltip-delay="1000" tabindex="-1" name="partner_id"
+                                data-tooltip="PLASTICOS PANDA S.A.C.">PLASTICOS PANDA S.A.C.</td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_many2one o_required_modifier o_readonly_modifier"
+                                data-tooltip-delay="1000" tabindex="-1" name="company_id"
+                                data-tooltip="Heinz Sport SAC">Heinz Sport SAC</td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_many2one o_many2one_avatar_user_cell"
+                                data-tooltip-delay="1000" tabindex="-1" name="user_id" data-tooltip="Elí Mandujano">
+                                <div name="user_id"
+                                    class="o_field_widget o_field_many2one_avatar_user o_field_many2one_avatar">
+                                    <div class="d-flex align-items-center gap-1" data-tooltip="Elí Mandujano"><span
+                                            class="o_avatar o_m2o_avatar"><img class="rounded"
+                                                src="/web/image/res.users/2/avatar_128"></span><span><span>Elí
+                                                Mandujano</span></span></div>
+                                </div>
+                            </td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_remaining_days_cell o_required_modifier o_readonly_modifier"
+                                data-tooltip-delay="1000" tabindex="-1" name="date_order"></td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_activity_cell"
+                                data-tooltip-delay="1000" tabindex="-1" name="activity_ids">
+                                <div name="activity_ids" class="o_field_widget o_field_list_activity"><button
+                                        class="o-mail-ActivityButton btn btn-link btn-dark p-0 w-100 text-start text-truncate"
+                                        aria-label="Mostrar actividades" title="Mostrar actividades"><i
+                                            class="fa fa-fw fa-lg fa-clock-o" role="img"></i><span
+                                            class="o-mail-ListActivity-summary"></span></button></div>
+                            </td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_char" data-tooltip-delay="1000"
+                                tabindex="-1" name="origin" data-tooltip=""></td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_number o_monetary_cell o_readonly_modifier"
+                                data-tooltip-delay="1000" tabindex="-1" name="amount_total">
+                                <div name="amount_total"
+                                    class="o_field_widget o_readonly_modifier o_field_monetary fw-bold">
+                                    <span>S/&nbsp;1,060.53</span>
+                                </div>
+                            </td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_badge_cell o_readonly_modifier"
+                                data-tooltip-delay="1000" tabindex="-1" name="state">
+                                <div name="state" class="o_field_widget o_readonly_modifier o_field_badge text-success">
+                                    <span class="badge rounded-pill text-bg-success">Orden de compra</span>
+                                </div>
+                            </td>
+                            <td tabindex="-1" class="w-print-0 p-print-0"></td>
+                        </tr>
+                        <tr class="o_data_row" data-id="datapoint_1271">
+                            <td class="o_list_record_selector user-select-none" tabindex="-1">
+                                <div class="o-checkbox form-check"><input type="checkbox" class="form-check-input"
+                                        id="checkbox-comp-375"><label class="form-check-label"
+                                        for="checkbox-comp-375"></label></div>
+                            </td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_priority_cell"
+                                data-tooltip-delay="1000" tabindex="-1" name="priority">
+                                <div name="priority" class="o_field_widget o_field_priority">
+                                    <div class="o_priority" role="radiogroup" name="priority" aria-label="Prioridad"><a
+                                            href="#" class="o_priority_star fa fa-star-o" role="radio" tabindex="0"
+                                            data-tooltip="Prioridad: Urgente" aria-checked="false"
+                                            aria-label="Urgente"></a></div>
+                                </div>
+                            </td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_char o_required_modifier o_readonly_modifier fw-bold"
+                                data-tooltip-delay="1000" tabindex="-1" name="name" data-tooltip="P00044">P00044</td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_many2one o_required_modifier o_readonly_modifier"
+                                data-tooltip-delay="1000" tabindex="-1" name="partner_id"
+                                data-tooltip="VALCARCEL SUCASACA CARLOS RAUL">VALCARCEL SUCASACA CARLOS RAUL</td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_many2one o_required_modifier o_readonly_modifier"
+                                data-tooltip-delay="1000" tabindex="-1" name="company_id"
+                                data-tooltip="Heinz Sport SAC">Heinz Sport SAC</td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_many2one o_many2one_avatar_user_cell"
+                                data-tooltip-delay="1000" tabindex="-1" name="user_id" data-tooltip="Elí Mandujano">
+                                <div name="user_id"
+                                    class="o_field_widget o_field_many2one_avatar_user o_field_many2one_avatar">
+                                    <div class="d-flex align-items-center gap-1" data-tooltip="Elí Mandujano"><span
+                                            class="o_avatar o_m2o_avatar"><img class="rounded"
+                                                src="/web/image/res.users/2/avatar_128"></span><span><span>Elí
+                                                Mandujano</span></span></div>
+                                </div>
+                            </td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_remaining_days_cell o_required_modifier o_readonly_modifier"
+                                data-tooltip-delay="1000" tabindex="-1" name="date_order"></td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_activity_cell"
+                                data-tooltip-delay="1000" tabindex="-1" name="activity_ids">
+                                <div name="activity_ids" class="o_field_widget o_field_list_activity"><button
+                                        class="o-mail-ActivityButton btn btn-link btn-dark p-0 w-100 text-start text-truncate"
+                                        aria-label="Mostrar actividades" title="Mostrar actividades"><i
+                                            class="fa fa-fw fa-lg fa-clock-o" role="img"></i><span
+                                            class="o-mail-ListActivity-summary"></span></button></div>
+                            </td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_char" data-tooltip-delay="1000"
+                                tabindex="-1" name="origin" data-tooltip=""></td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_number o_monetary_cell o_readonly_modifier"
+                                data-tooltip-delay="1000" tabindex="-1" name="amount_total">
+                                <div name="amount_total"
+                                    class="o_field_widget o_readonly_modifier o_field_monetary fw-bold">
+                                    <span>S/&nbsp;1,900.00</span>
+                                </div>
+                            </td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_badge_cell o_readonly_modifier"
+                                data-tooltip-delay="1000" tabindex="-1" name="state">
+                                <div name="state" class="o_field_widget o_readonly_modifier o_field_badge text-success">
+                                    <span class="badge rounded-pill text-bg-success">Orden de compra</span>
+                                </div>
+                            </td>
+                            <td tabindex="-1" class="w-print-0 p-print-0"></td>
+                        </tr>
+                        <tr class="o_data_row" data-id="datapoint_1273">
+                            <td class="o_list_record_selector user-select-none" tabindex="-1">
+                                <div class="o-checkbox form-check"><input type="checkbox" class="form-check-input"
+                                        id="checkbox-comp-376"><label class="form-check-label"
+                                        for="checkbox-comp-376"></label></div>
+                            </td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_priority_cell"
+                                data-tooltip-delay="1000" tabindex="-1" name="priority">
+                                <div name="priority" class="o_field_widget o_field_priority">
+                                    <div class="o_priority" role="radiogroup" name="priority" aria-label="Prioridad"><a
+                                            href="#" class="o_priority_star fa fa-star-o" role="radio" tabindex="0"
+                                            data-tooltip="Prioridad: Urgente" aria-checked="false"
+                                            aria-label="Urgente"></a></div>
+                                </div>
+                            </td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_char o_required_modifier o_readonly_modifier fw-bold"
+                                data-tooltip-delay="1000" tabindex="-1" name="name" data-tooltip="P00043">P00043</td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_many2one o_required_modifier o_readonly_modifier"
+                                data-tooltip-delay="1000" tabindex="-1" name="partner_id"
+                                data-tooltip="VALCARCEL SUCASACA CARLOS RAUL">VALCARCEL SUCASACA CARLOS RAUL</td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_many2one o_required_modifier o_readonly_modifier"
+                                data-tooltip-delay="1000" tabindex="-1" name="company_id"
+                                data-tooltip="Heinz Sport SAC">Heinz Sport SAC</td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_many2one o_many2one_avatar_user_cell"
+                                data-tooltip-delay="1000" tabindex="-1" name="user_id" data-tooltip="Elí Mandujano">
+                                <div name="user_id"
+                                    class="o_field_widget o_field_many2one_avatar_user o_field_many2one_avatar">
+                                    <div class="d-flex align-items-center gap-1" data-tooltip="Elí Mandujano"><span
+                                            class="o_avatar o_m2o_avatar"><img class="rounded"
+                                                src="/web/image/res.users/2/avatar_128"></span><span><span>Elí
+                                                Mandujano</span></span></div>
+                                </div>
+                            </td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_remaining_days_cell o_required_modifier o_readonly_modifier"
+                                data-tooltip-delay="1000" tabindex="-1" name="date_order"></td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_activity_cell"
+                                data-tooltip-delay="1000" tabindex="-1" name="activity_ids">
+                                <div name="activity_ids" class="o_field_widget o_field_list_activity"><button
+                                        class="o-mail-ActivityButton btn btn-link btn-dark p-0 w-100 text-start text-truncate"
+                                        aria-label="Mostrar actividades" title="Mostrar actividades"><i
+                                            class="fa fa-fw fa-lg fa-clock-o" role="img"></i><span
+                                            class="o-mail-ListActivity-summary"></span></button></div>
+                            </td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_char" data-tooltip-delay="1000"
+                                tabindex="-1" name="origin" data-tooltip=""></td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_number o_monetary_cell o_readonly_modifier"
+                                data-tooltip-delay="1000" tabindex="-1" name="amount_total">
+                                <div name="amount_total"
+                                    class="o_field_widget o_readonly_modifier o_field_monetary fw-bold">
+                                    <span>S/&nbsp;1,900.00</span>
+                                </div>
+                            </td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_badge_cell o_readonly_modifier"
+                                data-tooltip-delay="1000" tabindex="-1" name="state">
+                                <div name="state" class="o_field_widget o_readonly_modifier o_field_badge text-success">
+                                    <span class="badge rounded-pill text-bg-success">Orden de compra</span>
+                                </div>
+                            </td>
+                            <td tabindex="-1" class="w-print-0 p-print-0"></td>
+                        </tr>
+                        <tr class="o_data_row" data-id="datapoint_1275">
+                            <td class="o_list_record_selector user-select-none" tabindex="-1">
+                                <div class="o-checkbox form-check"><input type="checkbox" class="form-check-input"
+                                        id="checkbox-comp-377"><label class="form-check-label"
+                                        for="checkbox-comp-377"></label></div>
+                            </td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_priority_cell"
+                                data-tooltip-delay="1000" tabindex="-1" name="priority">
+                                <div name="priority" class="o_field_widget o_field_priority">
+                                    <div class="o_priority" role="radiogroup" name="priority" aria-label="Prioridad"><a
+                                            href="#" class="o_priority_star fa fa-star-o" role="radio" tabindex="0"
+                                            data-tooltip="Prioridad: Urgente" aria-checked="false"
+                                            aria-label="Urgente"></a></div>
+                                </div>
+                            </td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_char o_required_modifier o_readonly_modifier fw-bold"
+                                data-tooltip-delay="1000" tabindex="-1" name="name" data-tooltip="P00042">P00042</td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_many2one o_required_modifier o_readonly_modifier"
+                                data-tooltip-delay="1000" tabindex="-1" name="partner_id"
+                                data-tooltip="COLCA DEL PERU SA, LUISA DE LA CRUZ">COLCA DEL PERU SA, LUISA DE LA CRUZ
+                            </td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_many2one o_required_modifier o_readonly_modifier"
+                                data-tooltip-delay="1000" tabindex="-1" name="company_id"
+                                data-tooltip="Heinz Sport SAC">Heinz Sport SAC</td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_many2one o_many2one_avatar_user_cell"
+                                data-tooltip-delay="1000" tabindex="-1" name="user_id" data-tooltip="Elí Mandujano">
+                                <div name="user_id"
+                                    class="o_field_widget o_field_many2one_avatar_user o_field_many2one_avatar">
+                                    <div class="d-flex align-items-center gap-1" data-tooltip="Elí Mandujano"><span
+                                            class="o_avatar o_m2o_avatar"><img class="rounded"
+                                                src="/web/image/res.users/2/avatar_128"></span><span><span>Elí
+                                                Mandujano</span></span></div>
+                                </div>
+                            </td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_remaining_days_cell o_required_modifier o_readonly_modifier"
+                                data-tooltip-delay="1000" tabindex="-1" name="date_order"></td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_activity_cell"
+                                data-tooltip-delay="1000" tabindex="-1" name="activity_ids">
+                                <div name="activity_ids" class="o_field_widget o_field_list_activity"><button
+                                        class="o-mail-ActivityButton btn btn-link btn-dark p-0 w-100 text-start text-truncate"
+                                        aria-label="Mostrar actividades" title="Mostrar actividades"><i
+                                            class="fa fa-fw fa-lg fa-clock-o" role="img"></i><span
+                                            class="o-mail-ListActivity-summary"></span></button></div>
+                            </td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_char" data-tooltip-delay="1000"
+                                tabindex="-1" name="origin" data-tooltip=""></td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_list_number o_monetary_cell o_readonly_modifier"
+                                data-tooltip-delay="1000" tabindex="-1" name="amount_total">
+                                <div name="amount_total"
+                                    class="o_field_widget o_readonly_modifier o_field_monetary fw-bold">
+                                    <span>$&nbsp;1,510.40</span>
+                                </div>
+                            </td>
+                            <td class="o_data_cell cursor-pointer o_field_cell o_badge_cell o_readonly_modifier"
+                                data-tooltip-delay="1000" tabindex="-1" name="state">
+                                <div name="state" class="o_field_widget o_readonly_modifier o_field_badge text-success">
+                                    <span class="badge rounded-pill text-bg-success">Orden de compra</span>
+                                </div>
+                            </td>
+                            <td tabindex="-1" class="w-print-0 p-print-0"></td>
+                        </tr>
+                    </tbody>
+                    <tfoot class="o_list_footer cursor-default">
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="o_list_number"><span data-tooltip="No puede agregar distintas monedas">—</span>
+                            </td>
+                            <td></td>
+                            <td class="w-print-0 p-print-0"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
