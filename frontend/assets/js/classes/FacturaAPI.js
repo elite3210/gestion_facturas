@@ -45,6 +45,11 @@ export class FacturaAPI {
             }
         });
 
+        // Forzar move_type según el módulo actual si no está ya en los filtros
+        if (!filters['move_type']) {
+            url.searchParams.append('move_type', window.currentModule || 'out_invoice');
+        }
+
         try {
             const response = await fetch(url);
             const data = await response.json();
@@ -80,6 +85,11 @@ export class FacturaAPI {
                 url.searchParams.append(key, filters[key]);
             }
         });
+
+        // Forzar move_type según el módulo actual si no está ya en los filtros
+        if (!filters['move_type']) {
+            url.searchParams.append('move_type', window.currentModule || 'out_invoice');
+        }
 
         try {
             const response = await fetch(url);
@@ -123,7 +133,6 @@ export class FacturaAPI {
 
     /**
      * Subir archivo XML de factura
-     * 
      * @param {FormData} formData Datos del formulario con el archivo XML
      * @returns {Promise} Promesa con el resultado de la operación
      */
@@ -134,15 +143,18 @@ export class FacturaAPI {
                 body: formData
             });
 
+            // Intentamos leer el JSON tanto para éxito como para error
             const data = await response.json();
 
             if (!response.ok) {
+                // Pasamos el mensaje exacto que envió el backend en el throw
                 throw new Error(data.message || 'Error al subir factura');
             }
 
-            return data;
+            return data; // Éxito
         } catch (error) {
             console.error('Error en uploadFactura:', error);
+            // Volvemos a lanzar el error para que la interfaz (UI) pueda capturarlo en su propio try/catch
             throw error;
         }
     }

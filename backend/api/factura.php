@@ -129,8 +129,11 @@ try {
                 $facturaProcessor->regularizarFacturasHuerfanas();
                 Response::success(['mensaje' => 'Guias encontradas para facturas' ], 'Operación exitosa', 200);
             } elseif (isset($_FILES['xml_file'])) {
+                // Capturar el tipo de comprobante (out_invoice o in_invoice)
+                $moveType = isset($_POST['move_type']) ? $_POST['move_type'] : 'out_invoice';
+                
                 // Procesar archivo subido
-                $facturaData = $facturaProcessor->processXmlFile($_FILES['xml_file']);
+                $facturaData = $facturaProcessor->processXmlFile($_FILES['xml_file'], $moveType);
                 
                 // Guardar en la base de datos
                 $facturaId = $facturaProcessor->saveFactura($facturaData);

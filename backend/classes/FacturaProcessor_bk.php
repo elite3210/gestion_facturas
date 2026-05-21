@@ -77,45 +77,6 @@ class FacturaProcessor
             throw new Exception('XML inválido: ' . $errors[0]->message);
         }
 
-        // 1. OBTENER EL NODO RAÍZ DEL XML
-        $rootNode = $dom->documentElement->localName;
-
-        // 2. MAPEAR LOS TIPOS DE DOCUMENTO DE SUNAT/UBL
-        $tiposDocumento = [
-            'DespatchAdvice' => 'GUÍA DE REMISIÓN',
-            'CreditNote' => 'NOTA DE CRÉDITO',
-            'DebitNote' => 'NOTA DE DÉBITO',
-        ];
-
-        // Control especial para Boletas de Venta:
-        // Nota: En SUNAT, tanto la Factura como la Boleta usan el nodo raíz "Invoice".
-        // Para diferenciarlas con certeza, debemos mirar el campo cbc:InvoiceTypeCode (01 = Factura, 03 = Boleta).
-        if ($rootNode === 'Invoice') {
-            $xpath = new DOMXPath($dom);
-            foreach ($this->namespaces as $prefix => $uri) {
-                $xpath->registerNamespace($prefix, $uri);
-            }
-
-            $tipoCodigo = $this->getXPathValue($xpath, '//cbc:InvoiceTypeCode');
-
-            // Si el código es '03', es una Boleta de Venta
-            if ($tipoCodigo === '03') {
-                throw new Exception('El archivo subido es una BOLETA DE VENTA y esta clase solo procesa Facturas.');
-            }
-        }
-
-        // 3. EVALUAR SI ES OTRO DOCUMENTO NO SOPORTADO (Guía, Nota de Crédito, Nota de Débito)
-        if (array_key_exists($rootNode, $tiposDocumento)) {
-            throw new Exception('El archivo subido es una ' . $tiposDocumento[$rootNode] . ' y esta clase solo procesa Facturas.');
-        }
-
-        // Si es un XML desconocido que ni siquiera está en el mapeo y no es Invoice
-        if ($rootNode !== 'Invoice') {
-            throw new Exception('Documento no soportado. El nodo raíz del XML es: ' . $rootNode);
-        }
-
-        // 4. PROCESAR COMO FACTURA (Tu lógica original intacta)
-
         $xpath = new DOMXPath($dom);
 
         // Registrar namespaces
@@ -150,7 +111,7 @@ class FacturaProcessor
 
         // Detectar tipo de factura (Venta o Compra) basado en el RUC principal
         $miRuc = '20605216715'; // RUC de la empresa (Elite 3210)
-
+        
         if ($moveType !== null) {
             $facturaData['move_type'] = $moveType;
         } else {
@@ -271,11 +232,11 @@ class FacturaProcessor
                         case 'numero_factura':
                         case 'serie_numero_guia':
                         case 'nombre_receptor':
-                            $whereConditions[] = "(CASE WHEN move_type = 'in_invoice' THEN nombre_emisor ELSE nombre_receptor END) ILIKE ?"; // ✅ ILIKE para PostgreSQL (case insensitive)
+                            $whereConditions[] = "$field ILIKE ?"; // ✅ ILIKE para PostgreSQL (case insensitive)
                             $params[] = "%$value%";
                             break;
                         case 'search':
-                            $whereConditions[] = "(numero_factura ILIKE ? OR (CASE WHEN move_type = 'in_invoice' THEN nombre_emisor ELSE nombre_receptor END) ILIKE ? OR (CASE WHEN move_type = 'in_invoice' THEN ruc_emisor ELSE ruc_receptor END) ILIKE ?)";
+                            $whereConditions[] = "(numero_factura ILIKE ? OR nombre_receptor ILIKE ? OR ruc_receptor ILIKE ?)";
                             $params[] = "%$value%";
                             $params[] = "%$value%";
                             $params[] = "%$value%";
@@ -335,19 +296,17 @@ class FacturaProcessor
     {
         $selects = [];
         $groupBys = [];
-
-        // Mapeo de campos groupBy permitidos a expresiones SQL (PostgreSQL)
-        $clienteField = "(CASE WHEN move_type = 'in_invoice' THEN nombre_emisor ELSE nombre_receptor END)";
         
+        // Mapeo de campos groupBy permitidos a expresiones SQL (PostgreSQL)
         $allowedGroupBy = [
-            'cliente' => $clienteField,
-            'fecha_mes' => "TO_CHAR(fecha_emision, 'YYYY-MM')",
+            'cliente' => 'nombre_receptor',
+            'fecha_mes' => "TO_CHAR(fecha_emision, 'YYYY-MM')", 
             'fecha_anio' => "TO_CHAR(fecha_emision, 'YYYY')",
             'estado' => 'state',
             'tipo_comprobante' => 'l10n_latam_document_type_id',
             'move_type' => 'move_type'
         ];
-
+        
         foreach ($groupBy as $groupField) {
             if (isset($allowedGroupBy[$groupField])) {
                 $sqlExpr = $allowedGroupBy[$groupField];
@@ -355,7 +314,7 @@ class FacturaProcessor
                 $groupBys[] = $sqlExpr;
             }
         }
-
+        
         // Mapeo de medidas
         $allowedMeasures = [
             'monto_total' => 'SUM(COALESCE(monto_total, 0))',
@@ -363,24 +322,24 @@ class FacturaProcessor
             'amount_tax' => 'SUM(COALESCE(amount_tax, 0))',
             'count' => 'COUNT(id)'
         ];
-
+        
         foreach ($measures as $measure) {
             if (isset($allowedMeasures[$measure])) {
                 $sqlExpr = $allowedMeasures[$measure];
                 $selects[] = "$sqlExpr AS $measure";
             }
         }
-
+        
         // Si no hay medidas, por defecto devolvemos count
         if (empty($selects)) {
             $selects[] = "COUNT(id) AS count";
         }
-
+        
         $query = "SELECT " . implode(', ', $selects) . " FROM facturas_electronicas";
-
+        
         $params = [];
         $whereConditions = [];
-
+        
         // Aplicar filtros (mismo lógica que getFacturas)
         if (!empty($filters)) {
             foreach ($filters as $field => $value) {
@@ -389,11 +348,11 @@ class FacturaProcessor
                         case 'numero_factura':
                         case 'serie_numero_guia':
                         case 'nombre_receptor':
-                            $whereConditions[] = "(CASE WHEN move_type = 'in_invoice' THEN nombre_emisor ELSE nombre_receptor END) ILIKE ?";
+                            $whereConditions[] = "$field ILIKE ?";
                             $params[] = "%$value%";
                             break;
                         case 'search':
-                            $whereConditions[] = "(numero_factura ILIKE ? OR (CASE WHEN move_type = 'in_invoice' THEN nombre_emisor ELSE nombre_receptor END) ILIKE ? OR (CASE WHEN move_type = 'in_invoice' THEN ruc_emisor ELSE ruc_receptor END) ILIKE ?)";
+                            $whereConditions[] = "(numero_factura ILIKE ? OR nombre_receptor ILIKE ? OR ruc_receptor ILIKE ?)";
                             $params[] = "%$value%";
                             $params[] = "%$value%";
                             $params[] = "%$value%";
@@ -417,16 +376,16 @@ class FacturaProcessor
                 }
             }
         }
-
+        
         if (!empty($whereConditions)) {
             $query .= " WHERE " . implode(' AND ', $whereConditions);
         }
-
+        
         if (!empty($groupBys)) {
             $query .= " GROUP BY " . implode(', ', $groupBys);
             $query .= " ORDER BY " . implode(', ', $groupBys) . " ASC";
         }
-
+        
         $stmt = $this->db->executeQuery($query, $params);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

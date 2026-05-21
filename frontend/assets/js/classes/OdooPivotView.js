@@ -49,7 +49,7 @@ export class OdooPivotView {
                 <div class="d-inline-flex gap-2 align-items-center">
                     <span class="text-muted fw-bold" style="font-size:0.85rem;">Filas:</span>
                     <select class="form-select form-select-sm w-auto" id="pivot-groupby-select">
-                        <option value="cliente" ${this.currentRowGroup === 'cliente' ? 'selected' : ''}>Cliente</option>
+                        <option value="cliente" ${this.currentRowGroup === 'cliente' ? 'selected' : ''}>${window.currentModule === 'in_invoice' ? 'Proveedor' : 'Cliente'}</option>
                         <option value="fecha_anio" ${this.currentRowGroup === 'fecha_anio' ? 'selected' : ''}>Año</option>
                         <option value="fecha_mes" ${this.currentRowGroup === 'fecha_mes' ? 'selected' : ''}>Mes</option>
                         <option value="estado" ${this.currentRowGroup === 'estado' ? 'selected' : ''}>Estado</option>
@@ -63,7 +63,7 @@ export class OdooPivotView {
                         <option value="fecha_anio" ${this.currentColGroup === 'fecha_anio' ? 'selected' : ''}>Año</option>
                         <option value="fecha_anio_mes" ${this.currentColGroup === 'fecha_anio_mes' ? 'selected' : ''}>Año > Mes</option>
                         <option value="fecha_mes" ${this.currentColGroup === 'fecha_mes' ? 'selected' : ''}>Mes (Plano)</option>
-                        <option value="cliente" ${this.currentColGroup === 'cliente' ? 'selected' : ''}>Cliente</option>
+                        <option value="cliente" ${this.currentColGroup === 'cliente' ? 'selected' : ''}>${window.currentModule === 'in_invoice' ? 'Proveedor' : 'Cliente'}</option>
                         <option value="estado" ${this.currentColGroup === 'estado' ? 'selected' : ''}>Estado</option>
                         <option value="tipo_comprobante" ${this.currentColGroup === 'tipo_comprobante' ? 'selected' : ''}>Tipo Comprobante</option>
                     </select>

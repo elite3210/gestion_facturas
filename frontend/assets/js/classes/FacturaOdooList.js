@@ -37,16 +37,16 @@ export class FacturaOdooList {
                 optional: true
             },
             {
-                id: 'nombre_receptor',
-                field: 'nombre_receptor',
-                label: 'Cliente',
+                id: 'nombre_receptor', // Mantenemos el ID original para que los datos pasen, pero el field cambia
+                field: window.currentModule === 'in_invoice' ? 'nombre_emisor' : 'nombre_receptor',
+                label: window.currentModule === 'in_invoice' ? 'Proveedor' : 'Cliente',
                 class: 'col-client',
                 sortable: true,
                 optional: false
             },
             {
                 id: 'col-ruc',
-                field: 'ruc_receptor',
+                field: window.currentModule === 'in_invoice' ? 'ruc_emisor' : 'ruc_receptor',
                 label: 'RUC',
                 class: 'col-ruc',
                 sortable: true,
@@ -196,6 +196,9 @@ export class FacturaOdooList {
                     stateClass = 'badge-dark';
                 }
 
+                const nombreEntidad = window.currentModule === 'in_invoice' ? r.nombre_emisor : r.nombre_receptor;
+                const rucEntidad = window.currentModule === 'in_invoice' ? r.ruc_emisor : r.ruc_receptor;
+
                 return `<tr class="${isSelected ? 'selected' : ''}" data-id="${r.id}">
                     <td class="col-chk" data-id="${r.id}" data-action="chk">
                         <div style="display:flex;justify-content:center;">
@@ -204,8 +207,8 @@ export class FacturaOdooList {
                     </td>
                     <td class="fw-bold col-num">${r.numero_factura || 'N/D'}</td>
                     <td class="col-date" data-col="col-date">${fechaFormat}</td>
-                    <td class="col-client" style="overflow:hidden;text-overflow:ellipsis;" title="${r.nombre_receptor}">${r.nombre_receptor || 'N/D'}</td>
-                    <td data-col="col-ruc">${r.ruc_receptor || ''}</td>
+                    <td class="col-client" style="overflow:hidden;text-overflow:ellipsis;" title="${nombreEntidad}">${nombreEntidad || 'N/D'}</td>
+                    <td data-col="col-ruc">${rucEntidad || ''}</td>
                     <td class="monetary col-total" data-col="col-subtotal">${prefix} ${subtotalPEN}</td>
                     <td class="monetary col-total" data-col="col-igv">${prefix} ${igvPEN}</td>
                     <td class="monetary col-total fw-bold" data-col="col-total-pen">${prefix} ${totalPEN}</td>

@@ -48,7 +48,7 @@ export class OdooGraphView {
                 <select class="form-select form-select-sm w-auto d-inline-block" id="graph-groupby-select">
                     <option value="fecha_anio" ${this.currentGroupBy === 'fecha_anio' ? 'selected' : ''}>Por Año</option>
                     <option value="fecha_mes" ${this.currentGroupBy === 'fecha_mes' ? 'selected' : ''}>Por Mes</option>
-                    <option value="cliente" ${this.currentGroupBy === 'cliente' ? 'selected' : ''}>Por Cliente</option>
+                    <option value="cliente" ${this.currentGroupBy === 'cliente' ? 'selected' : ''}>${window.currentModule === 'in_invoice' ? 'Por Proveedor' : 'Por Cliente'}</option>
                     <option value="estado" ${this.currentGroupBy === 'estado' ? 'selected' : ''}>Por Estado</option>
                     <option value="tipo_comprobante" ${this.currentGroupBy === 'tipo_comprobante' ? 'selected' : ''}>Por Tipo de Comprobante</option>
                 </select>

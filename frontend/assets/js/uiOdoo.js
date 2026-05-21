@@ -80,11 +80,43 @@ function closeAppsMenu() {
 }
 
 function selectApp(name) {
-    document.querySelectorAll('.o-apps-item').forEach(el => el.classList.toggle('active', el.textContent.trim()===name));
+    document.querySelectorAll('.o-apps-item').forEach(el => {
+        // Normalizar texto para la comparación (ignorar iconos internos)
+        const text = el.textContent.trim();
+        el.classList.toggle('active', text === name);
+    });
     const brand = document.querySelector('.o-nav-brand');
     if (brand) brand.textContent = name;
     closeAppsMenu();
+
+    // Actualizar URL hash (Routing)
+    const newHash = '#app=' + name.toLowerCase();
+    if (window.location.hash !== newHash) {
+        // Al usar history.pushState en lugar de window.location.hash, evitamos disparar el evento hashchange innecesariamente
+        history.pushState(null, '', newHash);
+    }
+
+    // Disparar evento para que otras partes de la app reaccionen
+    const event = new CustomEvent('appChanged', { detail: { appName: name } });
+    window.dispatchEvent(event);
 }
+
+// ══════════════════════════════════════════════════════════
+//  HASH ROUTER (Soporte Atrás/Adelante del navegador)
+// ══════════════════════════════════════════════════════════
+window.addEventListener('hashchange', () => {
+    const hash = window.location.hash;
+    if (hash.startsWith('#app=')) {
+        let appName = hash.split('=')[1];
+        // Capitalizar primera letra (ventas -> Ventas, compras -> Compras)
+        appName = appName.charAt(0).toUpperCase() + appName.slice(1);
+        
+        const brand = document.querySelector('.o-nav-brand');
+        if (brand && brand.textContent.trim() !== appName) {
+            selectApp(appName);
+        }
+    }
+});
 
 // ══════════════════════════════════════════════════════════
 //  NOTEBOOK TABS (Inside form view)
@@ -138,9 +170,10 @@ function closeFormView(pushState = true) {
     }
     
     if (pushState) {
-        // Volver a la URL base de la lista
+        // Volver a la URL base de la lista preservando el hash actual
         const basePath = window.location.pathname.includes('/facturas/') ? '../factura.html' : './factura.html';
-        history.pushState({ view: 'list' }, '', basePath);
+        const currentHash = window.location.hash;
+        history.pushState({ view: 'list' }, '', basePath + currentHash);
     }
 }
 

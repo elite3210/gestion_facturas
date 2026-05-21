@@ -244,10 +244,20 @@ export class FacturaViewer {
         // Cabecera
         setTxt('fld-serie-numero', data.detalles.factura.serie);
 
-        // Cliente
-        setTxt('fld-cliente-nombre', data.detalles.receptor.razonSocial);
-        setTxt('fld-cliente-direccion', data.detalles.receptor.direccion);
-        setTxt('fld-cliente-ruc', data.detalles.receptor.ruc);
+        // Cliente o Proveedor según move_type
+        const isCompra = data.move_type === 'in_invoice';
+        const labelElem = document.querySelector('#fld-cliente-nombre').closest('.o-field-row').querySelector('.o-field-label');
+        if (labelElem) {
+            labelElem.textContent = isCompra ? 'Proveedor' : 'Cliente';
+        }
+
+        // Entidad objetivo: en compra el proveedor es el emisor, en venta el cliente es el receptor
+        const entidad = isCompra ? data.detalles.emisor : data.detalles.receptor;
+
+        // Cliente / Proveedor
+        setTxt('fld-cliente-nombre', entidad.razonSocial);
+        setTxt('fld-cliente-direccion', entidad.direccion);
+        setTxt('fld-cliente-ruc', entidad.ruc);
         setTxt('fld-guia', data.detalles.factura.guiaRemision || 'N/D');
 
         // Detalles factura

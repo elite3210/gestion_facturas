@@ -380,9 +380,11 @@ export class OdooKanbanView {
         const dateParts = (item.fecha_emision || '').split('-');
         const formattedDate = dateParts.length === 3 ? `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}` : item.fecha_emision;
 
+        const entityName = window.currentModule === 'in_invoice' ? item.nombre_emisor : item.nombre_receptor;
+
         return `
             <div class="o-kanban-card-title">${item.numero_factura || 'Factura sin número'}</div>
-            <div class="o-kanban-card-client" title="${item.nombre_receptor}">${item.nombre_receptor || 'Sin cliente'}</div>
+            <div class="o-kanban-card-client" title="${entityName}">${entityName || 'Sin cliente/proveedor'}</div>
             <div class="o-kanban-card-footer">
                 <div class="o-kanban-card-date">
                     <i class="fa-regular fa-calendar me-1"></i> ${formattedDate}

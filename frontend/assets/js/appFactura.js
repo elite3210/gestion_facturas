@@ -15,6 +15,30 @@ document.addEventListener('DOMContentLoaded', function () {
     // Inicializar API
     const api = new FacturaAPI();
 
+    // Estado del módulo actual (Ventas o Compras) inicializado basado en el Hash (Routing)
+    const hash = window.location.hash;
+    let initialApp = 'Ventas';
+    window.currentModule = 'out_invoice'; // Por defecto: Ventas
+
+    if (hash === '#app=compras') {
+        initialApp = 'Compras';
+        window.currentModule = 'in_invoice';
+    } else if (hash === '#app=ventas') {
+        initialApp = 'Ventas';
+        window.currentModule = 'out_invoice';
+    } else {
+        // Si no hay hash, establecemos el hash por defecto para que la URL se actualice
+        history.replaceState(null, '', '#app=ventas');
+    }
+
+    // Asegurarnos que la UI empiece en el módulo correcto visualmente si la función ya está disponible
+    if (window.uiOdoo && typeof window.uiOdoo.selectApp === 'function') {
+        // En un timeout corto para permitir que el resto de listeners se suscriban
+        setTimeout(() => {
+            window.uiOdoo.selectApp(initialApp);
+        }, 50);
+    }
+
     // Inicializar el visor de facturas (sin renderizar aún porque la plantilla no está)
     const facturaViewer = new FacturaViewer(api);
     window.facturaViewer = facturaViewer; // Hacer disponible globalmente
@@ -48,7 +72,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (pushState) {
             const basePath = window.location.pathname.includes('/facturas/') ? './' : 'facturas/';
-            history.pushState({ id: facturaId, view: 'form' }, '', basePath + facturaId);
+            const currentHash = window.location.hash;
+            history.pushState({ id: facturaId, view: 'form' }, '', basePath + facturaId + currentHash);
         }
 
         if (window.uiOdoo && uiOdoo.openFormView) uiOdoo.openFormView();
@@ -73,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Asegurarnos de comparar como strings o números de manera uniforme
         const index = data.findIndex(item => String(item.id) === String(currentId));
 
-        const valEl = document.getElementById('pager-val');
+        const valEl = document.getElementById('form-pager-val');
 
         if (valEl) {
             valEl.textContent = `${index !== -1 ? (index + 1) : 1} / ${total}`;
@@ -102,8 +127,8 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     // Vincular botones globales de pager para la vista de detalle
-    const btnPrev = document.getElementById('btn-pager-prev');
-    const btnNext = document.getElementById('btn-pager-next');
+    const btnPrev = document.getElementById('btn-form-pager-prev');
+    const btnNext = document.getElementById('btn-form-pager-next');
     if (btnPrev) {
         btnPrev.addEventListener('click', () => {
             const formEl = document.getElementById('view-form');
@@ -135,6 +160,59 @@ document.addEventListener('DOMContentLoaded', function () {
     );
     facturaList.init();
     window.facturaList = facturaList;
+
+    // Escuchar cambios de módulo (Ventas vs Compras)
+    window.addEventListener('appChanged', (e) => {
+        const appName = e.detail.appName;
+        if (appName === 'Compras') {
+            window.currentModule = 'in_invoice';
+        } else {
+            window.currentModule = 'out_invoice';
+        }
+        
+        // Refrescar la tabla actual (esto llamará a la API con el nuevo move_type)
+        if (window.facturaList) {
+            // Actualizar etiqueta y campo de columna dinámicamente
+            const col = window.facturaList.dataTable.config.columns.find(c => c.id === 'nombre_receptor');
+            if (col) {
+                col.label = window.currentModule === 'in_invoice' ? 'Proveedor' : 'Cliente';
+                col.field = window.currentModule === 'in_invoice' ? 'nombre_emisor' : 'nombre_receptor';
+            }
+            const colRuc = window.facturaList.dataTable.config.columns.find(c => c.id === 'col-ruc');
+            if (colRuc) {
+                colRuc.field = window.currentModule === 'in_invoice' ? 'ruc_emisor' : 'ruc_receptor';
+            }
+            
+            // Forzar el nuevo move_type en los defaultFilters de OdooDataTable
+            window.facturaList.dataTable.config.defaultFilters.move_type = window.currentModule;
+            window.facturaList.dataTable.buildFiltersFromFacets(); // Reconstruir filtros base
+            
+            window.facturaList.dataTable.renderLayout();
+            window.facturaList.dataTable.setupEvents(); // Se necesitan re-vincular eventos al recrear el DOM
+            window.facturaList.dataTable.initOptColPanel();
+            
+            window.facturaList.loadFacturas();
+        }
+
+        // Actualizar textos de dropdown de Pivot y Graph
+        const isCompra = window.currentModule === 'in_invoice';
+        const pivotGroup = document.querySelector('#pivot-groupby-select option[value="cliente"]');
+        if (pivotGroup) pivotGroup.textContent = isCompra ? 'Proveedor' : 'Cliente';
+        
+        const pivotRowGroup = document.querySelector('#pivot-groupby-select option[value="cliente"]');
+        if (pivotRowGroup) pivotRowGroup.textContent = isCompra ? 'Proveedor' : 'Cliente';
+
+        const pivotColGroup = document.querySelector('#pivot-colgroupby-select option[value="cliente"]');
+        if (pivotColGroup) pivotColGroup.textContent = isCompra ? 'Proveedor' : 'Cliente';
+
+        const graphGroup = document.querySelector('#graph-groupby-select option[value="cliente"]');
+        if (graphGroup) graphGroup.textContent = isCompra ? 'Por Proveedor' : 'Por Cliente';
+        
+        // Volver a la vista de lista si estamos en detalle
+        if (window.uiOdoo && window.uiOdoo.closeFormView) {
+            window.uiOdoo.closeFormView();
+        }
+    });
 
     // Inicializar Vista Pivot
     const pivotView = new OdooPivotView(api, 'view-pivot', {
@@ -336,6 +414,7 @@ function setupUploadForm(api, facturaList) {
             // Preparar datos
             const formData = new FormData();
             formData.append('xml_file', fileInput.files[0]);
+            formData.append('move_type', window.currentModule || 'out_invoice');
 
             // Enviar a la API
             await api.uploadFactura(formData);
